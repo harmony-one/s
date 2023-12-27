@@ -14,8 +14,8 @@ Test Cases
 - [ ] Test correct handling of the response data.
 
 3. createWallet
-- [ ] Test successful wallet creation.
-- [ ] Test failure in generating a private key.
+- [x] Test successful wallet creation.
+- [ ] Test failure in generating a private key (wrap to simulate faliure of crypto.GenerateKey()).
 
 4. sendTransaction
 - [ ] Test successful transaction sending.
