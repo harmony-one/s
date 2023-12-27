@@ -34,6 +34,23 @@ func main() {
 	safeAddressString = strings.TrimSpace(safeAddressString)
 	safeAddress := common.HexToAddress(safeAddressString)
 
+	// User choice
+	fmt.Print("Choose an action:\n1) Send Tokens\n2) Check Balance\n")
+	choiceString, _ := reader.ReadString('\n')
+	choiceString = strings.TrimSpace(choiceString)
+
+	if choiceString == "1" {
+		// Proceed with token transfer
+		sendTokens(reader, privateKey, safeAddress)
+	} else if choiceString == "2" {
+		// Check balance
+		checkBalance(privateKey, safeAddress)
+	} else {
+		fmt.Println("Invalid choice. Exiting.")
+	}
+}
+
+func sendTokens(reader *bufio.Reader, privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
 	fmt.Print("Enter recipient address: ")
 	recipientString, _ := reader.ReadString('\n')
 	recipientString = strings.TrimSpace(recipientString)
@@ -113,4 +130,19 @@ func main() {
 	}
 
 	fmt.Printf("Transaction sent: %s\n", signedTx.Hash().Hex())
+}
+
+func checkBalance(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
+	client, err := ethclient.Dial("https://api.harmony.one")
+	if err != nil {
+		log.Fatalf("Failed to connect to the Harmony blockchain: %v", err)
+	}
+	defer client.Close()
+
+	balance, err := client.BalanceAt(context.Background(), safeAddress, nil)
+	if err != nil {
+		log.Fatalf("Failed to retrieve balance: %v", err)
+	}
+
+	fmt.Printf("Balance of the safe: %s\n", balance.String())
 }
