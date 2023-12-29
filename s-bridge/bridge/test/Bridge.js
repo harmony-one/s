@@ -40,6 +40,15 @@ describe("Bridge contract", function () {
       await expect(bridge.connect(addr1).deposit({ value: depositAmount }))
         .to.emit(bridge, "Deposit")
         .withArgs(addr1.address, depositAmount);
+
+      const provider = ethers.getDefaultProvider();
+      const network = await provider.getNetwork()
+      console.log("Network: ", network);
+      const bridgeAddr = await bridge.getAddress();
+      provider.getBalance(bridgeAddr).then((balance) => {
+        const balanceInEth = ethers.utils.formatEther(balance)
+        console.log(`balance: ${balanceInEth} ETH`)
+      })
     });
   });
 
