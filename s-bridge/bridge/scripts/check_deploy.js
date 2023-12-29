@@ -28,7 +28,7 @@ function getContractAddress(network) {
 async function main() {
   const network = process.argv[2];
   if (!network) {
-      throw new Error('Please specify a network (testnet or sepolia)');
+      throw new Error('specify a network (testnet or sepolia)');
   }
 
   const providerUrl = getProviderUrl(network);
