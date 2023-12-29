@@ -18,50 +18,56 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+const (
+	rpcURL  = "https://api.s0.t.hmny.io" // Harmony Mainnet RPC URL (shard 0)
+	chainID = int64(1666600000)          // Harmony Mainnet Chain ID
+)
+
 func main() {
-	reader := bufio.NewReader(os.Stdin)
+	privateKey := promptForPrivateKey()
+	safeAddress := promptForAddress("Enter Gnosis Safe contract address: ")
+	action := promptForChoice("Choose an action:\n1) Send Tokens\n2) Check Balance\n")
 
-	fmt.Print("Enter your private key: ")
-	privateKeyString, _ := reader.ReadString('\n')
-	privateKeyString = strings.TrimSpace(privateKeyString)
-	privateKey, err := crypto.HexToECDSA(privateKeyString)
-	if err != nil {
-		log.Fatalf("Failed to parse private key: %v", err)
-	}
-
-	fmt.Print("Enter Gnosis Safe contract address: ")
-	safeAddressString, _ := reader.ReadString('\n')
-	safeAddressString = strings.TrimSpace(safeAddressString)
-	safeAddress := common.HexToAddress(safeAddressString)
-
-	// User choice
-	fmt.Print("Choose an action:\n1) Send Tokens\n2) Check Balance\n")
-	choiceString, _ := reader.ReadString('\n')
-	choiceString = strings.TrimSpace(choiceString)
-
-	if choiceString == "1" {
-		// Proceed with token transfer
-		sendTokens(reader, privateKey, safeAddress)
-	} else if choiceString == "2" {
-		// Check balance
-		checkBalance(privateKey, safeAddress)
-	} else {
+	switch action {
+	case "1":
+		sendTokens(privateKey, safeAddress)
+	case "2":
+		checkBalance(safeAddress)
+	default:
 		fmt.Println("Invalid choice. Exiting.")
 	}
 }
 
-func sendTokens(reader *bufio.Reader, privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
-	fmt.Print("Enter recipient address: ")
-	recipientString, _ := reader.ReadString('\n')
-	recipientString = strings.TrimSpace(recipientString)
-	recipient := common.HexToAddress(recipientString)
+func promptForPrivateKey() *ecdsa.PrivateKey {
+	privateKeyString := promptForInput("Enter your private key: ")
+	privateKey, err := crypto.HexToECDSA(privateKeyString)
+	if err != nil {
+		log.Fatalf("Failed to parse private key: %v", err)
+	}
+	return privateKey
+}
 
-	fmt.Print("Enter amount to send: ")
-	amountString, _ := reader.ReadString('\n')
-	amountString = strings.TrimSpace(amountString)
-	amount, _ := new(big.Int).SetString(amountString, 10)
+func promptForAddress(prompt string) common.Address {
+	addressString := promptForInput(prompt)
+	return common.HexToAddress(addressString)
+}
 
-	client, err := ethclient.Dial("https://api.harmony.one")
+func promptForInput(prompt string) string {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(prompt)
+	input, _ := reader.ReadString('\n')
+	return strings.TrimSpace(input)
+}
+
+func promptForChoice(prompt string) string {
+	return promptForInput(prompt)
+}
+
+func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
+	recipient := promptForAddress("Enter recipient address: ")
+	amount := promptForBigInt("Enter amount to send: ")
+
+	client, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		log.Fatalf("Failed to connect to the Harmony blockchain: %v", err)
 	}
@@ -94,7 +100,7 @@ func sendTokens(reader *bufio.Reader, privateKey *ecdsa.PrivateKey, safeAddress 
 		log.Fatal(err)
 	}
 
-	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(1666600000)) // Harmony Mainnet Chain ID
+	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainID))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,8 +138,14 @@ func sendTokens(reader *bufio.Reader, privateKey *ecdsa.PrivateKey, safeAddress 
 	fmt.Printf("Transaction sent: %s\n", signedTx.Hash().Hex())
 }
 
-func checkBalance(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
-	client, err := ethclient.Dial("https://api.harmony.one")
+func promptForBigInt(prompt string) *big.Int {
+	amountString := promptForInput(prompt)
+	amount, _ := new(big.Int).SetString(amountString, 10)
+	return amount
+}
+
+func checkBalance(safeAddress common.Address) {
+	client, err := ethclient.Dial(rpcURL)
 	if err != nil {
 		log.Fatalf("Failed to connect to the Harmony blockchain: %v", err)
 	}
