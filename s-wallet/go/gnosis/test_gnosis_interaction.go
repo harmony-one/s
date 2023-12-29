@@ -92,17 +92,17 @@ func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to generate fromAddress: %v", err)
 	}
 
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed get gas price suggestion: %v", err)
 	}
 
 	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainID))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to generate contract binding: %v", err)
 	}
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)      // in wei
@@ -126,7 +126,7 @@ func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
 
 	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to sign transaction: %v", err)
 	}
 
 	// Send the transaction
