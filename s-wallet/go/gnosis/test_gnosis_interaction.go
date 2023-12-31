@@ -63,7 +63,25 @@ func promptForChoice(prompt string) string {
 	return promptForInput(prompt)
 }
 
+// Placeholder function with standard token ABI
+func getERC20ABI() (abi.ABI, error) {
+	const erc20ABI = `[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},
+    {"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},
+    {"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},
+    {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},
+    {"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},
+    {"payable":true,"stateMutability":"payable","type":"fallback"}]`
+
+	return abi.JSON(strings.NewReader(erc20ABI))
+}
+
 func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
+	tokenAddress := promptForAddress("Enter the token contract address: ")
 	recipient := promptForAddress("Enter recipient address: ")
 	amount := promptForBigInt("Enter amount to send: ")
 
@@ -73,66 +91,87 @@ func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
 	}
 	defer client.Close()
 
-	file, err := os.ReadFile("gnosis.json")
+	// Read Gnosis Safe contract ABI
+	file, err := os.ReadFile("GnosisSafe.json")
 	if err != nil {
 		log.Fatalf("Failed to read ABI file: %v", err)
 	}
 
-	parsedABI, err := abi.JSON(strings.NewReader(string(file)))
+	gnosisABI, err := abi.JSON(strings.NewReader(string(file)))
 	if err != nil {
 		log.Fatalf("Failed to parse ABI: %v", err)
 	}
 
+	tokenABI, err := getERC20ABI()
+	if err != nil {
+		log.Fatalf("Failed to get ERC20 ABI: %v", err)
+	}
+
+	// Prepare the data for the token transfer
+	tokenData, err := tokenABI.Pack("transfer", recipient, amount)
+	if err != nil {
+		log.Fatalf("Failed to pack data for token transfer: %v", err)
+	}
+
+	// Prepare the parameters for execTransaction
+	to := tokenAddress
+	value := big.NewInt(0) // For token transfer, value is 0
+	data := tokenData
+	operation := big.NewInt(0)         // Call operation
+	safeTxGas := big.NewInt(0)         // TODO: Need to set
+	baseGas := big.NewInt(0)           // TODO: Need to set
+	gasToken := common.Address{}       // Address of the token to use for gas payment (0x0 for ETH)
+	refundReceiver := common.Address{} // Address to receive refund (0x0 for no refund)
+
+	// Convert the public key to a public address
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
 		log.Fatal("Cannot assert type: publicKey is not of type *ecdsa.PublicKey")
 	}
-
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
-	if err != nil {
-		log.Fatal("Failed to generate fromAddress: %v", err)
-	}
 
+	// Fetch the current gas price from the network
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
-		log.Fatal("Failed get gas price suggestion: %v", err)
+		log.Fatalf("Failed to get gas price: %v", err)
 	}
 
+	// Fetch the current nonce for the fromAddress
+	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+	if err != nil {
+		log.Fatalf("Failed to get nonce: %v", err)
+	}
+
+	// Pack the data for execTransaction
+	execData, err := gnosisABI.Pack("execTransaction", to, value, data, operation, safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, nonce)
+	if err != nil {
+		log.Fatalf("Failed to pack data for execTransaction: %v", err)
+	}
+
+	// Create a new auth for the transaction
 	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainID))
 	if err != nil {
-		log.Fatal("Failed to generate contract binding: %v", err)
+		log.Fatalf("Failed to create authorized transactor: %v", err)
 	}
 	auth.Nonce = big.NewInt(int64(nonce))
-	auth.Value = big.NewInt(0)      // in wei
-	auth.GasLimit = uint64(3000000) // in units
+	auth.Value = big.NewInt(0)      // The value is 0 for contract calls
+	auth.GasLimit = uint64(3000000) // Set the gas limit
 	auth.GasPrice = gasPrice
 
-	// Construct the transaction data
-	data, err := parsedABI.Pack("transfer", recipient, amount)
-	if err != nil {
-		log.Fatalf("Failed to pack data for transfer: %v", err)
-	}
-
 	// Create the transaction
-	tx := types.NewTransaction(nonce, safeAddress, big.NewInt(0), auth.GasLimit, gasPrice, data)
+	tx := types.NewTransaction(nonce, safeAddress, auth.Value, auth.GasLimit, auth.GasPrice, execData)
 
 	// Sign the transaction
-	chainID, err := client.NetworkID(context.Background())
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(big.NewInt(chainID)), privateKey)
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
-	if err != nil {
-		log.Fatal("Failed to sign transaction: %v", err)
+		log.Fatalf("Failed to sign transaction: %v", err)
 	}
 
 	// Send the transaction
 	err = client.SendTransaction(context.Background(), signedTx)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to send transaction: %v", err)
 	}
 
 	fmt.Printf("Transaction sent: %s\n", signedTx.Hash().Hex())
