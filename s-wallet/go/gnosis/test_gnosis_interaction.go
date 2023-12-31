@@ -156,7 +156,7 @@ func sendTokens(privateKey *ecdsa.PrivateKey, safeAddress common.Address) {
 	}
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)      // The value is 0 for contract calls
-	auth.GasLimit = uint64(3000000) // Set the gas limit
+	auth.GasLimit = uint64(3000000) // TODO: Set the gas limit
 	auth.GasPrice = gasPrice
 
 	// Create the transaction
