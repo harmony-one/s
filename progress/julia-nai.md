@@ -1,4 +1,4 @@
-2023-12-30 Sat: [Added](https://github.com/harmony-one/s/pull/4/files) implimentation started on Friday for interactino with safe ABI. sendToken uses execTransaction from safe. Currently using a placeholdre ERC20 ABI in getERC20ABI().
+2023-12-30 Sat: [Added](https://github.com/harmony-one/s/pull/4/files) implementation started on Friday for interaction with safe ABI. sendToken uses execTransaction from safe. Currently using a placeholder ERC20 ABI in getERC20ABI().
 
 2023-12-29 Fri: Read through Gnosis safe [source code](https://github.com/safe-global/safe-contracts/blob/main/contracts/Safe.sol) and Protofire gnosis python CLI [source code](https://github.com/harmony-one/safe-cli) to find relevant contract. Worked on generating ABI from contract that matches expected ABI of our safe implimentation.
 
