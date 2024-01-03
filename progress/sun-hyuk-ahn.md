@@ -1,3 +1,9 @@
+2024-01-02 Mon: Implemented usdc.country transaction logic outlined in /moe. Will record a demo tomorrow. Began smart contract development to work for Base and Arbitrum.
+
+---
+
+2023-12-29 Fri: Out of office
+
 2023-12-28 Thu: Fixed monitor logic for the relayer. Subscribe is not supported for Harmony network, also web3js causes problem in abi decoding with hardhat environment, thus changed the logic to poll transactions every 1 second. The monitor is working as expected now.
 
 2023-12-27 Wed: Initiated development for relayer for signature verification. Also, looking at ways to possibly implement Circle's CCTP to the bridge.
