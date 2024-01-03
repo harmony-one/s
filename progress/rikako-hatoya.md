@@ -1,3 +1,21 @@
+2024-01-02 Tue: Started investigation into how to mint Soulbound NFT, looked into defi recap reading, and researched minimal-on-chain for intent-based applications (Uniswap, Anoma, Chainflip). Currently minimal uniswap prototype still in progress - will push progress so far after cleaning code.
+
+2024-01-01 Mon: Sunday continued, further investigation on how to create a test environment to execute tests.
+
+---
+
+2023-12-31 Sun: Continued following along solidity tutorial, scrapped previous demo code and started work on implementing uniswap prototype - figuring how to write a smart contract to execute swap on V3.
+
+2023-12-30 Sat: Recapped fundamental understanding of blockchain and started following along this (solidity tutorial series)[https://www.youtube.com/watch?v=umepbfKp5rI]. Also studied Harmony ONE tokens (sharding to achieve 100x lower transaction fee, ~2s transaction time).
+
+2023-12-29 Fri: Continued research now focused on uniswap, (UNI tokens, ERC20 token swap, Uniswap liquidity pools). (Followed along this uniswap tutorial)[https://www.youtube.com/watch?v=GwMyv7CmoRs]
+
+2023-12-28 Thu: Continued research (smart contract, liquidity pool, transaction fees (gas), bridging vs. swapping)
+
+2023-12-27 Wed: Continued research (dApps, defi, dex, token vs coin, proof of stake vs proof of work, validator vs staking).
+
+2023-12-26 Tue: Investigated how to implement harmony tokens to uniswap and how to integrate with other components of our app. Got very confused and was completely lost during uniswap tutorial: figured I take a step back and started learning crypto fundamentals (blockchain, nonce, hashing, ethereum and eth based tokens).
+
 2023-12-25 Mon: Forked and implemented minimal uniswap code. In need of access to harmony testnet in order to test out contract. Currently still working on swap code.
 
 ---
