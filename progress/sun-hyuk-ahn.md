@@ -1,4 +1,6 @@
-2024-01-02 Mon: Implemented usdc.country transaction logic outlined in /moe. Will record a demo tomorrow. Began smart contract development to work for Base and Arbitrum.
+2024-01-03 Wed: Fixed up /moe to not use smart contract and bridges. Initial implementation finished with transfer from ONE on Harmony to USDC to Base (vice versa). Will work on implementing the price logic and generalizing the logic to implement for Arbitrum.
+
+2024-01-02 Tue: Implemented usdc.country transaction logic outlined in /moe.
 
 ---
 
