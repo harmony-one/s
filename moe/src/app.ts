@@ -7,9 +7,9 @@ const app = express();
 const port = process.env.PORT;
 
 const INTERVAL = 5000; // 5 seconds
-const RPC = process.env.HARMONY_TESTNET_RPC || 'https://api.s0.b.hmny.io';
+const RPC = process.env.HARMONY_RPC || 'https://api.s0.b.hmny.io';
 
-const tracker = new TxTracker(RPC)
+const tracker = new TxTracker(RPC, "");
 const txs: ethers.providers.TransactionResponse[] = [];
 setInterval(async () => {
   try {
