@@ -16,22 +16,22 @@ abstract class Indexer {
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null;
   private chain: string;
-  private dstChain: string;
+  // private dstChain: string;
   private interval: number;
 
-  constructor(chain: string, dstChain: string, rpc: string, interval: number = 5000) {
+  constructor(chain: string, rpc: string, interval: number = 5000) {
     this.provider = new ethers.providers.JsonRpcProvider(rpc);
     this.txs = [];
     this.lastBlockNum = null;
     this.chain = chain;
-    this.dstChain = dstChain;
+    // this.dstChain = dstChain;
     this.interval = interval;
   }
 
   protected log(message: string, ...args: any[]) {
     let logMessage = `[${this.chain}Indexer] ${message}`;
     if (args.length > 0) {
-      logMessage += ` ${args.map(arg => JSON.stringify(arg)).join(' ')}`;
+      logMessage += `${args.map(arg => JSON.stringify(arg)).join(' ')}`;
     }
     console.log(logMessage);
   }
@@ -48,18 +48,8 @@ abstract class Indexer {
       const newTxs = await this.fetchTxs();
       for (const tx of newTxs) {
         try {
-          this.log('GOTTEEE', tx);
+          this.log('Handle Tx:', tx.hash);
           this.handleTx(tx);
-
-          // if (this.dstNetwork === BASE) {
-          // const amount = walletManager.convertOneToToken(tx.value);
-          // await walletManager.sendToken(tx.from, amount);
-          // } else { // BASE
-          //   // TODO: complete the following
-          // const amount = walletManager.convertTokenToOne();
-          // const response = await walletManager.sendOne(tx.from, amount);
-          // console.log(response);
-          // }
         } catch (error) {
           this.error(`Failed to process transaction ${tx.hash}`, error as Error);
         }
