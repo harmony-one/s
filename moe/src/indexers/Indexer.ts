@@ -5,30 +5,40 @@ import { BASE, HARMONY, walletManager } from '../server';
 
 // TODO: db setup
 // TODO: for erc-20 transfers, need to monitor tx sent to the contract
-class Indexer {
+
+export interface ExtendedTransactionResponse extends TransactionResponse {
+  amount?: ethers.BigNumber;
+}
+
+abstract class Indexer {
   // SECURITY: accessibility
-  public txs: TransactionResponse[];
+  public txs: ExtendedTransactionResponse[];
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null;
-  private srcNetwork: string;
-  private dstNetwork: string;
+  private chain: string;
+  private dstChain: string;
   private interval: number;
 
-  constructor(srcNetwork: string, dstNetwork: string, rpc: string, interval: number = 5000) {
+  constructor(chain: string, dstChain: string, rpc: string, interval: number = 5000) {
     this.provider = new ethers.providers.JsonRpcProvider(rpc);
     this.txs = [];
     this.lastBlockNum = null;
-    this.srcNetwork = srcNetwork;
-    this.dstNetwork = dstNetwork;
+    this.chain = chain;
+    this.dstChain = dstChain;
     this.interval = interval;
   }
 
-  protected log(message: string) {
-    console.log(`[${this.srcNetwork}Indexer] ${message}`);
+  protected log(message: string, ...args: any[]) {
+    let logMessage = `[${this.chain}Indexer] ${message}`;
+    if (args.length > 0) {
+      logMessage += ` ${args.map(arg => JSON.stringify(arg)).join(' ')}`;
+    }
+    console.log(logMessage);
   }
 
+
   protected error(message: string, error: Error) {
-    console.error(`[${this.srcNetwork}Indexer] ${message}:`, error);
+    console.error(`[${this.chain}Indexer] ${message}:`, error);
   }
 
   public async start() {
@@ -38,16 +48,18 @@ class Indexer {
       const newTxs = await this.fetchTxs();
       for (const tx of newTxs) {
         try {
-          this.log(`GOTTEEE: ${tx}`);
-          if (this.dstNetwork === BASE) {
-            const amount = walletManager.convertOneToToken(tx.value);
-            await walletManager.sendToken(tx.from, amount);
-          } else { // BASE
-            // TODO: complete the following
-            // const amount = walletManager.convertTokenToOne();
-            // const response = await walletManager.sendOne(tx.from, amount);
-            // console.log(response);
-          }
+          this.log('GOTTEEE', tx);
+          this.handleTx(tx);
+
+          // if (this.dstNetwork === BASE) {
+          // const amount = walletManager.convertOneToToken(tx.value);
+          // await walletManager.sendToken(tx.from, amount);
+          // } else { // BASE
+          //   // TODO: complete the following
+          // const amount = walletManager.convertTokenToOne();
+          // const response = await walletManager.sendOne(tx.from, amount);
+          // console.log(response);
+          // }
         } catch (error) {
           this.error(`Failed to process transaction ${tx.hash}`, error as Error);
         }
@@ -55,28 +67,10 @@ class Indexer {
     }, this.interval);
   }
 
-  public async fetchTxs(): Promise<TransactionResponse[]> {
-    const newTxs: TransactionResponse[] = [];
-    try {
-      const currBlockNum = await this.provider.getBlockNumber();
-      if (this.lastBlockNum === null) {
-        this.lastBlockNum = currBlockNum - 1;
-      }
+  protected abstract fetchTxs(): Promise<ExtendedTransactionResponse[]>;
 
-      if (this.lastBlockNum + 1 < currBlockNum) {
-        for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
-          const block = await this.provider.getBlockWithTransactions(blockNum);
-          const filteredTxs = block.transactions.filter(tx => tx.to && tx.to.toLowerCase() === config.wallet.ADDRESS);
-          newTxs.push(...filteredTxs);
-        }
-        this.lastBlockNum = currBlockNum;
-        this.log(`lastBlockNum updated to ${currBlockNum}`);
-      }
-    } catch (error) {
-      this.error('Error fetching transactions', error as Error);
-    }
-    return newTxs;
-  }
+  // TODO: update return type
+  protected abstract handleTx(tx: ExtendedTransactionResponse): any;
 }
 
 export default Indexer;

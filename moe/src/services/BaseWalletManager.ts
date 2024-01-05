@@ -28,6 +28,10 @@ class BaseWalletManager {
 
     // TODO: return transaction receipt
   }
+
+  public getTokenContract(): ethers.Contract {
+    return this.tokenContract;
+  }
 }
 
 export default BaseWalletManager;
