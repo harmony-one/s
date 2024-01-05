@@ -1,3 +1,5 @@
+2023-01-04 Thu: Fixed USDC indexer logic to accurately index ERC20 transactions, fixed Harmony indexer because subscribe is not supported (workaround to fetch transactions every 5 seconds), fixed gas estimation, and added error handling for a robust flow. Will work on price estimation and DB implementaion tomorrow.
+
 2024-01-03 Wed: Fixed up /moe to not use smart contract and bridges. Initial implementation finished with transfer from ONE on Harmony to USDC to Base (vice versa). Will work on implementing the price logic and generalizing the logic to implement for Arbitrum.
 
 2024-01-02 Tue: Implemented usdc.country transaction logic outlined in /moe.
