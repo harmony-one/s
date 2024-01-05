@@ -4,6 +4,7 @@ import { config } from '../config';
 import { BASE, HARMONY, walletManager } from '../server';
 
 // TODO: db setup
+// TODO: for erc-20 transfers, need to monitor tx sent to the contract
 class Indexer {
   // SECURITY: accessibility
   public txs: TransactionResponse[];
@@ -37,7 +38,7 @@ class Indexer {
       const newTxs = await this.fetchTxs();
       for (const tx of newTxs) {
         try {
-          console.log('GOTTEEE:', tx);
+          this.log(`GOTTEEE: ${tx}`);
           if (this.dstNetwork === BASE) {
             const amount = walletManager.convertOneToToken(tx.value);
             await walletManager.sendToken(tx.from, amount);
