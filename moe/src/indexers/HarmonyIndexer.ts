@@ -5,8 +5,8 @@ import { HARMONY, walletManager } from "../server";
 
 class HarmonyIndexer extends Indexer {
 
-  constructor(dstChain: string, rpc: string) {
-    super(HARMONY, dstChain, rpc);
+  constructor(rpc: string) {
+    super(HARMONY, rpc);
   }
 
   protected async fetchTxs(): Promise<TransactionResponse[]> {

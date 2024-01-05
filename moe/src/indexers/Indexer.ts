@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
 import { TransactionResponse } from '../types/customTypes';
-import { config } from '../config';
-import { BASE, HARMONY, walletManager } from '../server';
 
 // TODO: db setup
 // TODO: for erc-20 transfers, need to monitor tx sent to the contract

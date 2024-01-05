@@ -4,8 +4,8 @@ import Indexer, { ExtendedTransactionResponse } from './Indexer';
 
 class BaseIndexer extends Indexer {
 
-  constructor(dstChain: string, rpc: string) {
-    super(BASE, dstChain, rpc);
+  constructor(rpc: string) {
+    super(BASE, rpc);
   }
 
   protected async fetchTxs(): Promise<ExtendedTransactionResponse[]> {

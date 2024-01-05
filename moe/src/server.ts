@@ -1,6 +1,5 @@
 import app from './app';
 import { config } from './config';
-import Indexer from './indexers/Indexer';
 import WalletManager from './services/WalletManager';
 import abi from './abis/base_usdc.json';
 import HarmonyIndexer from './indexers/HarmonyIndexer';
@@ -14,10 +13,10 @@ export const BASE = 'Base';
 export const walletManager = new WalletManager(config.rpc.HARMONY_RPC, config.rpc.BASE_RPC, abi, config.contracts.BASE_USDC);
 
 // initialize and start the indexers
-const harmonyIndexer = new HarmonyIndexer(BASE, config.rpc.HARMONY_RPC);
+const harmonyIndexer = new HarmonyIndexer(config.rpc.HARMONY_RPC);
 harmonyIndexer.start();
 
-const baseIndexer = new BaseIndexer(HARMONY, config.rpc.BASE_RPC);
+const baseIndexer = new BaseIndexer(config.rpc.BASE_RPC);
 baseIndexer.start();
 
 
