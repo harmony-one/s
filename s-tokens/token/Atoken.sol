@@ -5,9 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
 
-contract ACountry is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes, ERC20FlashMint {
+contract ACountry is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes {
     address private _owner;
 
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
