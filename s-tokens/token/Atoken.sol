@@ -3,18 +3,41 @@ pragma solidity ^0.8.23;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
 
-contract ACountry is ERC20, ERC20Burnable, Ownable, ERC20Permit, ERC20Votes, ERC20FlashMint {
+contract ACountry is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes, ERC20FlashMint {
+    address private _owner;
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
     constructor(address initialOwner)
         ERC20("A.country", "A")
-        Ownable(initialOwner)
         ERC20Permit("A.country")
     {
+        _transferOwnership(initialOwner);
         _mint(msg.sender, 1000000000 * 10 ** decimals());
+    }
+
+    modifier onlyOwner() {
+        require(_owner == msg.sender, "Caller is not the owner");
+        _;
+    }
+
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0), "New owner cannot be the zero address");
+        _transferOwnership(newOwner);
+    }
+
+    function _transferOwnership(address newOwner) internal {
+        address oldOwner = _owner;
+        _owner = newOwner;
+        emit OwnershipTransferred(oldOwner, newOwner);
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
