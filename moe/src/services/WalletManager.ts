@@ -3,8 +3,8 @@ import { TransactionResponse } from '../types/customTypes';
 
 // TODO: add logger
 
-// TODO: get estimated gas pricec
-const HARMONY_GAS_LIMIT = '40000';
+// TODO: get estimated gas price
+const HARMONY_GAS_LIMIT = 40000;
 
 class WalletManager {
   private wallet: ethers.Wallet;
@@ -63,7 +63,7 @@ class WalletManager {
       try {
         const tx = {
           ...txRequest,
-          gasLimit: ethers.utils.hexlify(40000) // setting gas limit to 25000
+          gasLimit: ethers.utils.hexlify(HARMONY_GAS_LIMIT) // setting manual gas limit
         };
         return await this.wallet.sendTransaction(tx);
       } catch (secondError) {
