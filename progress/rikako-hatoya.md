@@ -1,4 +1,16 @@
-2024-01-03: Implemented and updated [single swap protocol](https://github.com/rika97/s/blob/main/s_swap/contracts/SingleSwap.sol) using Uniswap V3. In order to swap ERC20 to native token like $ONE, need to implement an intermediary. Researched UniswapX and bridging for cross-chain swap.
+2021-01-08 Mon: Created [repo](https://github.com/rika97/s/tree/main/s-nft) for minting soulbound nft tokens by using ERC721 contract with Openzeppelin. Investigating changes due to openzeppelin updates to make tokens burnable and making them soulbound. 
+
+---
+
+2021-01-07 Sun: Researched about different existing marketing campaigns using soulbound and neighboring concept (rewards for token holders).
+
+2024-01-06 Sat: Researched more about chainflip, and how to implement soulbound tokens.
+
+2024-01-05 Fri: PTO
+
+2024-01-04 Thu: Researched into soulbound tokens, ERC (ethereum guidelines), deploying smart contracts and different "accomplishments" such as airdrop, and researched more into deploying swaps on chainflip.
+
+2024-01-03 Wed: Implemented and updated [single swap protocol](https://github.com/rika97/s/blob/main/s_swap/contracts/SingleSwap.sol) using Uniswap V3. In order to swap ERC20 to native token like $ONE, need to implement an intermediary. Researched UniswapX and bridging for cross-chain swap.
 
 2024-01-02 Tue: Started investigation into how to mint Soulbound NFT, looked into defi recap reading, and researched minimal-on-chain for intent-based applications (Uniswap, Anoma, Chainflip). Currently minimal uniswap prototype still in progress - will push progress so far after cleaning code.
 
