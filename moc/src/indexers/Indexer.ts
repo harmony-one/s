@@ -9,20 +9,20 @@ export interface ExtendedTransactionResponse extends TransactionResponse {
 
 abstract class Indexer {
   // SECURITY: accessibility
-  public txs: ExtendedTransactionResponse[];
+  public txs: ExtendedTransactionResponse[] = [];
   protected provider: ethers.providers.JsonRpcProvider;
-  protected lastBlockNum: number | null;
+  protected lastBlockNum: number | null = null;
   private chain: string;
-  // private dstChain: string;
   private interval: number;
 
   constructor(chain: string, rpc: string, interval: number = 5000) {
     this.provider = new ethers.providers.JsonRpcProvider(rpc);
-    this.txs = [];
-    this.lastBlockNum = null;
     this.chain = chain;
-    // this.dstChain = dstChain;
     this.interval = interval;
+  }
+
+  public getTxs(): ExtendedTransactionResponse[] {
+    return this.txs;
   }
 
   protected log(message: string, ...args: any[]) {
