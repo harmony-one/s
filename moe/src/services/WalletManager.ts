@@ -1,11 +1,12 @@
 import { BigNumber, ethers } from 'ethers';
 import { TransactionResponse } from '../types/customTypes';
+import { getHighPrice, getLowPrice } from '../utils/price';
 
 // TODO: add logger
-
 // TODO: get estimated gas price
 const HARMONY_GAS_LIMIT = 40000;
 
+// TODO: update price before fetching them;
 class WalletManager {
   private wallet: ethers.Wallet;
   private harmonyProvider: ethers.providers.JsonRpcProvider;
@@ -24,17 +25,21 @@ class WalletManager {
     this.baseTokenContract = new ethers.Contract(baseTokenAddress, baseTokenAbi, this.wallet.connect(this.baseProvider));
   }
 
-  // TODO: use binance.us price
-  // NOTE: assumes 1 ONE = 0.02 USDC 
   public convertTokenToOne(amount: BigNumber): BigNumber {
-    const conversionRate = ethers.utils.parseUnits('0.02', 6);
+    const highPrice = getHighPrice();
+    if (!highPrice) {
+      throw new Error('Price data not available');
+    }
+    const conversionRate = ethers.utils.parseUnits(highPrice.toString(), 6);
     return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
   }
 
-  // TODO: use binance.us price
-  // NOTE: assumes 1 ONE = 0.02 USDC 
   public convertOneToToken(amount: BigNumber): BigNumber {
-    const conversionRate = ethers.utils.parseUnits('0.02', 6);
+    const lowPrice = getLowPrice();
+    if (!lowPrice) {
+      throw new Error('Low price data not available');
+    }
+    const conversionRate = ethers.utils.parseUnits(lowPrice.toString(), 6);
     return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', 18));
   }
 
