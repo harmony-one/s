@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { config } from '../config';
+import { ethers, BigNumber } from 'ethers';
+import { ExtendedTransactionResponse } from '../indexers/Indexer';
+import { HARMONY } from '../server';
 
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '30m';
 
 let highPrice: number | null = null;
 let lowPrice: number | null = null;
-
-// https://api.binance.us/api/v3/klines?symbol=ONEUSDT&interval=30m&startTime=1704817800000
 
 interface PriceData {
   openTime: number;
@@ -50,6 +51,24 @@ async function fetchPrice(): Promise<PriceData> {
   }
 }
 
+function convertOneToToken(amount: BigNumber): BigNumber {
+  const lowPrice = getLowPrice();
+  if (!lowPrice) {
+    throw new Error('Low price data not available');
+  }
+  const conversionRate = ethers.utils.parseUnits(lowPrice.toString(), 6);
+  return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', 18));
+}
+
+function convertTokenToOne(amount: BigNumber): BigNumber {
+  const highPrice = getHighPrice();
+  if (!highPrice) {
+    throw new Error('Price data not available');
+  }
+  const conversionRate = ethers.utils.parseUnits(highPrice.toString(), 6);
+  return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
+}
+
 function getHighPrice(): number | null {
   return highPrice;
 }
@@ -58,4 +77,19 @@ function getLowPrice(): number | null {
   return lowPrice;
 }
 
-export { PriceData, fetchPrice, getHighPrice, getLowPrice };
+function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
+  let value: string;
+
+  console.log(`TO: ${chain}; VALUE: ${tx.value}; AMOUNT: ${tx.amount}`);
+
+  if (chain === HARMONY) {
+    value = ethers.utils.formatUnits(tx.value, 18);
+  } else {
+    value = ethers.utils.formatUnits(tx.amount as BigNumber, 6);
+  }
+
+  const numValue = parseFloat(value);
+  return parseFloat(numValue.toFixed(6));
+}
+
+export { PriceData, fetchPrice, convertOneToToken, convertTokenToOne, getHighPrice, getLowPrice, getAmount };

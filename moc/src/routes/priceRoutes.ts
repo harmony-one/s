@@ -1,8 +1,5 @@
 import express from 'express';
 import { fetchPrice, getHighPrice, getLowPrice } from '../utils/price';
-import { walletManager } from '../server';
-import { BigNumber, ethers } from 'ethers';
-import { parseUnits } from 'ethers/lib/utils';
 
 const router = express.Router();
 

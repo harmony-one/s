@@ -1,11 +1,12 @@
 import { config } from '../config';
-import { BASE, walletManager } from '../server';
+import { BASE, HARMONY, walletManager } from '../server';
+import { convertTokenToOne } from '../utils/price';
 import Indexer, { ExtendedTransactionResponse } from './Indexer';
 
 class BaseIndexer extends Indexer {
 
   constructor(rpc: string) {
-    super(BASE, rpc);
+    super(BASE, HARMONY, 'USDC', rpc);
   }
 
   protected async fetchTxs(): Promise<ExtendedTransactionResponse[]> {
@@ -48,13 +49,15 @@ class BaseIndexer extends Indexer {
     return newTxs;
   }
 
-  protected async handleTx(tx: ExtendedTransactionResponse) {
+  protected async handleTx(tx: ExtendedTransactionResponse): Promise<ExtendedTransactionResponse> {
     try {
-      const amount = walletManager.convertTokenToOne(tx.amount!); // amount should always be present for Transfer events
+      const amount = convertTokenToOne(tx.amount!); // amount should always be present for Transfer events
       const response = await walletManager.sendOne(tx.from, amount);
       this.log(`Handled Transaction ${response.hash} on Harmony`);
+      return response;
     } catch (error) {
       this.error('Failed to handle tx', error as Error);
+      throw error;
     }
   }
 }
