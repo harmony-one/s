@@ -23,15 +23,24 @@ harmonyIndexer.start();
 const baseIndexer = new BaseIndexer(config.rpc.BASE_RPC);
 baseIndexer.start();
 
+// fetch and configure price
+const fetchPriceWithInterval = async () => {
+  try {
+    const priceData = await fetchPrice();
+    console.log('Price data fetched: ', priceData);
+  } catch (error) {
+    console.error('Error fetching price data:', error);
+  }
+};
+
+fetchPriceWithInterval();
+setInterval(fetchPriceWithInterval, 30 * 60 * 1000); // 30 minutes
+
 // root
 app.get('/', async (req, res) => {
   try {
-    // const transactions = await getAllTransactions();
-    // res.json(transactions);
 
     const transactions = await getAllTransactions();
-
-    // TODO: limit transactions to certain number (50?)
     // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
 
@@ -76,19 +85,6 @@ app.get('/', async (req, res) => {
 
 // price route
 app.use('/price', priceRoutes);
-
-// TODO: fetchPrice should only be called once; prevent multiple calls of fetchPrice in different locations
-const fetchPriceWithInterval = async () => {
-  try {
-    const priceData = await fetchPrice();
-    console.log('Price data fetched: ', priceData);
-  } catch (error) {
-    console.error('Error fetching price data:', error);
-  }
-};
-
-fetchPriceWithInterval();
-setInterval(fetchPriceWithInterval, 30 * 60 * 1000); // 30 minutes
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
