@@ -18,6 +18,16 @@ def count_occurrences(strings):
 
     return sorted_count_dict
 
+def count_pairs(array):
+    pair_counts = {}
+
+    for pair in array:
+        if pair in pair_counts:
+            pair_counts[pair] += 1
+        else:
+            pair_counts[pair] = 1
+
+    return dict(sorted(pair_counts.items(), key=lambda item: item[1], reverse=True))
 
 def get_operations(page=0, size=10000):
     response = requests.get(f'{bridge_url}/operations-full?size={size}&page={page}')
@@ -79,11 +89,22 @@ def get_bridge_stats():
 
     networks = []
 
+    eth_to_one_pairs = [] # (erc20, hrc20)
+    one_to_eth_pairs = [] # (hrc20, erc20)
+    
+
     for i in range(100):
         items = get_operations(i)
         for item in items:
             item_timestamp = int(item['timestamp'])
             item_amount = float(item['amount'])
+
+            if item['status'] == 'success' and item_timestamp >= week_timestamp and item_amount > 0:
+                if item['type'] == 'eth_to_one' and item['erc20Address'] and item['hrc20Address']:
+                    eth_to_one_pairs.append((item['network'], item['erc20Address'],item['hrc20Address']))
+                elif item['type'] == 'one_to_eth' and item['erc20Address'] and item['hrc20Address']:
+                    one_to_eth_pairs.append((item['network'], item['hrc20Address'],item['erc20Address']))
+
             if item_timestamp >= week_timestamp and item_amount > 0:
                 total_ctr += 1
 
@@ -120,9 +141,23 @@ def get_bridge_stats():
     print("waiting", waiting_ctr)
     print("in progress", in_progress_ctr)
     print("skip", skip_ctr)
-    print("error", skip_ctr)
+    print("error", error_ctr)
     print("success", success_ctr)
     print('total', total_ctr)
+
+    print("\nTop Pairs one_to_eth (org, dest)")
+    for i, (key, value) in enumerate(count_pairs(one_to_eth_pairs).items()):
+        if i < 3:
+            print(f"{key}: {value}")
+        else:
+            break
+    print("\nTop Pairs eth_to_one (org, dest)")
+    for i, (key, value) in enumerate(count_pairs(eth_to_one_pairs).items()):
+        if i < 3:
+            print(f"{key}: {value}")
+        else:
+            break
+
     days_amount_list = sorted(days_amount_map.values(), reverse=True)
     value = days_amount_list[0]
     value_total = sum(days_amount_list)
