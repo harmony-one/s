@@ -7,8 +7,9 @@ import BaseIndexer from './indexers/BaseIndexer';
 import priceRoutes from './routes/priceRoutes';
 import { fetchPrice } from './utils/price';
 import { getAllTransactions } from './db/db';
+import { getExplorer, shortenHash } from './utils/chain';
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.express.PORT;
 export const HARMONY = 'Harmony';
 export const BASE = 'Base';
 
@@ -31,7 +32,7 @@ app.get('/', async (req, res) => {
     const transactions = await getAllTransactions();
 
     // TODO: limit transactions to certain number (50?)
-    // TODO: amount should show dollar equivalent as well
+    // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
     htmlResponse += `<table border="1">
     <tr>
@@ -49,11 +50,11 @@ app.get('/', async (req, res) => {
     for (const tx of transactions) {
       htmlResponse += `<tr>
         <td>${tx.id}</td>
-        <td>${tx.address}</td>
+        <td>${shortenHash(tx.address)}</a></td>
         <td>${tx.src_chain}</td>
-        <td>${tx.src_hash}</td>
+        <td><a href="${getExplorer(tx.src_chain, tx.src_hash)}" target="_blank">${shortenHash(tx.src_hash)}</a></td>
         <td>${tx.dst_chain}</td>
-        <td>${tx.dst_hash}</td>
+        <td><a href="${getExplorer(tx.dst_chain, tx.dst_hash)}" target="_blank">${shortenHash(tx.dst_hash)}</a></td>
         <td>${tx.asset}</td>
         <td>${parseFloat(tx.amount).toFixed(6)}</td>
         <td>${tx.date}</td>

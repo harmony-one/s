@@ -17,7 +17,7 @@ export const config = {
     BASE_USDC: process.env.BASE_USDC || '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
   },
   price: {
-    URL: process.env.PRICE_API || ''
+    URL: process.env.PRICE_URL || ''
   },
   db: {
     user: process.env.DB_USER,
