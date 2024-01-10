@@ -34,6 +34,9 @@ app.get('/', async (req, res) => {
     // TODO: limit transactions to certain number (50?)
     // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
+
+    const address = await walletManager.getAddress();
+    htmlResponse += `Address: ${address}`;
     htmlResponse += `<table border="1">
     <tr>
       <th>ID</th>

@@ -73,6 +73,10 @@ class WalletManager {
   public getTokenContract(): ethers.Contract {
     return this.baseTokenContract;
   }
+
+  public async getAddress(): Promise<string> {
+    return await this.wallet.getAddress();
+  }
 }
 
 export default WalletManager;
