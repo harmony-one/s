@@ -3,6 +3,7 @@ import { TransactionResponse } from '../types/customTypes';
 import { query } from '../db/db';
 import { getAmount } from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
+import { config } from '../config';
 
 // TODO: uniformed logging
 export interface ExtendedTransactionResponse extends TransactionResponse {
@@ -11,20 +12,15 @@ export interface ExtendedTransactionResponse extends TransactionResponse {
 
 abstract class Indexer {
   // TODO: accessibility
-  // TODO: remove dstChain and asset
   public txs: ExtendedTransactionResponse[] = [];
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null = null;
   private chain: string;
-  private dstChain: string;
-  private asset: string;
   private interval: number;
 
-  constructor(chain: string, dstChain: string, asset: string, rpc: string, interval: number = 5000) {
+  constructor(chain: string, rpc: string, interval: number = 5000) {
     this.provider = new ethers.providers.JsonRpcProvider(rpc);
     this.chain = chain;
-    this.dstChain = dstChain;
-    this.asset = asset;
     this.interval = interval;
   }
 
@@ -67,10 +63,6 @@ abstract class Indexer {
 
   protected abstract handleTx(tx: ExtendedTransactionResponse): Promise<ExtendedTransactionResponse>;
 
-  protected getAmount(tx: TransactionResponse): number {
-    return getAmount(tx, this.dstChain);
-  }
-
   protected async saveTx(tx: ExtendedTransactionResponse, dstTx: ExtendedTransactionResponse): Promise<void> {
     try {
       const insertQuery = `
@@ -83,6 +75,14 @@ abstract class Indexer {
     } catch (error) {
       this.error('Failed to save transaction', error as Error);
     }
+  }
+
+  protected getAmount(tx: TransactionResponse): number {
+    return getAmount(tx, getDstChain(this.chain));
+  }
+
+  protected isFundingTx(address: string): boolean {
+    return config.wallet.FUNDING_ADDRESS.includes(address);
   }
 }
 
