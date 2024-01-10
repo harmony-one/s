@@ -25,24 +25,6 @@ class WalletManager {
     this.baseTokenContract = new ethers.Contract(baseTokenAddress, baseTokenAbi, this.wallet.connect(this.baseProvider));
   }
 
-  public convertTokenToOne(amount: BigNumber): BigNumber {
-    const highPrice = getHighPrice();
-    if (!highPrice) {
-      throw new Error('Price data not available');
-    }
-    const conversionRate = ethers.utils.parseUnits(highPrice.toString(), 6);
-    return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
-  }
-
-  public convertOneToToken(amount: BigNumber): BigNumber {
-    const lowPrice = getLowPrice();
-    if (!lowPrice) {
-      throw new Error('Low price data not available');
-    }
-    const conversionRate = ethers.utils.parseUnits(lowPrice.toString(), 6);
-    return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', 18));
-  }
-
   // TODO: handle reverted tx
   public async sendOne(address: string, amount: BigNumber): Promise<TransactionResponse> {
     const MIN_GAS_PRICE = ethers.utils.parseUnits('100', 'gwei'); // 100 GWEI

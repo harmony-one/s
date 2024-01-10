@@ -4,7 +4,7 @@ dotenv.config();
 
 export const config = {
   wallet: {
-    ADDRESS: process.env.ADDRESS || '0xbf033d91fa2a37e14aca24e2c06c2f041be7ae38',
+    ADDRESS: process.env.ADDRESS || '',
   },
   express: {
     PORT: process.env.PORT || 3000,
@@ -18,5 +18,12 @@ export const config = {
   },
   price: {
     URL: process.env.PRICE_API || ''
+  },
+  db: {
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT || 5432,
   }
 };
