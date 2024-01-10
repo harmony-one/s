@@ -3,6 +3,7 @@ import { TransactionResponse } from '../types/customTypes';
 import { query } from '../db/db';
 import { getAmount } from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
+import { config } from '../config';
 
 // TODO: uniformed logging
 export interface ExtendedTransactionResponse extends TransactionResponse {
@@ -83,6 +84,10 @@ abstract class Indexer {
     } catch (error) {
       this.error('Failed to save transaction', error as Error);
     }
+  }
+
+  protected isFundingTx(address: string): boolean {
+    return config.wallet.FUNDING_ADDRESS.includes(address);
   }
 }
 
