@@ -5,6 +5,20 @@ from dateutil.relativedelta import relativedelta
 bridge_url = 'https://hmy-lz-api-token.fly.dev'
 stake_api_url = 'https://api.stake.hmny.io'
 
+def count_occurrences(strings):
+    count_dict = {}
+
+    for string in strings:
+        if string in count_dict:
+            count_dict[string] += 1
+        else:
+            count_dict[string] = 1
+
+    sorted_count_dict = dict(sorted(count_dict.items(), key=lambda item: item[1], reverse=True))
+
+    return sorted_count_dict
+
+
 def get_operations(page=0, size=10000):
     response = requests.get(f'{bridge_url}/operations-full?size={size}&page={page}')
     return response.json()['content']
@@ -63,6 +77,8 @@ def get_bridge_stats():
     success_ctr = 0
     total_ctr = 0
 
+    networks = []
+
     for i in range(100):
         items = get_operations(i)
         for item in items:
@@ -70,6 +86,9 @@ def get_bridge_stats():
             item_amount = float(item['amount'])
             if item_timestamp >= week_timestamp and item_amount > 0:
                 total_ctr += 1
+
+            if item_timestamp >= week_timestamp and item_amount > 0:
+                networks.append(item['network'])
 
             if item['status'] == 'waiting' and item_timestamp >= week_timestamp and item_amount > 0:
                 waiting_ctr += 1
@@ -97,6 +116,7 @@ def get_bridge_stats():
         if last_element and int(last_element['timestamp']) < week_timestamp:
             break
 
+    print(count_occurrences(networks))
     print("waiting", waiting_ctr)
     print("in progress", in_progress_ctr)
     print("skip", skip_ctr)
