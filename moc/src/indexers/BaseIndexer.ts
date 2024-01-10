@@ -22,7 +22,8 @@ class BaseIndexer extends Indexer {
         const block = await this.provider.getBlockWithTransactions(blockNum);
 
         for (const tx of block.transactions) {
-          if (tx.to && tx.to.toLowerCase() === config.contracts.BASE_USDC.toLowerCase()) {
+          if (tx.to && tx.to.toLowerCase() === config.contracts.BASE_USDC.toLowerCase()
+            && tx.from && !this.isFundingTx(tx.from)) {
             try {
               const receipt = await this.provider.getTransactionReceipt(tx.hash);
               receipt.logs.forEach(log => {
