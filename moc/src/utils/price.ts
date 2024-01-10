@@ -5,7 +5,7 @@ import { ExtendedTransactionResponse } from '../indexers/Indexer';
 import { HARMONY } from '../server';
 
 const SYMBOL = 'ONEUSDT';
-const INTERVAL = '30m';
+const INTERVAL = '1h';
 
 let highPrice: number | null = null;
 let lowPrice: number | null = null;
