@@ -78,7 +78,6 @@ abstract class Indexer {
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
 
-      // TODO: switch asset
       await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), dstTx.hash, getDstAsset(this.chain), this.getAmount(dstTx)]);
       this.log('Transaction saved:', tx.hash);
     } catch (error) {

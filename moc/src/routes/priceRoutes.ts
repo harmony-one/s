@@ -3,6 +3,7 @@ import { fetchPrice, getHighPrice, getLowPrice } from '../utils/price';
 
 const router = express.Router();
 
+// TODO: post raw data
 router.get('/', async (req, res) => {
   try {
     // update price
