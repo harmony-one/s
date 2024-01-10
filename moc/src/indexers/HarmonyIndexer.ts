@@ -20,7 +20,7 @@ class HarmonyIndexer extends Indexer {
       if (this.lastBlockNum + 1 < currBlockNum) {
         for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
           const block = await this.provider.getBlockWithTransactions(blockNum);
-          const filteredTxs = block.transactions.filter(tx => tx.to && tx.to.toLowerCase() === config.wallet.ADDRESS);
+          const filteredTxs = block.transactions.filter(tx => tx.to && tx.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase());
           newTxs.push(...filteredTxs);
         }
         this.lastBlockNum = currBlockNum;
