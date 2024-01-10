@@ -1,13 +1,12 @@
 import express from 'express';
-import { fetchPrice, getHighPrice, getLowPrice } from '../utils/price';
+import { getPrice, getHighPrice, getLowPrice } from '../utils/price';
 
 const router = express.Router();
 
-// TODO: post raw data
 router.get('/', async (req, res) => {
   try {
     // update price
-    const { lowPrice, highPrice } = await fetchPrice();
+    const { lowPrice, highPrice } = await getPrice()!;
     const highUsdc = highPrice.toFixed(6);
     const highOne = (1 / highPrice).toFixed(6);
     const lowUsdc = lowPrice.toFixed(6);
@@ -35,9 +34,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/data', async (req, res) => {
+router.get('/data', (req, res) => {
   try {
-    const priceData = await fetchPrice();
+    const priceData = getPrice();
     res.json(priceData);
   } catch (error) {
     res.status(500).send('Error fetching price data');

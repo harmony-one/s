@@ -7,8 +7,7 @@ import { HARMONY } from '../server';
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
 
-let highPrice: number | null = null;
-let lowPrice: number | null = null;
+let priceData: PriceData | null = null;
 
 interface PriceData {
   openTime: number;
@@ -18,7 +17,7 @@ interface PriceData {
 }
 
 async function fetchPrice(): Promise<PriceData> {
-  const startTime = Date.now() - (60 * 60 * 1000); // last hour
+  const startTime = Date.now() - (120 * 60 * 1000); // last 2 hours
 
   const params = {
     symbol: SYMBOL,
@@ -34,21 +33,32 @@ async function fetchPrice(): Promise<PriceData> {
     }
 
     const recentPrice = data[data.length - 1];
-    const priceData = {
+
+    // update priceData with the fetched one
+    priceData = {
       openTime: recentPrice[0],
       closeTime: recentPrice[6],
       highPrice: parseFloat(recentPrice[2]),
       lowPrice: parseFloat(recentPrice[3])
     };
 
-    highPrice = priceData.highPrice;
-    lowPrice = priceData.lowPrice;
-
     return priceData;
   } catch (error) {
     console.error('Error fetching price data:', error);
     throw error;
   }
+}
+
+function getPrice(): PriceData | null {
+  return priceData;
+}
+
+function getHighPrice(): number | undefined {
+  return priceData?.highPrice;
+}
+
+function getLowPrice(): number | undefined {
+  return priceData?.lowPrice;
 }
 
 function convertOneToToken(amount: BigNumber): BigNumber {
@@ -69,18 +79,8 @@ function convertTokenToOne(amount: BigNumber): BigNumber {
   return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
 }
 
-function getHighPrice(): number | null {
-  return highPrice;
-}
-
-function getLowPrice(): number | null {
-  return lowPrice;
-}
-
 function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
   let value: string;
-
-  console.log(`TO: ${chain}; VALUE: ${tx.value}; AMOUNT: ${tx.amount}`);
 
   if (chain === HARMONY) {
     value = ethers.utils.formatUnits(tx.value, 18);
@@ -92,4 +92,4 @@ function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
   return parseFloat(numValue.toFixed(6));
 }
 
-export { PriceData, fetchPrice, convertOneToToken, convertTokenToOne, getHighPrice, getLowPrice, getAmount };
+export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getAmount };
