@@ -1,6 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
 import { TransactionResponse } from '../types/customTypes';
-import { getHighPrice, getLowPrice } from '../utils/price';
 
 // TODO: add logger
 // TODO: get estimated gas price
