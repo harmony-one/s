@@ -47,20 +47,26 @@ abstract class Indexer {
 
   public async start() {
     this.log('Starting Indexer');
+    this.pollTxs()
+  }
 
-    setInterval(async () => {
+  private async pollTxs() {
+    try {
       const newTxs = await this.fetchTxs();
       for (const tx of newTxs) {
         try {
           this.log('Handle Tx:', tx.hash);
           const dstTx = await this.handleTx(tx);
           await this.saveTx(tx, dstTx);
-
         } catch (error) {
           this.error(`Failed to process transaction ${tx.hash}`, error as Error);
         }
       }
-    }, this.interval);
+    } catch (e) {
+      this.log('Polling error:', e)
+    } finally {
+      setTimeout(() => this.pollTxs(), this.interval)
+    }
   }
 
   protected abstract fetchTxs(): Promise<ExtendedTransactionResponse[]>;
