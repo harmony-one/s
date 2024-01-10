@@ -5,7 +5,8 @@ dotenv.config();
 // load funding address
 var fundingAddress: string[] = [];
 if (process.env.FUNDING_ADDRESS) {
-  fundingAddress = process.env.FUNDING_ADDRESS.split(',');
+  fundingAddress = process.env.FUNDING_ADDRESS.split(',')
+    .map(address => address.toLowerCase());
 }
 
 export const config = {

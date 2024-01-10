@@ -82,7 +82,7 @@ abstract class Indexer {
   }
 
   protected isFundingTx(address: string): boolean {
-    return config.wallet.FUNDING_ADDRESS.includes(address);
+    return config.wallet.FUNDING_ADDRESS.includes(address.toLowerCase());
   }
 }
 
