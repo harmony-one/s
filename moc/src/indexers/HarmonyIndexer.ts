@@ -11,23 +11,13 @@ class HarmonyIndexer extends Indexer {
     super(HARMONY, rpc);
   }
 
-  protected async fetchTxs(): Promise<TransactionResponse[]> {
+  protected async fetchTxs(blockNum: number): Promise<TransactionResponse[]> {
     const newTxs: TransactionResponse[] = [];
     try {
-      const currBlockNum = await this.provider.getBlockNumber();
-      if (this.lastBlockNum === null) {
-        this.lastBlockNum = currBlockNum - 1;
-      }
-      if (this.lastBlockNum + 1 < currBlockNum) {
-        for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
-          const block = await this.provider.getBlockWithTransactions(blockNum);
-          const filteredTxs = block.transactions.filter(tx =>
-            tx.from && !this.isFundingTx(tx.from) && tx.to && isAddrEqual(tx.to, config.wallet.ADDRESS));
-          newTxs.push(...filteredTxs);
-        }
-        this.lastBlockNum = currBlockNum;
-        this.log(`lastBlockNum updated to ${currBlockNum}`);
-      }
+      const block = await this.provider.getBlockWithTransactions(blockNum);
+      const filteredTxs = block.transactions.filter(tx =>
+        tx.from && !this.isFundingTx(tx.from) && tx.to && isAddrEqual(tx.to, config.wallet.ADDRESS));
+      newTxs.push(...filteredTxs);
     } catch (error) {
       this.error('Error fetching transactions', error as Error);
     }

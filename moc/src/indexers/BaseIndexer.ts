@@ -10,44 +10,35 @@ class BaseIndexer extends Indexer {
     super(BASE, rpc);
   }
 
-  protected async fetchTxs(): Promise<ExtendedTransactionResponse[]> {
+  protected async fetchTxs(blockNum: number): Promise<ExtendedTransactionResponse[]> {
     const newTxs: ExtendedTransactionResponse[] = [];
     const tokenContract = walletManager.getTokenContract();
+
     try {
-      const currBlockNum = await this.provider.getBlockNumber();
-      if (this.lastBlockNum === null) {
-        this.lastBlockNum = currBlockNum - 1;
-      }
-
-      for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
-        const block = await this.provider.getBlockWithTransactions(blockNum);
-
-        for (const tx of block.transactions) {
-          if (tx.to && isAddrEqual(tx.to, config.contracts.BASE_USDC)
-            && tx.from && !this.isFundingTx(tx.from)) {
-            try {
-              const receipt = await this.provider.getTransactionReceipt(tx.hash);
-              receipt.logs.forEach(log => {
-                const parsedLog = tokenContract.interface.parseLog(log);
-                if (parsedLog.name === 'Transfer' && isAddrEqual(parsedLog.args.to, config.wallet.ADDRESS)) {
-                  newTxs.push({
-                    ...tx,
-                    amount: parsedLog.args.value, // include the transferred amount
-                  });
-                }
-              });
-            } catch (parseError) {
-              this.error(`Error parsing transaction ${tx.hash}`, parseError as Error);
-            }
+      const block = await this.provider.getBlockWithTransactions(blockNum);
+      for (const tx of block.transactions) {
+        if (tx.to && isAddrEqual(tx.to, config.contracts.BASE_USDC)
+          && tx.from && !this.isFundingTx(tx.from)) {
+          try {
+            const receipt = await this.provider.getTransactionReceipt(tx.hash);
+            receipt.logs.forEach(log => {
+              const parsedLog = tokenContract.interface.parseLog(log);
+              if (parsedLog.name === 'Transfer' && parsedLog.args.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase()) {
+                newTxs.push({
+                  ...tx,
+                  amount: parsedLog.args.value, // include the transferred amount
+                });
+              }
+            });
+          } catch (parseError) {
+            this.error(`Error parsing transaction ${tx.hash}`, parseError as Error);
           }
         }
       }
-
-      this.lastBlockNum = currBlockNum;
-      this.log(`lastBlockNum updated to ${currBlockNum}`);
     } catch (error) {
       this.error('Error fetching transactions', error as Error);
     }
+
     return newTxs;
   }
 
