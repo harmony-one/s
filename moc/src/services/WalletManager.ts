@@ -5,7 +5,6 @@ import { TransactionResponse } from '../types/customTypes';
 // TODO: get estimated gas price
 const HARMONY_GAS_LIMIT = 40000;
 
-// TODO: update price before fetching them;
 class WalletManager {
   private wallet: ethers.Wallet;
   private harmonyProvider: ethers.providers.JsonRpcProvider;

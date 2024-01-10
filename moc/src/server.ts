@@ -34,7 +34,7 @@ const fetchPriceWithInterval = async () => {
 };
 
 fetchPriceWithInterval();
-setInterval(fetchPriceWithInterval, 30 * 60 * 1000); // 30 minutes
+setInterval(fetchPriceWithInterval, 60 * 60 * 1000); // 60 minutes
 
 // root
 app.get('/', async (req, res) => {
