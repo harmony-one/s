@@ -3,6 +3,7 @@ import { TransactionResponse } from "../types/customTypes";
 import { config } from "../config";
 import { BASE, HARMONY, walletManager } from "../server";
 import { convertOneToToken } from "../utils/price";
+import { isAddrEqual } from "../utils/chain";
 
 class HarmonyIndexer extends Indexer {
 
@@ -21,7 +22,7 @@ class HarmonyIndexer extends Indexer {
         for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
           const block = await this.provider.getBlockWithTransactions(blockNum);
           const filteredTxs = block.transactions.filter(tx =>
-            tx.from && !this.isFundingTx(tx.from) && tx.to && tx.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase());
+            tx.from && !this.isFundingTx(tx.from) && tx.to && isAddrEqual(tx.to, config.wallet.ADDRESS));
           newTxs.push(...filteredTxs);
         }
         this.lastBlockNum = currBlockNum;

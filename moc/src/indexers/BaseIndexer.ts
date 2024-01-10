@@ -1,5 +1,6 @@
 import { config } from '../config';
 import { BASE, HARMONY, walletManager } from '../server';
+import { isAddrEqual } from '../utils/chain';
 import { convertTokenToOne } from '../utils/price';
 import Indexer, { ExtendedTransactionResponse } from './Indexer';
 
@@ -22,13 +23,13 @@ class BaseIndexer extends Indexer {
         const block = await this.provider.getBlockWithTransactions(blockNum);
 
         for (const tx of block.transactions) {
-          if (tx.to && tx.to.toLowerCase() === config.contracts.BASE_USDC.toLowerCase()
+          if (tx.to && isAddrEqual(tx.to, config.contracts.BASE_USDC)
             && tx.from && !this.isFundingTx(tx.from)) {
             try {
               const receipt = await this.provider.getTransactionReceipt(tx.hash);
               receipt.logs.forEach(log => {
                 const parsedLog = tokenContract.interface.parseLog(log);
-                if (parsedLog.name === 'Transfer' && parsedLog.args.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase()) {
+                if (parsedLog.name === 'Transfer' && isAddrEqual(parsedLog.args.to, config.wallet.ADDRESS)) {
                   newTxs.push({
                     ...tx,
                     amount: parsedLog.args.value, // include the transferred amount
