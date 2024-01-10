@@ -3,6 +3,7 @@ import { TransactionResponse } from '../types/customTypes';
 import { query } from '../db/db';
 import { getAmount } from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
+import {PriceProvider} from "../services/PriceProvider";
 
 // TODO: uniformed logging
 export interface ExtendedTransactionResponse extends TransactionResponse {
@@ -19,6 +20,7 @@ abstract class Indexer {
   private dstChain: string;
   private asset: string;
   private interval: number;
+  private priceProvider = new PriceProvider()
 
   constructor(chain: string, dstChain: string, asset: string, rpc: string, interval: number = 5000) {
     this.provider = new ethers.providers.JsonRpcProvider(rpc);
