@@ -6,7 +6,7 @@ import Indexer, { ExtendedTransactionResponse } from './Indexer';
 class BaseIndexer extends Indexer {
 
   constructor(rpc: string) {
-    super(BASE, HARMONY, 'USDC', rpc);
+    super(BASE, rpc);
   }
 
   protected async fetchTxs(): Promise<ExtendedTransactionResponse[]> {

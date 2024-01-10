@@ -7,7 +7,7 @@ import { convertOneToToken } from "../utils/price";
 class HarmonyIndexer extends Indexer {
 
   constructor(rpc: string) {
-    super(HARMONY, BASE, 'ONE', rpc);
+    super(HARMONY, rpc);
   }
 
   protected async fetchTxs(): Promise<TransactionResponse[]> {
