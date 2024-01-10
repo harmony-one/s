@@ -27,7 +27,7 @@ class BaseIndexer extends Indexer {
               const receipt = await this.provider.getTransactionReceipt(tx.hash);
               receipt.logs.forEach(log => {
                 const parsedLog = tokenContract.interface.parseLog(log);
-                if (parsedLog.name === 'Transfer' && parsedLog.args.to.toLowerCase() === config.wallet.ADDRESS) {
+                if (parsedLog.name === 'Transfer' && parsedLog.args.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase()) {
                   newTxs.push({
                     ...tx,
                     amount: parsedLog.args.value, // include the transferred amount
