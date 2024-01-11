@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { TransactionResponse } from '../types/customTypes';
 import { query } from '../db/db';
 import { getAmount } from '../utils/price';
@@ -8,6 +8,9 @@ import { config } from '../config';
 // TODO: uniformed logging
 export interface ExtendedTransactionResponse extends TransactionResponse {
   amount?: ethers.BigNumber;
+  cappedAmount?: ethers.BigNumber;
+  remainderAmount?: ethers.BigNumber;
+  reamainderValue?: number;
 }
 
 const INTERVAL = 500 // 500 ms
@@ -107,7 +110,6 @@ abstract class Indexer {
       INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
-
       await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), dstTx.hash, getDstAsset(this.chain), this.getAmount(dstTx)]);
       this.log(`Transaction saved: ${tx.hash}`);
     } catch (error) {
@@ -115,10 +117,24 @@ abstract class Indexer {
     }
   }
 
+  protected async saveRemainder(dstTx: ExtendedTransactionResponse, amount: string, sent: string, remainder: string): Promise<void> {
+    try {
+      const insertQuery = `
+      INSERT INTO remainder (address, chain, tx_hash, asset, total_amount, sent_amount, remainder, remainder_value)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      `;
+      await query(insertQuery, [dstTx.from, getDstChain(this.chain), dstTx.hash, getDstAsset(this.chain), amount, sent, remainder, '?']);
+      this.log(`Remainder saved: ${dstTx.hash}`);
+    } catch (error) {
+      this.error('Failed to save remainder', error as Error);
+    }
+  }
+
   public getTxs(): ExtendedTransactionResponse[] {
     return this.txs;
   }
 
+  // TODO: check parsing;
   protected getAmount(tx: TransactionResponse): number {
     return getAmount(tx, getDstChain(this.chain));
   }

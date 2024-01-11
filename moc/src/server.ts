@@ -5,6 +5,7 @@ import abi from './abis/base_usdc.json';
 import HarmonyIndexer from './indexers/HarmonyIndexer';
 import BaseIndexer from './indexers/BaseIndexer';
 import priceRoutes from './routes/priceRoutes';
+import remainderRoutes from './routes/remainderRoutes';
 import { fetchPrice } from './utils/price';
 import { getAllTransactions } from './db/db';
 import { getExplorer, shortenHash } from './utils/chain';
@@ -86,6 +87,9 @@ app.get('/', async (req, res) => {
 
 // price route
 app.use('/price', priceRoutes);
+
+// remainder route
+app.use('/remainder', remainderRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

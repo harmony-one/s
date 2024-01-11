@@ -1,3 +1,4 @@
+import { BigNumber, ethers } from 'ethers';
 import { config } from '../config';
 import { BASE, HARMONY, walletManager } from '../server';
 import { isAddrEqual } from '../utils/chain';
@@ -50,6 +51,15 @@ class BaseIndexer extends Indexer {
       const response = await walletManager.sendOne(tx.from, cappedAmount);
       // const response = await walletManager.sendOne(tx.from, amount);
       this.log(`Handled Transaction ${response.hash} on Harmony`);
+
+      // save remainder
+      if (remainder.gt(BigNumber.from(0))) {
+        const amountFormat = ethers.utils.formatUnits(amount, 18);
+        const sentFormat = ethers.utils.formatUnits(cappedAmount, 18);
+        const remainderFormat = ethers.utils.formatUnits(remainder, 18);
+        this.saveRemainder(response, amountFormat, sentFormat, remainderFormat);
+      }
+
       return response;
     } catch (error) {
       this.error('Failed to handle tx', error as Error);

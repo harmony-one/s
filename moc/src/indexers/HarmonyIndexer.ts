@@ -5,6 +5,7 @@ import { BASE, HARMONY, walletManager } from "../server";
 import { convertOneToToken } from "../utils/price";
 import { isAddrEqual } from "../utils/chain";
 import { limitToken } from "../utils/dollar";
+import { BigNumber, ethers } from "ethers";
 
 class HarmonyIndexer extends Indexer {
 
@@ -32,11 +33,24 @@ class HarmonyIndexer extends Indexer {
       // const response = await walletManager.sendToken(tx.from, amount) as TransactionResponse;
       const response = await walletManager.sendToken(tx.from, cappedAmount) as TransactionResponse;
       this.log(`Handled Transaction ${response.hash} on Base`);
-      return {
+      const dstTx = {
         ...response,
         amount: cappedAmount
         // amount
       };
+
+      // save remainder
+      if (remainder.gt(BigNumber.from(0))) {
+        const amountFormat = ethers.utils.formatUnits(amount, 6);
+        const sentFormat = ethers.utils.formatUnits(cappedAmount, 6);
+        const remainderFormat = ethers.utils.formatUnits(remainder, 6);
+
+        // TODO: calculate dollar equivalent
+
+        this.saveRemainder(dstTx, amountFormat, sentFormat, remainderFormat);
+      }
+
+      return dstTx;
     } catch (error) {
       this.error('Failed to handle tx', error as Error);
       throw error;
