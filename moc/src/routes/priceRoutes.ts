@@ -61,4 +61,28 @@ router.get('/low', (req, res) => {
   }
 });
 
+// router.get('/token', (req, res) => {
+//   const amount = parseFloat(req.query.amount as string);
+
+//   if (isNaN(amount)) {
+//     res.status(400).send("Invalid amount provided.");
+//   } else {
+//     capToken(amount);
+
+//     res.send("Token cap check complete.");
+//   }
+// });
+
+// router.get('/one', (req, res) => {
+//   const amount = parseFloat(req.query.amount as string);
+
+//   if (isNaN(amount)) {
+//     res.status(400).send("Invalid amount provided.");
+//   } else {
+
+//     capOne(amount);
+//     res.send("ONE cap check complete.");
+//   }
+// });
+
 export default router;

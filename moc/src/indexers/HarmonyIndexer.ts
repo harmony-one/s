@@ -4,6 +4,7 @@ import { config } from "../config";
 import { BASE, HARMONY, walletManager } from "../server";
 import { convertOneToToken } from "../utils/price";
 import { isAddrEqual } from "../utils/chain";
+import { limitToken } from "../utils/dollar";
 
 class HarmonyIndexer extends Indexer {
 
@@ -27,7 +28,9 @@ class HarmonyIndexer extends Indexer {
   protected async handleTx(tx: TransactionResponse): Promise<ExtendedTransactionResponse> {
     try {
       const amount = convertOneToToken(tx.value);
-      const response = await walletManager.sendToken(tx.from, amount) as TransactionResponse;
+      const [cappedAmount, remainder] = limitToken(amount);
+      // const response = await walletManager.sendToken(tx.from, amount) as TransactionResponse;
+      const response = await walletManager.sendToken(tx.from, cappedAmount) as TransactionResponse;
       this.log(`Handled Transaction ${response.hash} on Base`);
       return {
         ...response,
