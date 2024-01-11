@@ -5,20 +5,21 @@ import { ExtendedTransactionResponse } from '../indexers/Indexer';
 import { HARMONY } from '../server';
 
 const SYMBOL = 'ONEUSDT';
-const INTERVAL = '30m';
+const INTERVAL = '1h';
+const USDC_DECIMAL = 6;
+const ONE_DECIMAL = 18;
 
-let highPrice: number | null = null;
-let lowPrice: number | null = null;
+let priceData: PriceData | null = null;
 
 interface PriceData {
   openTime: number;
   closeTime: number;
-  highPrice: number;
-  lowPrice: number;
+  highPrice: string;
+  lowPrice: string;
 }
 
 async function fetchPrice(): Promise<PriceData> {
-  const startTime = Date.now() - (60 * 60 * 1000); // last hour
+  const startTime = Date.now() - (120 * 60 * 1000); // last 2 hours
 
   const params = {
     symbol: SYMBOL,
@@ -34,15 +35,14 @@ async function fetchPrice(): Promise<PriceData> {
     }
 
     const recentPrice = data[data.length - 1];
-    const priceData = {
+
+    // update priceData with the fetched one
+    priceData = {
       openTime: recentPrice[0],
       closeTime: recentPrice[6],
-      highPrice: parseFloat(recentPrice[2]),
-      lowPrice: parseFloat(recentPrice[3])
+      highPrice: recentPrice[2],
+      lowPrice: recentPrice[3]
     };
-
-    highPrice = priceData.highPrice;
-    lowPrice = priceData.lowPrice;
 
     return priceData;
   } catch (error) {
@@ -51,13 +51,25 @@ async function fetchPrice(): Promise<PriceData> {
   }
 }
 
+function getPrice(): PriceData | null {
+  return priceData;
+}
+
+function getHighPrice(): string | undefined {
+  return priceData?.highPrice;
+}
+
+function getLowPrice(): string | undefined {
+  return priceData?.lowPrice;
+}
+
 function convertOneToToken(amount: BigNumber): BigNumber {
   const lowPrice = getLowPrice();
   if (!lowPrice) {
     throw new Error('Low price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(lowPrice.toString(), 6);
-  return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', 18));
+  const conversionRate = ethers.utils.parseUnits(lowPrice, USDC_DECIMAL);
+  return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', ONE_DECIMAL));
 }
 
 function convertTokenToOne(amount: BigNumber): BigNumber {
@@ -65,31 +77,24 @@ function convertTokenToOne(amount: BigNumber): BigNumber {
   if (!highPrice) {
     throw new Error('Price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(highPrice.toString(), 6);
-  return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
-}
-
-function getHighPrice(): number | null {
-  return highPrice;
-}
-
-function getLowPrice(): number | null {
-  return lowPrice;
+  const conversionRate = ethers.utils.parseUnits(highPrice, USDC_DECIMAL);
+  return amount.mul(ethers.utils.parseUnits('1', ONE_DECIMAL)).div(conversionRate);
 }
 
 function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
   let value: string;
 
-  console.log(`TO: ${chain}; VALUE: ${tx.value}; AMOUNT: ${tx.amount}`);
-
   if (chain === HARMONY) {
-    value = ethers.utils.formatUnits(tx.value, 18);
+    value = ethers.utils.formatUnits(tx.value, ONE_DECIMAL);
   } else {
-    value = ethers.utils.formatUnits(tx.amount as BigNumber, 6);
+    value = ethers.utils.formatUnits(tx.amount as BigNumber, USDC_DECIMAL);
   }
 
   const numValue = parseFloat(value);
   return parseFloat(numValue.toFixed(6));
+
+  // // TODO: check overflow
+  // return parseFloat(value);
 }
 
-export { PriceData, fetchPrice, convertOneToToken, convertTokenToOne, getHighPrice, getLowPrice, getAmount };
+export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getAmount };
