@@ -18,3 +18,4 @@ Both Harmony and Base networks produce blocks every two seconds. Sending ERC-20 
 We as the usdc.country operator is staking 100,000 $ONE tokens as the bond for good service under a 2-out-of-3 multisig wallet with .country governors. Users may dispute bad pricing or lost transactions within our service guideline and our bond amount. To provide sufficient liquidity on both sides, we regularly rebalance the assets on the wallets ted:one and ted:base via centralized exchanges.
 
 We cover the cost of backend infrastructure, exchange operations, and governance engagement. We make money from the price difference of bridging the two tokens and from rebalancing the two wallets. We lease the premium domain usdc.country for trust and branding from monthly open auctions.
+
