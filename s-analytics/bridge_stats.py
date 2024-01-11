@@ -91,6 +91,8 @@ def get_bridge_stats():
 
     eth_to_one_pairs = [] # (erc20, hrc20)
     one_to_eth_pairs = [] # (hrc20, erc20)
+
+    gas = 0
     
 
     for i in range(100):
@@ -104,6 +106,14 @@ def get_bridge_stats():
                     eth_to_one_pairs.append((item['network'], item['erc20Address'],item['hrc20Address']))
                 elif item['type'] == 'one_to_eth' and item['erc20Address'] and item['hrc20Address']:
                     one_to_eth_pairs.append((item['network'], item['hrc20Address'],item['erc20Address']))
+
+            if item['status'] == 'success' and item['type'] == 'one_to_eth':
+                for i in item['actions']:
+                    try:
+                        gas += int(i['payload']['gas'])
+                    except:
+                        continue
+
 
             if item_timestamp >= week_timestamp and item_amount > 0:
                 total_ctr += 1
@@ -157,6 +167,8 @@ def get_bridge_stats():
             print(f"{key}: {value}")
         else:
             break
+    
+    print(f"\nGas (one_to_eth in ONE): {gas}")
 
     days_amount_list = sorted(days_amount_map.values(), reverse=True)
     value = days_amount_list[0]

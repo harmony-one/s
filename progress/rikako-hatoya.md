@@ -1,3 +1,7 @@
+2021-01-10 Wed: Researched into Multisig wallets, and Gnosis Safe. Set-up API keys, debugged, and resolved  configurations for Harmony safe-ios fork to get it to build.
+
+2021-01-09 Tue: Researched into Thor swap, more campaigns into airdrops, minting soulbound ERC721, Unistat, and relevant topics such as layer2 and minimla on-chain.
+
 2021-01-08 Mon: Created [repo](https://github.com/rika97/s/tree/main/s-nft) for minting soulbound nft tokens by using ERC721 contract with Openzeppelin. Investigating changes due to openzeppelin updates to make tokens burnable and making them soulbound. 
 
 ---
