@@ -1,17 +1,16 @@
 import express from 'express';
-import { fetchPrice, getHighPrice, getLowPrice } from '../utils/price';
+import { getPrice, getHighPrice, getLowPrice } from '../utils/price';
 
 const router = express.Router();
 
-// TODO: post raw data
 router.get('/', async (req, res) => {
   try {
     // update price
-    const { lowPrice, highPrice } = await fetchPrice();
-    const highUsdc = highPrice.toFixed(6);
-    const highOne = (1 / highPrice).toFixed(6);
-    const lowUsdc = lowPrice.toFixed(6);
-    const lowOne = (1 / lowPrice).toFixed(6);
+    const { lowPrice, highPrice } = await getPrice()!;
+    const highUsdc = parseFloat(highPrice).toFixed(8);
+    const highOne = (1 / parseFloat(highPrice)).toFixed(8);
+    const lowUsdc = parseFloat(lowPrice).toFixed(8);
+    const lowOne = (1 / parseFloat(lowPrice)).toFixed(8);
 
     // const oneToToken = await walletManager.convertOneToToken(parseUnits('1', 18));
     // const formattedToken = ethers.utils.formatUnits(oneToToken, 6); // format to USDC (6 decimal places)
@@ -35,9 +34,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/data', async (req, res) => {
+router.get('/data', (req, res) => {
   try {
-    const priceData = await fetchPrice();
+    const priceData = getPrice();
     res.json(priceData);
   } catch (error) {
     res.status(500).send('Error fetching price data');
@@ -61,5 +60,29 @@ router.get('/low', (req, res) => {
     res.status(404).send('Low price not available');
   }
 });
+
+// router.get('/token', (req, res) => {
+//   const amount = parseFloat(req.query.amount as string);
+
+//   if (isNaN(amount)) {
+//     res.status(400).send("Invalid amount provided.");
+//   } else {
+//     capToken(amount);
+
+//     res.send("Token cap check complete.");
+//   }
+// });
+
+// router.get('/one', (req, res) => {
+//   const amount = parseFloat(req.query.amount as string);
+
+//   if (isNaN(amount)) {
+//     res.status(400).send("Invalid amount provided.");
+//   } else {
+
+//     capOne(amount);
+//     res.send("ONE cap check complete.");
+//   }
+// });
 
 export default router;

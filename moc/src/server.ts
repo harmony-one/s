@@ -5,6 +5,7 @@ import abi from './abis/base_usdc.json';
 import HarmonyIndexer from './indexers/HarmonyIndexer';
 import BaseIndexer from './indexers/BaseIndexer';
 import priceRoutes from './routes/priceRoutes';
+import remainderRoutes from './routes/remainderRoutes';
 import { fetchPrice } from './utils/price';
 import { getAllTransactions } from './db/db';
 import { getExplorer, shortenHash } from './utils/chain';
@@ -23,20 +24,31 @@ harmonyIndexer.start();
 const baseIndexer = new BaseIndexer(config.rpc.BASE_RPC);
 baseIndexer.start();
 
+// fetch and configure price
+const fetchPriceWithInterval = async () => {
+  try {
+    const priceData = await fetchPrice();
+    console.log('Price data fetched: ', priceData);
+  } catch (error) {
+    console.error('Error fetching price data:', error);
+  }
+};
+
+fetchPriceWithInterval();
+setInterval(fetchPriceWithInterval, 60 * 60 * 1000); // 60 minutes
+
 // root
 app.get('/', async (req, res) => {
   try {
-    // const transactions = await getAllTransactions();
-    // res.json(transactions);
 
     const transactions = await getAllTransactions();
-
-    // TODO: limit transactions to certain number (50?)
     // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
+    htmlResponse += '<h2>DO NOT attempt to send more than $1 of any asset.</h2>';
+    htmlResponse += '<h2>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h2>';
 
     const address = await walletManager.getAddress();
-    htmlResponse += `Address: ${address}`;
+    htmlResponse += `<h2>Flip Address: ${address}</h2>`;
     htmlResponse += `<table border="1">
     <tr>
       <th>ID</th>
@@ -77,18 +89,8 @@ app.get('/', async (req, res) => {
 // price route
 app.use('/price', priceRoutes);
 
-// TODO: fetchPrice should only be called once; prevent multiple calls of fetchPrice in different locations
-const fetchPriceWithInterval = async () => {
-  try {
-    const priceData = await fetchPrice();
-    console.log('Price data fetched: ', priceData);
-  } catch (error) {
-    console.error('Error fetching price data:', error);
-  }
-};
-
-fetchPriceWithInterval();
-setInterval(fetchPriceWithInterval, 30 * 60 * 1000); // 30 minutes
+// remainder route
+app.use('/remainder', remainderRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

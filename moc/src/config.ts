@@ -2,9 +2,17 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// load funding address
+var fundingAddress: string[] = [];
+if (process.env.FUNDING_ADDRESS) {
+  fundingAddress = process.env.FUNDING_ADDRESS.split(',')
+    .map(address => address.toLowerCase());
+}
+
 export const config = {
   wallet: {
     ADDRESS: process.env.ADDRESS || '',
+    FUNDING_ADDRESS: fundingAddress,
   },
   express: {
     PORT: process.env.PORT || 3000,
