@@ -34,7 +34,8 @@ class HarmonyIndexer extends Indexer {
       this.log(`Handled Transaction ${response.hash} on Base`);
       return {
         ...response,
-        amount
+        amount: cappedAmount
+        // amount
       };
     } catch (error) {
       this.error('Failed to handle tx', error as Error);
