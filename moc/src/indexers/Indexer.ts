@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
-import { TransactionResponse } from '../types/customTypes';
-import { query } from '../db/db';
+import {DBTransaction, TransactionResponse} from '../types/customTypes';
+import {getPendingTransactions, query} from '../db/db';
 import { getAmount } from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
 import {PriceProvider} from "../services/PriceProvider";
@@ -48,6 +48,8 @@ abstract class Indexer {
   public async start() {
     this.log('Starting Indexer');
 
+    this.pendingTransactionsLoop()
+
     const processIndexing = async () => {
       let retryCount = 0;
 
@@ -61,10 +63,8 @@ abstract class Indexer {
               for (const tx of newTxs) {
                 try {
                   this.log(`Handling Transaction: ${tx.hash}`);
-                  const dstTx = await this.handleTx(tx);
-                  await this.saveTx(tx, dstTx);
-
-                  this.log(`Completed Transaction: ${tx.hash}`);
+                  await this.addTxToQuery(tx);
+                  this.log(`Transaction added to query: ${tx.hash}`);
 
                 } catch (error) {
                   this.error(`Failed to process transaction: {tx.hash}`, error as Error);
@@ -94,6 +94,24 @@ abstract class Indexer {
     processIndexing();
   }
 
+  protected async pendingTransactionsLoop() {
+    try {
+      await this.processPendingTransactions()
+    } catch (e) {
+      console.log('Error on processing pending transactions:', e)
+    } finally {
+      setTimeout(() => this.pendingTransactionsLoop(), 10_000)
+    }
+  }
+
+  protected async processPendingTransactions() {
+    const txs = await getPendingTransactions()
+    for(const tx of txs) {
+      const result = await this.handleTx(tx)
+      this.log(`Handled Transaction ${result.hash}`);
+    }
+  }
+
   protected async fetchBlockNum(): Promise<number> {
     const currBlockNum = await this.provider.getBlockNumber();
     if (this.lastBlockNum === null) {
@@ -104,7 +122,19 @@ abstract class Indexer {
 
   protected abstract fetchTxs(blockNum: number): Promise<ExtendedTransactionResponse[]>;
 
-  protected abstract handleTx(tx: ExtendedTransactionResponse): Promise<ExtendedTransactionResponse>;
+  protected abstract handleTx(tx: DBTransaction): Promise<TransactionResponse>;
+
+  protected async addTxToQuery(tx: ExtendedTransactionResponse): Promise<void> {
+    try {
+      const insertQuery = `
+      INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `;
+      const res = await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), "", getDstAsset(this.chain), tx.value]);
+    } catch (error) {
+      this.error('Failed to save transaction', error as Error);
+    }
+  }
 
   protected async saveTx(tx: ExtendedTransactionResponse, dstTx: ExtendedTransactionResponse): Promise<void> {
     try {

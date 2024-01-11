@@ -1,11 +1,10 @@
-import Indexer, { ExtendedTransactionResponse } from "./Indexer";
-import { TransactionResponse } from "../types/customTypes";
-import { config } from "../config";
-import { BASE, HARMONY, walletManager } from "../server";
-import { convertOneToToken } from "../utils/price";
-import { isAddrEqual } from "../utils/chain";
-import { limitToken } from "../utils/dollar";
-import { BigNumber, ethers } from "ethers";
+import Indexer from "./Indexer";
+import {DBTransaction, TransactionResponse} from "../types/customTypes";
+import {config} from "../config";
+import {HARMONY, walletManager} from "../server";
+import {convertOneToToken} from "../utils/price";
+import {isAddrEqual} from "../utils/chain";
+import {BigNumber} from "ethers";
 
 class HarmonyIndexer extends Indexer {
 
@@ -26,35 +25,9 @@ class HarmonyIndexer extends Indexer {
     return newTxs;
   }
 
-  protected async handleTx(tx: TransactionResponse): Promise<ExtendedTransactionResponse> {
-    try {
-      const amount = convertOneToToken(tx.value);
-      const [cappedAmount, remainder] = limitToken(amount);
-      // const response = await walletManager.sendToken(tx.from, amount) as TransactionResponse;
-      const response = await walletManager.sendToken(tx.from, cappedAmount) as TransactionResponse;
-      this.log(`Handled Transaction ${response.hash} on Base`);
-      const dstTx = {
-        ...response,
-        amount: cappedAmount
-        // amount
-      };
-
-      // save remainder
-      if (remainder.gt(BigNumber.from(0))) {
-        const amountFormat = ethers.utils.formatUnits(amount, 6);
-        const sentFormat = ethers.utils.formatUnits(cappedAmount, 6);
-        const remainderFormat = ethers.utils.formatUnits(remainder, 6);
-
-        // TODO: calculate dollar equivalent
-
-        this.saveRemainder(dstTx, amountFormat, sentFormat, remainderFormat);
-      }
-
-      return dstTx;
-    } catch (error) {
-      this.error('Failed to handle tx', error as Error);
-      throw error;
-    }
+  protected async handleTx(tx: DBTransaction): Promise<TransactionResponse> {
+    const amount = convertOneToToken(BigNumber.from(tx.amount));
+    return await walletManager.sendToken(tx.address, amount) as TransactionResponse
   }
 }
 
