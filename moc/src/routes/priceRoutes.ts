@@ -7,10 +7,10 @@ router.get('/', async (req, res) => {
   try {
     // update price
     const { lowPrice, highPrice } = await getPrice()!;
-    const highUsdc = highPrice.toFixed(6);
-    const highOne = (1 / highPrice).toFixed(6);
-    const lowUsdc = lowPrice.toFixed(6);
-    const lowOne = (1 / lowPrice).toFixed(6);
+    const highUsdc = parseFloat(highPrice).toFixed(8);
+    const highOne = (1 / parseFloat(highPrice)).toFixed(8);
+    const lowUsdc = parseFloat(lowPrice).toFixed(8);
+    const lowOne = (1 / parseFloat(lowPrice)).toFixed(8);
 
     // const oneToToken = await walletManager.convertOneToToken(parseUnits('1', 18));
     // const formattedToken = ethers.utils.formatUnits(oneToToken, 6); // format to USDC (6 decimal places)

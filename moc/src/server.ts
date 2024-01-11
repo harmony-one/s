@@ -43,9 +43,10 @@ app.get('/', async (req, res) => {
     const transactions = await getAllTransactions();
     // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
+    htmlResponse += '<h2>Do not send more than $1 for now, as the service only flips up to that amount.</h2>';
 
     const address = await walletManager.getAddress();
-    htmlResponse += `Address: ${address}`;
+    htmlResponse += `<h2>Flip Address: ${address}</h2>`;
     htmlResponse += `<table border="1">
     <tr>
       <th>ID</th>

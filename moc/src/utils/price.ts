@@ -12,8 +12,8 @@ let priceData: PriceData | null = null;
 interface PriceData {
   openTime: number;
   closeTime: number;
-  highPrice: number;
-  lowPrice: number;
+  highPrice: string;
+  lowPrice: string;
 }
 
 async function fetchPrice(): Promise<PriceData> {
@@ -38,8 +38,8 @@ async function fetchPrice(): Promise<PriceData> {
     priceData = {
       openTime: recentPrice[0],
       closeTime: recentPrice[6],
-      highPrice: parseFloat(recentPrice[2]),
-      lowPrice: parseFloat(recentPrice[3])
+      highPrice: recentPrice[2],
+      lowPrice: recentPrice[3]
     };
 
     return priceData;
@@ -53,11 +53,11 @@ function getPrice(): PriceData | null {
   return priceData;
 }
 
-function getHighPrice(): number | undefined {
+function getHighPrice(): string | undefined {
   return priceData?.highPrice;
 }
 
-function getLowPrice(): number | undefined {
+function getLowPrice(): string | undefined {
   return priceData?.lowPrice;
 }
 
@@ -66,7 +66,7 @@ function convertOneToToken(amount: BigNumber): BigNumber {
   if (!lowPrice) {
     throw new Error('Low price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(lowPrice.toString(), 6);
+  const conversionRate = ethers.utils.parseUnits(lowPrice, 8);
   return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', 18));
 }
 
@@ -75,7 +75,7 @@ function convertTokenToOne(amount: BigNumber): BigNumber {
   if (!highPrice) {
     throw new Error('Price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(highPrice.toString(), 6);
+  const conversionRate = ethers.utils.parseUnits(highPrice, 8);
   return amount.mul(ethers.utils.parseUnits('1', 18)).div(conversionRate);
 }
 
