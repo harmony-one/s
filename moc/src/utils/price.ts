@@ -92,6 +92,9 @@ function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
 
   const numValue = parseFloat(value);
   return parseFloat(numValue.toFixed(6));
+
+  // // TODO: check overflow
+  // return parseFloat(value);
 }
 
 export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getAmount };

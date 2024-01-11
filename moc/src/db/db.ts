@@ -15,3 +15,8 @@ export const getAllTransactions = async () => {
   const result = await query('SELECT * FROM transactions ORDER BY id DESC');
   return result.rows;
 };
+
+export const getAllRemainders = async () => {
+  const result = await query('SELECT * FROM remainder ORDER BY id DESC');
+  return result.rows;
+};
