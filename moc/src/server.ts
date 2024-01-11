@@ -44,7 +44,8 @@ app.get('/', async (req, res) => {
     const transactions = await getAllTransactions();
     // TODO: amount: show dollar equivalent
     let htmlResponse = `<h1>Transaction Data</h1>`;
-    htmlResponse += '<h2>Do not send more than $1 for now, as the service only flips up to that amount.</h2>';
+    htmlResponse += '<h2>DO NOT attempt to send more than $1 of any asset.</h2>';
+    htmlResponse += '<h2>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h2>';
 
     const address = await walletManager.getAddress();
     htmlResponse += `<h2>Flip Address: ${address}</h2>`;
