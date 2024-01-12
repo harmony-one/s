@@ -9,6 +9,7 @@ import remainderRoutes from './routes/remainderRoutes';
 import { fetchPrice } from './utils/price';
 import { getAllTransactions } from './db/db';
 import { getExplorer, shortenHash } from './utils/chain';
+import { formatDate } from './utils/utils';
 
 const PORT = config.express.PORT;
 export const HARMONY = 'Harmony';
@@ -43,12 +44,23 @@ app.get('/', async (req, res) => {
 
     const transactions = await getAllTransactions();
     // TODO: amount: show dollar equivalent
-    let htmlResponse = `<h1>Transaction Data</h1>`;
-    htmlResponse += '<h2>DO NOT attempt to send more than $1 of any asset.</h2>';
-    htmlResponse += '<h2>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h2>';
-
     const address = await walletManager.getAddress();
-    htmlResponse += `<h2>Flip Address: ${address}</h2>`;
+    let htmlResponse = `<h1>Flip: ${address}</h1>`;
+
+    htmlResponse += '<h3>DO NOT attempt to send more than $1 of any asset.</h3>';
+    htmlResponse += '<h3>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h3>';
+    htmlResponse += '<h2>Welcome to usdc.country – Flip Tokens with Ease!</h2>'
+    htmlResponse += '<h3>What is it?</h3>';
+    htmlResponse += '<p>usdc.country offers a revolutionary service that allows you to swap native tokens seamlessly. No smart contracts, no transaction signing – just send $ONE to receive $USDC. (more asset support coming soon)</p>';
+
+    htmlResponse += '<h3>How it works?</h3>';
+    htmlResponse += '<p>First, you send $ONE tokens to a wallet address on usdc.country. Next, our system automatically calculates the equivalent amount in $USDC based on the current exchange rate and sends it to your specified wallet. Finally, you can access your $USDC on the Base network using your original address in as little as 4 seconds, for less than $0.10! It\'s that easy – no smart contracts, no transaction signing, just quick and secure token swaps. (this process in reverse will also work, send USDC on Base and receive ONE on Harmony!)</p>';
+
+    htmlResponse += '<h3>Why is it useful?</h3>';
+    htmlResponse += '<p>Our service provides a secure, cost-effective, and rapid solution for native token swaps. By eliminating the complexities and risks of traditional methods, we make it easier for you to manage your assets across different networks.</p>';
+    htmlResponse += '<p>Start trading smarter with usdc.country – where speed, security, and simplicity come together.</p>';
+
+
     htmlResponse += `<table border="1">
     <tr>
       <th>ID</th>
@@ -72,7 +84,7 @@ app.get('/', async (req, res) => {
         <td><a href="${getExplorer(tx.dst_chain, tx.dst_hash)}" target="_blank">${shortenHash(tx.dst_hash)}</a></td>
         <td>${tx.asset}</td>
         <td>${parseFloat(tx.amount).toFixed(6)}</td>
-        <td>${tx.date}</td>
+        <td>${formatDate(tx.date)}</td>
       </tr>`;
     }
 
