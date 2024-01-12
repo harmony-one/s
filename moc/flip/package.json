@@ -1,5 +1,5 @@
 {
-  "name": "moc",
+  "name": "flip",
   "version": "1.0.0",
   "description": "minimal on chain service via .country",
   "main": "dist/server.js",

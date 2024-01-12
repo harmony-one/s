@@ -29,6 +29,23 @@ def count_pairs(array):
 
     return dict(sorted(pair_counts.items(), key=lambda item: item[1], reverse=True))
 
+def avg_time_per_network(array):
+    network_times = {}
+
+    for pair in array:
+        if pair[0] in network_times:
+            network_times[pair[0]] = (network_times[pair[0]][0] + pair[1], network_times[pair[0]][1] + 1)
+        else:
+            network_times[pair[0]] = (pair[1], 1)
+    
+    avg_network_times = {}
+
+    for key, value in network_times.items():
+        avg_network_times[key] = value[0]/value[1]
+    
+    return avg_network_times
+
+
 def get_operations(page=0, size=10000):
     response = requests.get(f'{bridge_url}/operations-full?size={size}&page={page}')
     return response.json()['content']
@@ -91,8 +108,11 @@ def get_bridge_stats():
 
     eth_to_one_pairs = [] # (erc20, hrc20)
     one_to_eth_pairs = [] # (hrc20, erc20)
-    
 
+    gas = 0
+
+    avg_times = []
+    
     for i in range(100):
         items = get_operations(i)
         for item in items:
@@ -104,6 +124,18 @@ def get_bridge_stats():
                     eth_to_one_pairs.append((item['network'], item['erc20Address'],item['hrc20Address']))
                 elif item['type'] == 'one_to_eth' and item['erc20Address'] and item['hrc20Address']:
                     one_to_eth_pairs.append((item['network'], item['hrc20Address'],item['erc20Address']))
+
+            if item['status'] == 'success' and item['type'] == 'one_to_eth' and item_timestamp >= week_timestamp and item_amount > 0:
+                for i in item['actions']:
+                    try:
+                        gas += int(i['payload']['gas'])
+                    except:
+                        continue
+
+            if item['status'] == 'success' and item_timestamp >= week_timestamp and item_amount > 0:
+                start = item['timestamp']                
+                end = item['actions'][-1]['timestamp']
+                avg_times.append((item['network'], end - start))
 
             if item_timestamp >= week_timestamp and item_amount > 0:
                 total_ctr += 1
@@ -157,6 +189,9 @@ def get_bridge_stats():
             print(f"{key}: {value}")
         else:
             break
+    
+    print(f"\nGas (one_to_eth in ONE): {gas}")
+    print("\nAvg txn time per network: ", avg_time_per_network(avg_times))
 
     days_amount_list = sorted(days_amount_map.values(), reverse=True)
     value = days_amount_list[0]
