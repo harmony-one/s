@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
     <th>Total Amount</th>
     <th>Sent Amount</th>
     <th>Remainder</th>
-    <th>Remainder Value</th>
     <th>Date</th>
   </tr>`;
 
@@ -30,7 +29,6 @@ router.get('/', async (req, res) => {
       <td>${parseFloat(tx.total_amount).toFixed(6)}</td>
       <td>${parseFloat(tx.sent_amount).toFixed(6)}</td>
       <td>${parseFloat(tx.remainder).toFixed(6)}</td>
-      <td>${tx.remainder_value}</td>
       <td>${tx.date}</td>
     </tr>`;
   }
