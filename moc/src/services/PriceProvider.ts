@@ -18,7 +18,7 @@ export class PriceProvider {
 
   async getTokenPrice(token: string) {
     if(this.priceData[token] && this.priceData[this.currency]) {
-      return this.priceData[this.currency]
+      return this.priceData[token][this.currency]
     }
     console.warn(`Unavailable price for token ${token}. Using default value = 0.`)
     return 0

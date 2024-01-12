@@ -63,9 +63,7 @@ abstract class Indexer {
               for (const tx of newTxs) {
                 try {
                   this.log(`Handling Transaction: ${tx.hash}`);
-                  await this.addTxToQuery(tx);
-                  this.log(`Transaction added to query: ${tx.hash}`);
-
+                  await this.onNewTx(tx)
                 } catch (error) {
                   this.error(`Failed to process transaction: {tx.hash}`, error as Error);
                 }
@@ -124,6 +122,13 @@ abstract class Indexer {
 
   protected abstract handleTx(tx: DBTransaction): Promise<TransactionResponse>;
 
+  protected async onNewTx(tx: TransactionResponse): Promise<void> {
+    const harmonyTokenPrice = await this.priceProvider.getTokenPrice('harmony')
+    const amountUsd = tx.value
+    await this.addTxToQuery(tx)
+    this.log(`Transaction added to query: ${tx.hash}`);
+  }
+
   protected async addTxToQuery(tx: ExtendedTransactionResponse): Promise<void> {
     try {
       const insertQuery = `
@@ -133,32 +138,6 @@ abstract class Indexer {
       const res = await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), "", getDstAsset(this.chain), tx.value]);
     } catch (error) {
       this.error('Failed to save transaction', error as Error);
-    }
-  }
-
-  protected async saveTx(tx: ExtendedTransactionResponse, dstTx: ExtendedTransactionResponse): Promise<void> {
-    try {
-      const insertQuery = `
-      INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-      `;
-      await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), dstTx.hash, getDstAsset(this.chain), this.getAmount(dstTx)]);
-      this.log(`Transaction saved: ${tx.hash}`);
-    } catch (error) {
-      this.error('Failed to save transaction', error as Error);
-    }
-  }
-
-  protected async saveRemainder(dstTx: ExtendedTransactionResponse, amount: string, sent: string, remainder: string): Promise<void> {
-    try {
-      const insertQuery = `
-      INSERT INTO remainder (address, chain, tx_hash, asset, total_amount, sent_amount, remainder, remainder_value)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      `;
-      await query(insertQuery, [dstTx.from, getDstChain(this.chain), dstTx.hash, getDstAsset(this.chain), amount, sent, remainder, '?']);
-      this.log(`Remainder saved: ${dstTx.hash}`);
-    } catch (error) {
-      this.error('Failed to save remainder', error as Error);
     }
   }
 
