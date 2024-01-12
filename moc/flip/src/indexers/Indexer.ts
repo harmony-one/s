@@ -127,9 +127,9 @@ abstract class Indexer {
     const amountUsd = convertOneToToken(BigNumber.from(amountOne))
 
     const { transfer: transferLimitUsd } = config.rateLimit
-    const transfersCount = transferLimitUsd / amountUsd.toNumber()
+    const transfersCount = amountUsd.toNumber() / transferLimitUsd
 
-    let amountLeft = amountOne
+      let amountLeft = amountOne
     const maxAmount = convertTokenToOne(BigNumber.from(transferLimitUsd))
 
     for(let i= 0; i < transfersCount; i++) {
