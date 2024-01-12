@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import {DBTransaction, TransactionResponse} from '../types/customTypes';
 import {getPendingTransactions, query} from '../db/db';
-import { getAmount } from '../utils/price';
+import {convertOneToToken, convertTokenToOne, getAmount} from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
 import {PriceProvider} from "../services/PriceProvider";
 import { config } from '../config';
@@ -63,7 +63,7 @@ abstract class Indexer {
               for (const tx of newTxs) {
                 try {
                   this.log(`Handling Transaction: ${tx.hash}`);
-                  await this.onNewTx(tx)
+                  await this.processNewTx(tx)
                 } catch (error) {
                   this.error(`Failed to process transaction: {tx.hash}`, error as Error);
                 }
@@ -122,20 +122,32 @@ abstract class Indexer {
 
   protected abstract handleTx(tx: DBTransaction): Promise<TransactionResponse>;
 
-  protected async onNewTx(tx: TransactionResponse): Promise<void> {
-    const harmonyTokenPrice = await this.priceProvider.getTokenPrice('harmony')
-    const amountUsd = tx.value
-    await this.addTxToQuery(tx)
+  protected async processNewTx(tx: TransactionResponse): Promise<void> {
+    const amountOne = tx.value
+    const amountUsd = convertOneToToken(BigNumber.from(amountOne))
+
+    const { transfer: transferLimitUsd } = config.rateLimit
+    const transfersCount = transferLimitUsd / amountUsd.toNumber()
+
+    let amountLeft = amountOne
+    const maxAmount = convertTokenToOne(BigNumber.from(transferLimitUsd))
+
+    for(let i= 0; i < transfersCount; i++) {
+      const amount = amountLeft.gt(maxAmount) ? maxAmount : amountLeft
+      await this.addTxToQuery(tx, amount.toString())
+      amountLeft = amountLeft.sub(amount)
+    }
+
     this.log(`Transaction added to query: ${tx.hash}`);
   }
 
-  protected async addTxToQuery(tx: ExtendedTransactionResponse): Promise<void> {
+  protected async addTxToQuery(tx: ExtendedTransactionResponse, amount: string): Promise<void> {
     try {
       const insertQuery = `
-      INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
+      INSERT INTO transactions_v1 (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
-      const res = await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), "", getDstAsset(this.chain), tx.value]);
+      const res = await query(insertQuery, [tx.from, this.chain, tx.hash, getDstChain(this.chain), "", getDstAsset(this.chain), amount]);
     } catch (error) {
       this.error('Failed to save transaction', error as Error);
     }
