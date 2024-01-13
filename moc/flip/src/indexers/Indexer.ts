@@ -59,10 +59,11 @@ abstract class Indexer {
               for (const tx of newTxs) {
                 try {
                   this.log(`Handling Transaction: ${tx.hash}`);
-                  const dstTx = await this.handleTx(tx);
-                  await this.saveTx(tx, dstTx);
 
+                  const dstTx = await this.handleTx(tx);
                   this.log(`Completed Transaction: ${tx.hash}`);
+
+                  await this.saveTx(tx, dstTx);
 
                 } catch (error) {
                   this.error(`Failed to process transaction: {tx.hash}`, error as Error);

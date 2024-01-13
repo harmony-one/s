@@ -1,7 +1,7 @@
 import Indexer, { ExtendedTransactionResponse } from "./Indexer";
 import { TransactionResponse } from "../types/customTypes";
 import { config } from "../config";
-import { BASE, HARMONY, walletManager } from "../server";
+import { HARMONY, walletManager } from "../server";
 import { convertOneToToken } from "../utils/price";
 import { isAddrEqual } from "../utils/chain";
 import { limitToken } from "../utils/dollar";

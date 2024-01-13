@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 import { config } from '../config';
-import { BASE, HARMONY, walletManager } from '../server';
+import { BASE, walletManager } from '../server';
 import { isAddrEqual } from '../utils/chain';
 import { limitOne } from '../utils/dollar';
 import { convertTokenToOne } from '../utils/price';
