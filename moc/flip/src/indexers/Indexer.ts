@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 import {DBTransaction, TransactionResponse} from '../types/customTypes';
-import {getPendingTransactions, query} from '../db/db';
+import {getPendingTransactions, query, setTxExecuted} from '../db/db';
 import {convertOneToToken, convertTokenToOne, getAmount} from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
 import {PriceProvider} from "../services/PriceProvider";
@@ -106,6 +106,7 @@ abstract class Indexer {
     const txs = await getPendingTransactions()
     for(const tx of txs) {
       const result = await this.handleTx(tx)
+      await setTxExecuted(tx.id, true)
       this.log(`Handled Transaction ${result.hash}`);
     }
   }

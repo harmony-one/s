@@ -3,8 +3,9 @@ import { config } from '../config';
 import { BASE, HARMONY, walletManager } from '../server';
 import { isAddrEqual } from '../utils/chain';
 import { limitOne } from '../utils/dollar';
-import { convertTokenToOne } from '../utils/price';
+import {convertOneToToken, convertTokenToOne} from '../utils/price';
 import Indexer, { ExtendedTransactionResponse } from './Indexer';
+import {DBTransaction, TransactionResponse} from "../types/customTypes";
 
 class BaseIndexer extends Indexer {
 
@@ -44,27 +45,9 @@ class BaseIndexer extends Indexer {
     return newTxs;
   }
 
-  protected async handleTx(tx: ExtendedTransactionResponse): Promise<ExtendedTransactionResponse> {
-    try {
-      const amount = convertTokenToOne(tx.amount!); // amount should always be present for Transfer events
-      const [cappedAmount, remainder] = limitOne(amount);
-      const response = await walletManager.sendOne(tx.from, cappedAmount);
-      // const response = await walletManager.sendOne(tx.from, amount);
-      this.log(`Handled Transaction ${response.hash} on Harmony`);
-
-      // save remainder
-      if (remainder.gt(BigNumber.from(0))) {
-        const amountFormat = ethers.utils.formatUnits(amount, 18);
-        const sentFormat = ethers.utils.formatUnits(cappedAmount, 18);
-        const remainderFormat = ethers.utils.formatUnits(remainder, 18);
-        this.saveRemainder(response, amountFormat, sentFormat, remainderFormat);
-      }
-
-      return response;
-    } catch (error) {
-      this.error('Failed to handle tx', error as Error);
-      throw error;
-    }
+  protected async handleTx(tx: DBTransaction): Promise<ExtendedTransactionResponse> {
+    const amount = convertOneToToken(BigNumber.from(tx.amount));
+    return await walletManager.sendToken(tx.address, amount) as TransactionResponse
   }
 }
 
