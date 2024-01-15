@@ -106,7 +106,7 @@ abstract class Indexer {
     const txs = await getPendingTransactions()
     for(const tx of txs) {
       const result = await this.handleTx(tx)
-      await setTxExecuted(tx.id, true)
+      await setTxExecuted(tx.id, true, result.hash)
       this.log(`Handled Transaction ${result.hash}`);
     }
   }

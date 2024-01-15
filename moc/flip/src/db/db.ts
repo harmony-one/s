@@ -33,10 +33,10 @@ export const getPendingTransactions = async (
   return rows
 };
 
-export const setTxExecuted = async (txId: string, isExecuted: boolean): Promise<DBTransaction[]> => {
+export const setTxExecuted = async (txId: string, isExecuted: boolean, dstHash: string): Promise<DBTransaction[]> => {
   const { rows } = await query(
-    `update transactions_v1 set is_executed = $2 where id = $1`,
-    [txId, isExecuted]
+    `update transactions_v1 set is_executed = $2, dst_hash = $3 where id = $1`,
+    [txId, isExecuted, dstHash]
   );
   return rows
 };
