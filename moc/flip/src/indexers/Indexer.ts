@@ -66,7 +66,7 @@ abstract class Indexer {
                   await this.saveTx(tx, dstTx);
 
                 } catch (error) {
-                  this.error(`Failed to process transaction: {tx.hash}`, error as Error);
+                  this.error(`Failed to process transaction: ${tx.hash}`, error as Error);
                 }
               }
               this.lastBlockNum = blockNum;
