@@ -22,15 +22,54 @@ export const getAllRemainders = async () => {
   return result.rows;
 };
 
-export const getPendingTransactions = async (
-  offset = 0,
-  limit = 100
+export const getTransactions = async (
+  params: {
+    offset?: number,
+    limit?: number,
+    isExecuted?: boolean,
+    address?: string
+    intervalSeconds?: number
+  }
 ): Promise<DBTransaction[]> => {
+  const { offset = 0, limit = 100, address, isExecuted , intervalSeconds } = params
+
+  const whereConditions = [];
+
+  if(typeof isExecuted !== 'undefined') {
+    whereConditions.push(`"is_executed" = ${isExecuted}`)
+  }
+
+  if(address) {
+    whereConditions.push(`"address" = '${address}'`)
+  }
+
+  if(intervalSeconds) {
+    whereConditions.push(`date BETWEEN NOW() - INTERVAL '${intervalSeconds} SECONDS' AND NOW()`)
+  }
+  const whereClause = whereConditions.length > 0
+    ? 'WHERE ' + whereConditions.join('AND ')
+    : ''
+
   const { rows } = await query(
-    `SELECT * FROM transactions_v1 WHERE is_executed = FALSE ORDER BY id DESC  OFFSET $1 LIMIT $2`,
-    [offset, limit]
+    `SELECT * FROM transactions_v1 ${whereClause} ORDER BY id DESC OFFSET $2 LIMIT $3`,
+    [isExecuted, offset, limit]
   );
   return rows
+};
+
+export const getTotalAmountForAddress = async (
+  params: {
+    address?: string
+    intervalSeconds?: number
+  }
+): Promise<number> => {
+  const { address, intervalSeconds } = params
+
+  const { rows } = await query(
+    `SELECT sum(amount) FROM transactions_v1 WHERE "address" = $1 AND date BETWEEN NOW() - INTERVAL '${intervalSeconds} SECONDS' AND NOW();`,
+    [address]
+  );
+  return rows[0].sum
 };
 
 export const setTxExecuted = async (txId: string, isExecuted: boolean, dstHash: string): Promise<DBTransaction[]> => {

@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 import {DBTransaction, TransactionResponse} from '../types/customTypes';
-import {getPendingTransactions, query, setTxExecuted} from '../db/db';
+import {getTotalAmountForAddress, getTransactions, query, setTxExecuted} from '../db/db';
 import {convertOneToToken, convertTokenToOne, getAmount} from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
 import {PriceProvider} from "../services/PriceProvider";
@@ -103,7 +103,9 @@ abstract class Indexer {
   }
 
   protected async processPendingTransactions() {
-    const txs = await getPendingTransactions()
+    const txs = await getTransactions({
+      isExecuted: false
+    })
     for(const tx of txs) {
       const result = await this.handleTx(tx)
       await setTxExecuted(tx.id, true, result.hash)
@@ -127,16 +129,36 @@ abstract class Indexer {
     const amountOne = tx.value
     const amountUsd = convertOneToToken(BigNumber.from(amountOne))
 
-    const { transfer: transferLimitUsd } = config.rateLimit
-    const transfersCount = amountUsd.toNumber() / transferLimitUsd
+    const {
+      transferLimitUSD,
+      addressLimitUSD,
+      addressLimitTTL
+    } = config.rateLimit
+
+    const lastHourAmountOne = await getTotalAmountForAddress({
+      intervalSeconds: addressLimitTTL,
+      address: tx.from
+    })
+    const lastHourAmountUSD = convertOneToToken(BigNumber.from(lastHourAmountOne))
+    if(
+      lastHourAmountUSD.toNumber() > addressLimitUSD
+      || amountUsd.toNumber() > transferLimitUSD
+    ) {
+      const limitUSD = lastHourAmountUSD.toNumber() > addressLimitUSD
+        ? addressLimitUSD
+        : transferLimitUSD
+      const transfersCount = Math.ceil(amountUsd.toNumber() / limitUSD)
 
       let amountLeft = amountOne
-    const maxAmount = convertTokenToOne(BigNumber.from(transferLimitUsd))
+      const maxAmount = convertTokenToOne(BigNumber.from(transferLimitUSD))
 
-    for(let i= 0; i < transfersCount; i++) {
-      const amount = amountLeft.gt(maxAmount) ? maxAmount : amountLeft
-      await this.addTxToQuery(tx, amount.toString())
-      amountLeft = amountLeft.sub(amount)
+      for(let i= 0; i < transfersCount; i++) {
+        const amount = amountLeft.gt(maxAmount) ? maxAmount : amountLeft
+        await this.addTxToQuery(tx, amount.toString())
+        amountLeft = amountLeft.sub(amount)
+      }
+    } else {
+      await this.addTxToQuery(tx, amountOne.toString())
     }
 
     this.log(`Transaction added to query: ${tx.hash}`);

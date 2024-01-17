@@ -28,9 +28,9 @@ export const config = {
     URL: process.env.PRICE_URL || ''
   },
   rateLimit: {
-    transfer: Number(process.env.RATE_LIMIT_TRANSFER || '10'),
-    address_value: Number(process.env.RATE_LIMIT_ADDRESS_VALUE || '10'),
-    address_ttl: Number(process.env.RATE_LIMIT_ADDRESS_TTL || '3600'), // seconds
+    transferLimitUSD: Number(process.env.RATE_LIMIT_TRANSFER || '1'),
+    addressLimitUSD: Number(process.env.RATE_LIMIT_ADDRESS_USD || '10'), // 10 USD per 1 hour (3600 seconds) per address
+    addressLimitTTL: Number(process.env.RATE_LIMIT_ADDRESS_TTL || '3600'), // seconds
   },
   db: {
     user: process.env.DB_USER,
