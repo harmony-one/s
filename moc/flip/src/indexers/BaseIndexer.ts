@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
 import { config } from '../config';
-import { BASE, walletManager } from '../server';
+import { BSC, walletManager } from '../server';
 import { isAddrEqual } from '../utils/chain';
 import { limitOne } from '../utils/dollar';
 import { convertTokenToOne } from '../utils/price';
@@ -9,7 +9,7 @@ import Indexer, { ExtendedTransactionResponse } from './Indexer';
 class BaseIndexer extends Indexer {
 
   constructor(rpc: string) {
-    super(BASE, rpc);
+    super(BSC, rpc, 1000); // bsc block time 3 seconds
   }
 
   protected async fetchTxs(blockNum: number): Promise<ExtendedTransactionResponse[]> {
@@ -18,25 +18,38 @@ class BaseIndexer extends Indexer {
 
     try {
       const block = await this.provider.getBlockWithTransactions(blockNum);
-      for (const tx of block.transactions) {
-        if (tx.to && isAddrEqual(tx.to, config.contracts.BASE_USDC)
-          && tx.from && !this.isFundingTx(tx.from)) {
-          try {
-            const receipt = await this.provider.getTransactionReceipt(tx.hash);
-            receipt.logs.forEach(log => {
+      const filteredTxs = block.transactions.filter(tx =>
+        tx.to && isAddrEqual(tx.to, config.contracts.BSC_USDT) &&
+        tx.from && !this.isFundingTx(tx.from)
+      );
+
+      // get all receipts in parallel
+      const receiptPromises = filteredTxs.map(tx =>
+        this.provider.getTransactionReceipt(tx.hash).catch(error => {
+          this.error(`Error parsing transaction ${tx.hash}`, error);
+          return null; // return null or a default value in case of error
+        })
+      );
+
+      const receipts = await Promise.all(receiptPromises);
+
+      receipts.forEach((receipt, index) => {
+        if (receipt) {
+          receipt.logs.forEach(log => {
+            try {
               const parsedLog = tokenContract.interface.parseLog(log);
               if (parsedLog.name === 'Transfer' && parsedLog.args.to.toLowerCase() === config.wallet.ADDRESS.toLowerCase()) {
                 newTxs.push({
-                  ...tx,
+                  ...filteredTxs[index],
                   amount: parsedLog.args.value, // include the transferred amount
                 });
               }
-            });
-          } catch (parseError) {
-            this.error(`Error parsing transaction ${tx.hash}`, parseError as Error);
-          }
+            } catch (parseError) {
+              this.error(`Error parsing log for transaction ${filteredTxs[index].hash}`, parseError as Error);
+            }
+          });
         }
-      }
+      });
     } catch (error) {
       this.error('Error fetching transactions', error as Error);
     }

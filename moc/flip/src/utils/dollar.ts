@@ -4,15 +4,17 @@ import { getHighPrice } from "./price";
 export const CAP = 10; // $10
 
 export function limitToken(tokenAmountBN: BigNumber): [BigNumber, BigNumber] {
-  const capBN = ethers.utils.parseUnits(CAP.toFixed(6), 6);
+  const capBN = ethers.utils.parseUnits(CAP.toString(), 18);
 
   let actualSendBN;
   let remainderBN;
 
   if (tokenAmountBN.gt(capBN)) {
+    console.log('[XXXXX] TOO MUCH')
     actualSendBN = capBN;
     remainderBN = tokenAmountBN.sub(capBN);
   } else {
+    console.log('[XXXXX] YOU GOOD')
     actualSendBN = tokenAmountBN;
     remainderBN = BigNumber.from(0);
   }

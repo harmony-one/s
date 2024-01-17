@@ -41,9 +41,9 @@ class HarmonyIndexer extends Indexer {
 
       // save remainder
       if (remainder.gt(BigNumber.from(0))) {
-        const amountFormat = ethers.utils.formatUnits(amount, 6);
-        const sentFormat = ethers.utils.formatUnits(cappedAmount, 6);
-        const remainderFormat = ethers.utils.formatUnits(remainder, 6);
+        const amountFormat = ethers.utils.formatUnits(amount, 18);
+        const sentFormat = ethers.utils.formatUnits(cappedAmount, 18);
+        const remainderFormat = ethers.utils.formatUnits(remainder, 18);
 
         // TODO: calculate dollar equivalent
 

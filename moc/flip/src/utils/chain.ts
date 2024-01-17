@@ -1,8 +1,8 @@
-import { BASE, HARMONY } from "../server";
+import { BSC, HARMONY } from "../server";
 
 function getDstChain(chain: string): string {
   if (chain === HARMONY) {
-    return BASE;
+    return BSC;
   } else {
     return HARMONY;
   }
@@ -10,7 +10,7 @@ function getDstChain(chain: string): string {
 
 function getDstAsset(chain: string): string {
   if (chain === HARMONY) {
-    return 'USDC';
+    return 'USDT';
   } else {
     return 'ONE';
   }
@@ -29,7 +29,7 @@ function getExplorer(chain: string, hash: string): string {
   if (chain === HARMONY) {
     return `https://explorer.harmony.one/tx/${hash}`;
   } else {
-    return `https://basescan.org/tx/${hash}`;
+    return `https://bscscan.com/tx/${hash}`;
   }
 }
 

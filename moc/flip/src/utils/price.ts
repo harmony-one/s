@@ -7,6 +7,7 @@ import { HARMONY } from '../server';
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
 const USDC_DECIMAL = 6;
+const USDT_DECIMAL = 18;
 const ONE_DECIMAL = 18;
 
 let priceData: PriceData | null = null;
@@ -68,7 +69,7 @@ function convertOneToToken(amount: BigNumber): BigNumber {
   if (!lowPrice) {
     throw new Error('Low price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(lowPrice, USDC_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(lowPrice, USDT_DECIMAL);
   return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', ONE_DECIMAL));
 }
 
@@ -77,7 +78,7 @@ function convertTokenToOne(amount: BigNumber): BigNumber {
   if (!highPrice) {
     throw new Error('Price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(highPrice, USDC_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(highPrice, USDT_DECIMAL);
   return amount.mul(ethers.utils.parseUnits('1', ONE_DECIMAL)).div(conversionRate);
 }
 
@@ -87,7 +88,7 @@ function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
   if (chain === HARMONY) {
     value = ethers.utils.formatUnits(tx.value, ONE_DECIMAL);
   } else {
-    value = ethers.utils.formatUnits(tx.amount as BigNumber, USDC_DECIMAL);
+    value = ethers.utils.formatUnits(tx.amount as BigNumber, USDT_DECIMAL);
   }
 
   const numValue = parseFloat(value);

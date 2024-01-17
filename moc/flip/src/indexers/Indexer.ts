@@ -4,6 +4,7 @@ import { query } from '../db/db';
 import { getAmount } from '../utils/price';
 import { getDstAsset, getDstChain } from '../utils/chain';
 import { config } from '../config';
+import { BSC } from '../server';
 
 // TODO: uniformed logging
 export interface ExtendedTransactionResponse extends TransactionResponse {
@@ -52,6 +53,9 @@ abstract class Indexer {
       while (retryCount <= MAX_RETRIES) {
         try {
           const currBlockNum = await this.fetchBlockNum();
+
+          // TODO: too slow for binance
+
           if (this.lastBlockNum && this.lastBlockNum < currBlockNum) {
             for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
               const newTxs = await this.fetchTxs(blockNum);
@@ -136,7 +140,7 @@ abstract class Indexer {
   }
 
   // TODO: check parsing;
-  protected getAmount(tx: TransactionResponse): number {
+  protected getAmount(tx: ExtendedTransactionResponse): number {
     return getAmount(tx, getDstChain(this.chain));
   }
 

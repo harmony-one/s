@@ -61,8 +61,10 @@ class WalletManager {
   public async sendToken(address: string, amount: BigNumber): Promise<TransactionResponse> {
     try {
       const estimatedGasLimit = await this.baseTokenContract.estimateGas.transfer(address, amount);
-      const gasLimit = estimatedGasLimit.add(ethers.utils.parseUnits('10000', 'wei')); // buffer
-      const tx = await this.baseTokenContract.transfer(address, amount, { gasLimit: gasLimit });
+      const gasPrice = await this.baseProvider.getGasPrice()
+      // const gasLimit = estimatedGasLimit.add(ethers.utils.parseUnits('10000', 'wei')); // buffer
+      const tx = await this.baseTokenContract.transfer(address, amount, { gasPrice: gasPrice });
+      // const tx = await this.baseTokenContract.transfer(address, amount, { gasLimit: estimatedGasLimit });
       return tx;
     } catch (error) {
       throw new Error(`Failed to send USDC: ${error}`);
