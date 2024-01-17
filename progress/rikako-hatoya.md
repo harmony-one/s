@@ -1,6 +1,18 @@
-2021-01-11 Thu: Resolved environment config issues for Gnosis safe fork, got forked app to work with Goerli testnet, investigated how to adopt harmony ONE as custom network for safe-ios. TO-DO: Will look into PRs made by protofire team for existing safe contract/safe singleton factory. (Relevant PRs: [https://github.com/safe-global/safe-singleton-factory/pull/15], [https://github.com/safe-global/safe-deployments/pull/62])
+2024-01-16 Tue: Researched different inscription tokens/XRC-20s (eg. AVAX, AVAV, ASC-20, PRC-20, SPL-20, NRC-20, ...,) their marketplace, and its relevant concepts (UTF to HEX, etc).
 
-2021-01-10 Wed: Researched into Multisig wallets, and Gnosis Safe. Set-up API keys, debugged, and resolved  configurations for Harmony safe-ios fork to get it to build.
+2024-01-15 Mon: (Holiday) Researched about sending inscriptions transactions.
+
+---
+
+2024-01-14 Sun: Further investigation on how to fix the wallet connection issue on Gnosis. (TheoF was able to fix it.)
+
+2024-01-13 Sat: Investigated further on how to fix the wallet connection issue on Gnosis.
+
+2024-01-12 Fri: Investigated how to setup harmony testnet on Gnosis multisig ios app. Reached out to protofire team regarding an issue I raised [here](https://github.com/safe-global/safe-singleton-factory/issues/337). Added backend connection to harmony testnet and other configuration setup such as connecting API and adding assets. Tested Sun's USDC flip.
+
+2024-01-11 Thu: Resolved environment config issues for Gnosis safe fork, got forked app to work with Goerli testnet, investigated how to adopt harmony ONE as custom network for safe-ios. TO-DO: Will look into PRs made by protofire team for existing safe contract/safe singleton factory. (Relevant PRs: [https://github.com/safe-global/safe-singleton-factory/pull/15], [https://github.com/safe-global/safe-deployments/pull/62])
+
+2024-01-10 Wed: Researched into Multisig wallets, and Gnosis Safe. Set-up API keys, debugged, and resolved  configurations for Harmony safe-ios fork to get it to build.
 
 2021-01-09 Tue: Researched into Thor swap, more campaigns into airdrops, minting soulbound ERC721, Unistat, and relevant topics such as layer2 and minimla on-chain.
 
