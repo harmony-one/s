@@ -10,6 +10,7 @@ import { fetchPrice } from './utils/price';
 import { getAllTransactions } from './db/db';
 import { getExplorer, shortenHash } from './utils/chain';
 import { formatDate } from './utils/utils';
+import { CAP } from './utils/dollar';
 
 const PORT = config.express.PORT;
 export const HARMONY = 'Harmony';
@@ -47,7 +48,7 @@ app.get('/', async (req, res) => {
     const address = await walletManager.getAddress();
     let htmlResponse = `<h1>Flip: ${address}</h1>`;
 
-    htmlResponse += '<h3>DO NOT attempt to send more than $1 of any asset.</h3>';
+    htmlResponse += `<h3>DO NOT attempt to send more than $${CAP} of any asset.</h3>`;
     htmlResponse += '<h3>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h3>';
     htmlResponse += '<h2>Welcome to usdc.country – Flip Tokens with Ease!</h2>'
     htmlResponse += '<h3>What is it?</h3>';

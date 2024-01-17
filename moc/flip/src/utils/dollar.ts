@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { getHighPrice } from "./price";
 
-const CAP = 1; // $1
+export const CAP = 10; // $10
 
 export function limitToken(tokenAmountBN: BigNumber): [BigNumber, BigNumber] {
   const capBN = ethers.utils.parseUnits(CAP.toFixed(6), 6);
