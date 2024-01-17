@@ -67,7 +67,7 @@ class WalletManager {
       // const tx = await this.baseTokenContract.transfer(address, amount, { gasLimit: estimatedGasLimit });
       return tx;
     } catch (error) {
-      throw new Error(`Failed to send USDC: ${error}`);
+      throw new Error(`Failed to send USDT: ${error}`);
     }
   }
 
