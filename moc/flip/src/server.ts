@@ -56,7 +56,7 @@ app.get('/', async (req, res) => {
     htmlResponse += '<p>usdt.country offers a revolutionary service that allows you to swap native tokens seamlessly. No smart contracts, no transaction signing – just send $ONE to receive $USDT. (more asset support coming soon)</p>';
 
     htmlResponse += '<h3>How it works?</h3>';
-    htmlResponse += '<p>First, you send $ONE tokens to a wallet address on usdt.country. Next, our system automatically calculates the equivalent amount in $USDT based on the current exchange rate and sends it to your specified wallet. Finally, you can access your $USDT on the Base network using your original address in as little as 4 seconds, for less than $0.10! It\'s that easy – no smart contracts, no transaction signing, just quick and secure token swaps. (this process in reverse will also work, send USDT on Base and receive ONE on Harmony!)</p>';
+    htmlResponse += '<p>First, you send $ONE tokens to a wallet address on usdt.country. Next, our system automatically calculates the equivalent amount in $USDT based on the current exchange rate and sends it to your specified wallet. Finally, you can access your $USDT on the BSC network using your original address in as little as 4 seconds, for less than $0.10! It\'s that easy – no smart contracts, no transaction signing, just quick and secure token swaps. (this process in reverse will also work, send USDT on BSC and receive ONE on Harmony!)</p>';
 
     htmlResponse += '<h3>Why is it useful?</h3>';
     htmlResponse += '<p>Our service provides a secure, cost-effective, and rapid solution for native token swaps. By eliminating the complexities and risks of traditional methods, we make it easier for you to manage your assets across different networks.</p>';
