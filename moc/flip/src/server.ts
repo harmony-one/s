@@ -1,4 +1,5 @@
 import app from './app';
+import cors from 'cors';
 import { config } from './config';
 import WalletManager from './services/WalletManager';
 // import abi from './abis/base_usdc.json';
@@ -39,6 +40,8 @@ const fetchPriceWithInterval = async () => {
 
 fetchPriceWithInterval();
 setInterval(fetchPriceWithInterval, 60 * 60 * 1000); // 60 minutes
+
+app.use(cors());
 
 // root
 app.get('/', async (req, res) => {
