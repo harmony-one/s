@@ -29,18 +29,15 @@ const StyledTd = styled.td`
   border: 1px solid black;
   padding: 8px;
   width: 150;
-
-  // &:nth-child(3) {
-  //   width: 300px;
-  // }
 `;
 
 const StyledLink = styled.a`
-  font-weight: bold;
+  // color: ${props => props.chain === srcChain ? srcColor : dstColor};
   color: #00AEE9;
   text-decoration: none;
 
   &:visited {
+    // color: ${props => props.chain === srcChain ? srcColor : dstColor};
     color: #00AEE9;
   }
 
@@ -49,27 +46,47 @@ const StyledLink = styled.a`
   }
 `;
 
+const txsUrl = 'https://moc-bsc-usdt.fly.dev/txs';
+
 const flipAddr = '0x23719c80171E1c533E58cE757084f6b225721D95';
 const capAmount = 10;
 
-const srcChain = 'Harmony'
-const srcAsset = 'ONE'
+const srcChain = 'Harmony';
+const srcAsset = 'ONE';
+const srcExplorer = 'https://explorer.harmony.one';
+const srcColor = '#00AEE9';
 
-const dstChain = 'BSC'
-const dstAsset = 'USDT'
+const dstChain = 'BSC';
+const dstAsset = 'USDT';
+const dstExplorer = 'https://bscscan.com';
+const dstColor = '#F3BA2F';
 
 const dotCountry = 'usdt'
 
-const formatHashAndAddress = (str) => str.slice(0, 6) + '...' + str.slice(-4);
+const fetchTxs = async () => {
+  const response = await fetch(txsUrl);
+  return response.json();
+};
+const formatHash = (str) => str.slice(0, 6) + '...' + str.slice(-4);
 
 const formatDate = (timestamp) => {
   const date = new Date(timestamp);
-  return date.toISOString().replace('T', ' ').slice(0, 19);
+  return date.toUTCString().replace(/GMT.*/, 'GMT');
 };
 
+const getExplorer = (chain, txHash) => {
+  if (chain === srcChain) {
+    return `${srcExplorer}/tx/${txHash}`;
+  } else {
+    return `${dstExplorer}/tx/${txHash}`;
+  }
+}
+
 function App() {
+  const [txs, setTxs] = useState([]);
 
   useEffect(() => {
+    fetchTxs().then(setTxs);
   }, []);
 
   return (
@@ -103,6 +120,28 @@ function App() {
           </tr>
         </thead>
         <tbody>
+          {txs.map(tx => (
+            <tr key={tx.id}>
+              <StyledTd>{formatHash(tx.address)}</StyledTd>
+              <StyledTd>{tx.src_chain}</StyledTd>
+              <StyledTd>
+                {/* <StyledLink chain={tx.src_chain} href={getExplorer(tx.src_chain, tx.src_hash)} target="_blank" rel="noopener noreferrer"> */}
+                <StyledLink href={getExplorer(tx.src_chain, tx.src_hash)} target="_blank" rel="noopener noreferrer">
+                  {formatHash(tx.src_hash)}
+                </StyledLink>
+              </StyledTd>
+              <StyledTd>{tx.dst_chain}</StyledTd>
+              <StyledTd>
+                {/* <StyledLink chain={tx.dst_chain} href={getExplorer(tx.dst_chain, tx.dst_hash)} target="_blank" rel="noopener noreferrer"> */}
+                <StyledLink href={getExplorer(tx.dst_chain, tx.dst_hash)} target="_blank" rel="noopener noreferrer">
+                  {formatHash(tx.dst_hash)}
+                </StyledLink>
+              </StyledTd>
+              <StyledTd>{tx.asset}</StyledTd>
+              <StyledTd>{parseFloat(tx.amount).toFixed(6)}</StyledTd>
+              <StyledTd>{formatDate(tx.date)}</StyledTd>
+            </tr>
+          ))}
         </tbody>
       </StyledTable>
     </Container>
