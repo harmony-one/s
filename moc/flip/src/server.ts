@@ -100,6 +100,11 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/txs', async (_, res) => {
+  const txs = await getAllTransactions();
+  res.json(txs);
+})
+
 // price route
 app.use('/price', priceRoutes);
 
