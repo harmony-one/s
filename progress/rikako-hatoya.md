@@ -1,3 +1,7 @@
+2024-01-18 Thu: Updated UI for multisig iOS - edited UI view controllers and added Harmony logo to onboarding/privacy protection screens, removed unwanted sections in settings screen, removed chainprefix settings and set their defaults to false, updated theme color.
+
+2024-01-17 Wed: Updated UI for multisig iOS - updated chain logo, removed help center section and replaced it with various social media/privacy policy links and icons, updated app name to Harmony Multisig Wallet, updated configurations on info.plist, removed dApps tab and modified navigation router, removed collectibles and forum section,
+
 2024-01-16 Tue: Researched different inscription tokens/XRC-20s (eg. AVAX, AVAV, ASC-20, PRC-20, SPL-20, NRC-20, ...,) their marketplace, and its relevant concepts (UTF to HEX, etc).
 
 2024-01-15 Mon: (Holiday) Researched about sending inscriptions transactions.
