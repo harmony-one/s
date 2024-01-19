@@ -49,7 +49,6 @@ abstract class Indexer {
 
     const processIndexing = async () => {
       let retryCount = 0;
-
       while (retryCount <= MAX_RETRIES) {
         try {
           const currBlockNum = await this.fetchBlockNum();
