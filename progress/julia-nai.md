@@ -1,3 +1,25 @@
+2023-01-19 Fri: 
+
+2023-01-18 Thu: Found new lead for senior eng position. Prototyped new pool based flip with Theo. Setup and tested podcast. 
+
+2023-01-17 Wed: Pulled protocol stats for Harmony, Polygon, Avalanche, and Near from footprint and API calls. Created spreadsheet comparing gas fees, utilization, and other stats for Harmony, Polygon, and Avalanche (could not find reliable easily accessible sources for Near). 
+
+2023-01-16 Tue: Tested interacting with inscriptions on Avalanche (AVAV on Avascriptions). Minted inscription tokens and listed new tokens. Generated graphic for Harmony x Onescription announcement. 
+
+2023-01-15 Mon: Fed Holiday
+
+---
+
+2023-01-14 Sun: Wrote speaker bios and other response questions for team members for ETHDenver applications. 
+
+2023-01-13 Sat: Tested minimal secure wallet. 
+
+2023-01-12 Fri: Created POC for a contract that holds ONE tokens for you. This limits your hot wallet's exposure. When you need more tokens, you can send a transaction work 0 ONE to the contract and the contract will automatically send you 100 ONE tokens back. This way, you still have access to all of your funds, but in the event you sign something you shouldn't, your exposure is limited to however much you want to refill your account with. [Contract](https://explorer.harmony.one/address/0x80a7f21728d263a64a4acac56e9c43dea997ee30) and [code](https://github.com/harmony-one/s/commit/fc63f102bf473ce615f94cbcaab11e558f141f35).
+
+2023-01-11 Thu:[Added](https://github.com/harmony-one/s/commit/ce97d2b7aeadfbe18735a43abea1d5df8f8e59a9) fee counter for bridge stats to find gas charged across bridge transactions from fly.io. Generated and designed graphic for Harmony 2024: ONE Finality substack post. 
+
+2023-01-10 Wed:[Found](https://github.com/harmony-one/s/commit/dfa3fdeea1b30d5c14946936b9a0375063c7ade1) top 3 pairs from Harmony to other chains and top 3 pairs from other chains to Harmony on the bridge. Created manual prototype for BTC - ONE flip using call data and OP_RETURN. Created front end with hex converter. 
+
 2023-01-09 Tue: Planned btc.country setup and researched methods for deriving receipt address from send address on Bitcoin. [Created](https://github.com/harmony-one/s/commit/91071fd9cfaf9389c984b5d10b9009e3cbe23610) quick bridge stats scraper. Currently gets transaction value and number of transactions in various statuses (waiting, in progress, error, success etc.) for the last week. [Added](https://github.com/harmony-one/s/commit/95c3d3bf40930020af74089668029a21f7da16bf) list of networks by number of transactions. Reviewed pricing model for moc.
 
 2023-01-08 Mon: [Reviewed](https://lucid.app/lucidchart/e2275294-1899-4f72-a1e8-d934146d2942/edit?invitationId=inv_49cc2640-ae23-4c26-aed0-d95e788e3ca6) moc setup and btc.country.
