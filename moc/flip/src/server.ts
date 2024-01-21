@@ -1,4 +1,7 @@
 import app from './app';
+import express from 'express';
+import cors from 'cors';
+
 // import cors from 'cors';
 // import { config } from './config';
 // import WalletManager from './services/WalletManager';
@@ -13,16 +16,60 @@ import app from './app';
 // import { getExplorer, shortenHash } from './utils/chain';
 // import { formatDate } from './utils/utils';
 // import { CAP } from './utils/dollar';
-import chainConfig from '../config/index';
+
+
+// TODO: make 'Harmony' into a constant
+// TODO: refactor ./utils/
+
+import { chainConfig } from './config/index';
 import GeneralIndexer from './indexers/GeneralIndexer';
+import HarmonyIndexer from './indexers/HarmonyIndexer';
+import { CrossChainConfig, HarmonyConfig } from './config/type';
+import HarmonyManager from './services/HarmonyManager';
+import { fetchPrice } from './utils/price';
+import GeneralManager from './services/GeneralManager';
+
+app.use(cors());
+app.use(express.json());
 
 console.log(chainConfig);
-const indexer = new GeneralIndexer(chainConfig);
-indexer.start();
+fetchPrice(); // TODO: do this right
 
-app.listen(3000, () => {
-  console.log(`Server running on port ${3000}`);
+export var transactionManager: GeneralManager | HarmonyManager;
+export var indexer: GeneralIndexer | HarmonyIndexer;
+function startServer() {
+  if (chainConfig.chain === 'Harmony') {
+    indexer = new HarmonyIndexer(chainConfig as HarmonyConfig);
+    indexer.start();
+    transactionManager = new HarmonyManager(chainConfig as HarmonyConfig);
+
+    app.listen(3000, () => {
+      console.log(`Server running on port ${3000}`);
+    });
+  } else if (chainConfig.chain === 'Base') {
+    indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
+    indexer.start();
+    transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
+
+    app.listen(3001, () => {
+      console.log(`Server running on port ${3001}`);
+    });
+  } else {
+    indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
+    indexer.start();
+    transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
+
+    app.listen(3002, () => {
+      console.log(`Server running on port ${3002}`);
+    });
+  }
+}
+
+app.post('/', async (req, res) => {
+  await transactionManager.handleRequest(req, res);
 });
+
+startServer();
 
 // const PORT = config.express.PORT;
 // export const HARMONY = 'Harmony';

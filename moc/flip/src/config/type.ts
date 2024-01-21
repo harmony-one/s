@@ -1,23 +1,28 @@
 // TODO: ensure the required values are loaded
-
 interface ChainConfig {
   chain: string;
   rpcUrl: string;
-  keys: KeyPair | KeyPair[]; // multiple key pairs for Harmony
+  apiKey: string;
   funders: string[];
   native: boolean; // set to true if accepting native asset
+}
+
+interface HarmonyConfig extends ChainConfig {
+  keys: KeyPair[];
+  indexerInfo: Map<string, IndexerInfo>;
+  dstChains: { [address: string]: string };
+}
+
+interface CrossChainConfig extends ChainConfig {
+  key: KeyPair;
   tokens?: TokenConfig[];
-  dstChains?: { [address: string]: string };
+  indexerInfo: IndexerInfo;
 }
 
 interface KeyPair {
   dstChain?: string, // destination chain (i.e. Base, BSC, etc)
   pubKey: string,
   privKey: string
-}
-
-interface TokenConfigs {
-  [address: string]: TokenConfig
 }
 
 interface TokenConfig {
@@ -27,4 +32,9 @@ interface TokenConfig {
   abi: any; // TODO: check type
 }
 
-export { ChainConfig, KeyPair, TokenConfig };
+interface IndexerInfo {
+  url: string;
+  apiKey: string;
+}
+
+export { ChainConfig, HarmonyConfig, CrossChainConfig, KeyPair, TokenConfig, IndexerInfo };

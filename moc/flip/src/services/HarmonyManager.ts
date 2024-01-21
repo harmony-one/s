@@ -1,0 +1,101 @@
+import express from 'express';
+import axios from "axios";
+import { BigNumber, ethers } from "ethers";
+import { HarmonyConfig } from "../config/type";
+import { convertOneToToken } from "../utils/price";
+import { tokenConfigs } from "../config";
+import { indexer } from '../server';
+
+class HarmonyManager {
+  private config: HarmonyConfig;
+  private walletMap: Map<String, ethers.Wallet> = new Map();
+
+  constructor(config: HarmonyConfig) {
+    this.config = config;
+    config.keys.forEach(keyPair => {
+      this.walletMap.set(keyPair.pubKey.toLowerCase(), new ethers.Wallet(keyPair.privKey, indexer.getProvider()));
+    });
+  }
+
+  async sendRequest(dstAddress: string, walletAddress: string, tokenAddress: string, amount: BigNumber) {
+    const indexerInfo = this.config.indexerInfo.get(walletAddress);
+    if (!indexerInfo) {
+      console.error(`URL mapping for ${walletAddress} does not exist`);
+      return;
+    }
+
+    const tokenConfig = tokenConfigs.get(tokenAddress);
+    if (!tokenConfig) {
+      console.error(`Token ${tokenAddress} not supported`);
+      return;
+    }
+
+    const conversionAmount = convertOneToToken(amount, tokenConfig.decimal);
+    console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ${tokenConfig.symbol} / Amount: ${conversionAmount}`);
+    try {
+      const data = {
+        dstAddress: dstAddress,
+        walletAddress: walletAddress,
+        tokenAddress: tokenAddress,
+        amount: conversionAmount.toString(),
+        apiKey: this.config.apiKey
+      };
+      const response = await axios.post(indexerInfo.url, data);
+      // TODO: fix logging
+      console.log('Completed:', response.data.txHash);
+    } catch (error) {
+      // TODO: revert transaction
+      if (error instanceof Error) {
+        console.error('Error sending request', error.message);
+      } else {
+        console.error('Error sending request');
+      }
+    }
+  }
+
+  async handleRequest(req: express.Request, res: express.Response) {
+    try {
+      const { dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
+      if (!this.verifyApiKey(walletAddress, apiKey)) {
+        res.status(401).send('Invalid API key');
+        return;
+      }
+      const wallet = this.walletMap.get(walletAddress.toLowerCase());
+      if (!wallet) {
+        res.status(500).send(`Wallet ${walletAddress} not setup`);
+        return;
+      }
+
+      const minGasPrice = ethers.utils.parseUnits('100', 'gwei'); // 100 GWEI
+      const txRequest = {
+        to: dstAddress,
+        value: BigNumber.from(amount),
+        gasPrice: minGasPrice
+      };
+
+      let estimatedGasLimit = await wallet.estimateGas(txRequest);
+      const tx = {
+        ...txRequest,
+        gasLimit: estimatedGasLimit
+      };
+
+      const txResponse = await wallet.sendTransaction(tx);
+      console.log('Handled Tx:', txResponse.hash);
+      res.status(200).send({
+        txHash: txResponse.hash
+      });
+
+      // TODO: save transaction to DB
+    } catch (error) {
+      console.error('Error handling request:', error);
+      res.status(500).send('Internal server error');
+    }
+  }
+
+  verifyApiKey(walletAddress: string, apiKey: string): boolean {
+    return this.config.indexerInfo.has(walletAddress)
+      && this.config.indexerInfo.get(walletAddress)?.apiKey === apiKey;
+  }
+}
+
+export default HarmonyManager;

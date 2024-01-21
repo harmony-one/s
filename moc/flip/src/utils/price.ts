@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { config } from '../config';
+import { config } from '../prev_config';
 import { ethers, BigNumber } from 'ethers';
-import { ExtendedTransactionResponse } from '../indexers/Indexer';
-import { HARMONY } from '../server';
+import { ExtendedTransactionResponse } from '../indexers/GeneralIndexer';
 
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
@@ -64,28 +63,28 @@ function getLowPrice(): string | undefined {
   return priceData?.lowPrice;
 }
 
-function convertOneToToken(amount: BigNumber): BigNumber {
+function convertOneToToken(amount: BigNumber, decimal: number): BigNumber {
   const lowPrice = getLowPrice();
   if (!lowPrice) {
     throw new Error('Low price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(lowPrice, USDT_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(lowPrice, decimal);
   return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', ONE_DECIMAL));
 }
 
-function convertTokenToOne(amount: BigNumber): BigNumber {
+function convertTokenToOne(amount: BigNumber, decimal: number): BigNumber {
   const highPrice = getHighPrice();
   if (!highPrice) {
     throw new Error('Price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(highPrice, USDT_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(highPrice, decimal);
   return amount.mul(ethers.utils.parseUnits('1', ONE_DECIMAL)).div(conversionRate);
 }
 
 function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
   let value: string;
 
-  if (chain === HARMONY) {
+  if (chain === 'Harmony') {
     value = ethers.utils.formatUnits(tx.value, ONE_DECIMAL);
   } else {
     value = ethers.utils.formatUnits(tx.amount as BigNumber, USDT_DECIMAL);
