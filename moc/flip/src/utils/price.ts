@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import axios from 'axios';
-import { config } from '../prev_config';
 import { ethers, BigNumber } from 'ethers';
 
 const SYMBOL = 'ONEUSDT';
@@ -25,7 +25,8 @@ async function fetchPrice(): Promise<PriceData> {
   }
 
   try {
-    const response = await axios.get(config.price.URL, { params: params })
+    const priceUrl = process.env.PRICE_URL;
+    const response = await axios.get(priceUrl!, { params: params })
     const data = response.data;
     if (data.length == 0) {
       throw new Error('No price data available');

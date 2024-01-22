@@ -1,4 +1,3 @@
-app = "moc-bsc-usdt"
 primary_region = "sjc"
 
 [build]

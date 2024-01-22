@@ -1,37 +1,15 @@
 import app from './app';
-import express from 'express';
-import cors from 'cors';
-
-// import cors from 'cors';
-// import { config } from './config';
-// import WalletManager from './services/WalletManager';
-// // import abi from './abis/base_usdc.json';
-// import abi from './abis/bsc_usdt.json';
-// import HarmonyIndexer from './indexers/HarmonyIndexer';
-// import BaseIndexer from './indexers/BaseIndexer';
-// import priceRoutes from './routes/priceRoutes';
-// import remainderRoutes from './routes/remainderRoutes';
-// import { fetchPrice } from './utils/price';
-// import { getAllTransactions } from './db/db';
-// import { getExplorer, shortenHash } from './utils/chain';
-// import { formatDate } from './utils/utils';
-// import { CAP } from './utils/dollar';
-
-// TODO: refactor ./utils/
-
+import 'dotenv/config';
 import { chainConfig } from './config/index';
+import { fetchPrice } from './utils/price';
+import { CrossChainConfig, HarmonyConfig } from './config/type';
 import GeneralIndexer from './indexers/GeneralIndexer';
 import HarmonyIndexer from './indexers/HarmonyIndexer';
-import { CrossChainConfig, HarmonyConfig } from './config/type';
 import HarmonyManager from './services/HarmonyManager';
-import { fetchPrice } from './utils/price';
 import GeneralManager from './services/GeneralManager';
-import { getAllRemainders, getAllTransactions, getChainTransactions } from './db/db';
+import { getAllRemainders, getChainTransactions } from './db/db';
 
-app.use(cors());
-app.use(express.json());
-
-console.log(chainConfig);
+const PORT = process.env.PORT || 3000;
 
 // fetch and configure price
 const fetchPriceWithInterval = async () => {
@@ -53,35 +31,31 @@ function startServer() {
     indexer = new HarmonyIndexer(chainConfig as HarmonyConfig);
     indexer.start();
     transactionManager = new HarmonyManager(chainConfig as HarmonyConfig);
-
-    app.listen(3000, () => {
-      console.log(`Server running on port ${3000}`);
-    });
   } else if (chainConfig.chain === 'Base') {
     indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
     indexer.start();
     transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
-
-    app.listen(3001, () => {
-      console.log(`Server running on port ${3001}`);
-    });
   } else {
     indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
     indexer.start();
     transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
-
-    app.listen(3002, () => {
-      console.log(`Server running on port ${3002}`);
-    });
   }
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
+
+app.get('/health', async (_, res) => {
+  res.send('ok');
+});
 
 app.post('/', async (req, res) => {
   console.log(req.body);
   await transactionManager.handleRequest(req, res);
 });
 
-app.get('/txs', async (req, res) => {
+app.get('/txs', async (_, res) => {
   const txs = await getChainTransactions(chainConfig.chain);
   res.json(txs);
 });
@@ -89,6 +63,6 @@ app.get('/txs', async (req, res) => {
 app.get('/remainders', async (_, res) => {
   const remainders = await getAllRemainders();
   res.json(remainders);
-})
+});
 
 startServer();
