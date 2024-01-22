@@ -7,7 +7,7 @@ import { convertTokenToOne, getNumberAmount } from "../utils/price";
 import { indexer } from '../server';
 import GeneralIndexer from '../indexers/GeneralIndexer';
 import { saveRemainder, saveTransction } from '../db/db';
-import { limitOne } from '../utils/priceLimit';
+import { limitOne } from '../utils/priceRateLimit';
 
 class GeneralManager {
   private config: CrossChainConfig;
@@ -84,7 +84,7 @@ class GeneralManager {
       const gasPrice = await provider.getGasPrice();
       const tx = await tokenContract
         .connect(this.wallet)
-        .transfer(dstAddress, amount, { gasPrice: gasPrice }); // TODO: transfer only the cappedAmount
+        .transfer(dstAddress, amount, { gasPrice: gasPrice });
 
       console.log('Handled Tx:', tx.hash);
       res.status(200).send({

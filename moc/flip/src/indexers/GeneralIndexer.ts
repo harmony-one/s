@@ -17,7 +17,7 @@ class GeneralIndexer {
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null = null;
   private config: CrossChainConfig;
-  private tokenMap: Map<String, TokenConfig> = new Map(); // TODO: needs to be handled differently for Harmony and other chains
+  private tokenMap: Map<String, TokenConfig> = new Map();
   private contractMap: Map<String, ethers.Contract> = new Map();
 
   constructor(config: CrossChainConfig) {

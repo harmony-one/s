@@ -6,7 +6,7 @@ import { convertOneToToken, getNumberAmount } from "../utils/price";
 import { tokenConfigs } from "../config";
 import { indexer } from '../server';
 import { saveRemainder, saveTransction } from '../db/db';
-import { limitToken } from '../utils/priceLimit';
+import { limitToken } from '../utils/priceRateLimit';
 
 class HarmonyManager {
   private config: HarmonyConfig;
@@ -91,7 +91,7 @@ class HarmonyManager {
       const minGasPrice = ethers.utils.parseUnits('100', 'gwei'); // 100 GWEI
       const txRequest = {
         to: dstAddress,
-        value: BigNumber.from(amount), // TODO: send only the capped amount 
+        value: BigNumber.from(amount),
         gasPrice: minGasPrice
       };
 

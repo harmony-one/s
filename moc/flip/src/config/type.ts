@@ -33,7 +33,7 @@ interface TokenConfig {
   symbol: string,
   decimal: number,
   contractAddress: string,
-  abi: any; // TODO: check type
+  abi: any;
 }
 
 interface IndexerInfo {

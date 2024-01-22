@@ -6,9 +6,6 @@ export const CAP = 0.1; // $10
 // return [cappedAmount, remainder, conversionRate (lowPrice)]
 export function limitToken(tokenAmountBN: BigNumber, decimal: number): [BigNumber, BigNumber, string] {
   const capBN = ethers.utils.parseUnits(CAP.toString(), decimal);
-  console.log(capBN.toString());
-  console.log(tokenAmountBN.toString());
-
   let actualSendBN;
   let remainderBN;
 
@@ -26,9 +23,6 @@ export function limitToken(tokenAmountBN: BigNumber, decimal: number): [BigNumbe
 // return [cappedAmount, remainder, conversionRate (highPrice)]
 export function limitOne(oneAmountBN: BigNumber): [BigNumber, BigNumber, string] {
   const capBN = calculateONEAmount(CAP);
-
-  console.log(capBN.toString());
-
   let actualSendBN;
   let remainderBN;
 
