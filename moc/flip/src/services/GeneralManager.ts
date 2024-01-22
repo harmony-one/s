@@ -6,7 +6,8 @@ import { CrossChainConfig, HARMONY } from "../config/type";
 import { convertTokenToOne, getNumberAmount } from "../utils/price";
 import { indexer } from '../server';
 import GeneralIndexer from '../indexers/GeneralIndexer';
-import { saveTransction } from '../db/db';
+import { saveRemainder, saveTransction } from '../db/db';
+import { limitOne } from '../utils/priceLimit';
 
 class GeneralManager {
   private config: CrossChainConfig;
@@ -24,8 +25,10 @@ class GeneralManager {
       console.error(`Token ${tokenAddress} not supported`);
       return;
     }
-    const conversionAmount = convertTokenToOne(amount, tokenConfig.decimal);
-    console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ONE / Amount: ${conversionAmount.toString()}`);
+
+    const totalAmount = convertTokenToOne(amount, tokenConfig.decimal);
+    const [cappedAmount, remainder, conversionRate] = limitOne(totalAmount);
+    console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ONE / Amount: ${totalAmount.toString()} / Capped: ${cappedAmount.toString()}`);
 
     try {
       const response = await axios.post(indexerInfo.url, {
@@ -33,9 +36,22 @@ class GeneralManager {
         dstAddress: dstAddress,
         walletAddress: walletAddress,
         tokenAddress: tokenAddress,
-        amount: conversionAmount.toString(),
-        apiKey: this.config.apiKey
+        amount: cappedAmount.toString(),
+        apiKey: this.config.apiKey,
+        remainderInfo: {
+          totalAmount: totalAmount.toString(),
+          remainder: remainder.toString(),
+          conversionRate: conversionRate,
+        }
       });
+      // const response = await axios.post(indexerInfo.url, {
+      //   srcHash: srcHash,
+      //   dstAddress: dstAddress,
+      //   walletAddress: walletAddress,
+      //   tokenAddress: tokenAddress,
+      //   amount: totalAmount.toString(),
+      //   apiKey: this.config.apiKey,
+      // });
       // TODO: fix logging
       console.log('Completed:', response.data.txHash);
     } catch (error) {
@@ -48,9 +64,10 @@ class GeneralManager {
     }
   }
 
+  // TODO: need to await?
   async handleRequest(req: express.Request, res: express.Response) {
     try {
-      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
+      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey, remainderInfo } = req.body;
       if (!this.verifyApiKey(apiKey)) {
         res.status(401).send('Invalid API key');
         return;
@@ -67,7 +84,7 @@ class GeneralManager {
       const gasPrice = await provider.getGasPrice();
       const tx = await tokenContract
         .connect(this.wallet)
-        .transfer(dstAddress, amount, { gasPrice: gasPrice });
+        .transfer(dstAddress, amount, { gasPrice: gasPrice }); // TODO: transfer only the cappedAmount
 
       console.log('Handled Tx:', tx.hash);
       res.status(200).send({
@@ -77,6 +94,15 @@ class GeneralManager {
       await saveTransction(
         dstAddress, HARMONY, srcHash, this.config.chain, tx.hash, tokenConfig.symbol, getNumberAmount(amount, tokenConfig.decimal)
       );
+
+      const { totalAmount, remainder, conversionRate } = remainderInfo;
+      if (BigNumber.from(remainder).gt(BigNumber.from(0))) {
+        await saveRemainder(
+          dstAddress, this.config.chain, tx.hash, tokenConfig.symbol,
+          ethers.utils.formatUnits(totalAmount, tokenConfig.decimal), ethers.utils.formatUnits(amount, tokenConfig.decimal), ethers.utils.formatUnits(remainder, tokenConfig.decimal), conversionRate
+        );
+      }
+
     } catch (error) {
       console.error('Error handling request:', error);
       res.status(500).send('Internal server error');

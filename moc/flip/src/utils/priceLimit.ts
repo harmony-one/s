@@ -1,10 +1,13 @@
 import { BigNumber, ethers } from "ethers";
-import { getHighPrice } from "./price";
+import { getHighPrice, getLowPrice } from "./price";
 
-export const CAP = 10; // $10
+export const CAP = 0.1; // $10 
 
-export function limitToken(tokenAmountBN: BigNumber): [BigNumber, BigNumber] {
-  const capBN = ethers.utils.parseUnits(CAP.toString(), 18);
+// return [cappedAmount, remainder, conversionRate (lowPrice)]
+export function limitToken(tokenAmountBN: BigNumber, decimal: number): [BigNumber, BigNumber, string] {
+  const capBN = ethers.utils.parseUnits(CAP.toString(), decimal);
+  console.log(capBN.toString());
+  console.log(tokenAmountBN.toString());
 
   let actualSendBN;
   let remainderBN;
@@ -17,11 +20,14 @@ export function limitToken(tokenAmountBN: BigNumber): [BigNumber, BigNumber] {
     remainderBN = BigNumber.from(0);
   }
 
-  return [actualSendBN, remainderBN];
+  return [actualSendBN, remainderBN, getLowPrice()!];
 }
 
-export function limitOne(oneAmountBN: BigNumber): [BigNumber, BigNumber] {
+// return [cappedAmount, remainder, conversionRate (highPrice)]
+export function limitOne(oneAmountBN: BigNumber): [BigNumber, BigNumber, string] {
   const capBN = calculateONEAmount(CAP);
+
+  console.log(capBN.toString());
 
   let actualSendBN;
   let remainderBN;
@@ -34,7 +40,7 @@ export function limitOne(oneAmountBN: BigNumber): [BigNumber, BigNumber] {
     remainderBN = BigNumber.from(0);
   }
 
-  return [actualSendBN, remainderBN];
+  return [actualSendBN, remainderBN, getHighPrice()!];
 }
 
 export function calculateONEAmount(dollarAmount: number): BigNumber {

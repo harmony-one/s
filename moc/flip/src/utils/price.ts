@@ -1,13 +1,9 @@
 import axios from 'axios';
 import { config } from '../prev_config';
 import { ethers, BigNumber } from 'ethers';
-import { ExtendedTransactionResponse } from '../indexers/GeneralIndexer';
-import { HARMONY } from '../config/type';
 
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
-const USDC_DECIMAL = 6;
-const USDT_DECIMAL = 18;
 const ONE_DECIMAL = 18;
 
 let priceData: PriceData | null = null;

@@ -42,8 +42,9 @@ class GeneralIndexer {
             for (let blockNum = this.lastBlockNum + 1; blockNum <= currBlockNum; blockNum++) {
               const newTxs = await this.fetchTxs(blockNum);
               for (const tx of newTxs) {
-                console.log(`Handling Tx: ${tx.hash}`);
                 try {
+                  console.log(`Handling Tx: ${tx.hash}`);
+                  // TODO: get rid of the await
                   await transactionManager.sendRequest(
                     tx.hash,
                     tx.from,

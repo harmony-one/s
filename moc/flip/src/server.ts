@@ -28,7 +28,7 @@ import { CrossChainConfig, HarmonyConfig } from './config/type';
 import HarmonyManager from './services/HarmonyManager';
 import { fetchPrice } from './utils/price';
 import GeneralManager from './services/GeneralManager';
-import { getAllTransactions } from './db/db';
+import { getAllRemainders, getAllTransactions } from './db/db';
 
 app.use(cors());
 app.use(express.json());
@@ -84,8 +84,14 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/', async (req, res) => {
+  console.log(req.body);
   await transactionManager.handleRequest(req, res);
 });
+
+app.get('/remainder', async (_, res) => {
+  const remainders = await getAllRemainders();
+  res.json(remainders);
+})
 
 startServer();
 

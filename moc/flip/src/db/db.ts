@@ -19,13 +19,30 @@ const getAllRemainders = async () => {
 
 const saveTransction = async (
   address: string, srcChain: string, srcHash: string, dstChain: string, dstHash: string, asset: string, amount: number) => {
-  const insertQuery = `
-  INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
-  VALUES ($1, $2, $3, $4, $5, $6, $7)
-  `;
-  await query(insertQuery, [address, srcChain, srcHash, dstChain, dstHash, asset, amount]);
-  // TODO: srcHash undefined
-  console.log(`Transaction ${srcChain}: ${srcHash} / ${dstChain}: ${dstHash} saved to DB`);
+  try {
+    const insertQuery = `
+      INSERT INTO transactions (address, src_chain, src_hash, dst_chain, dst_hash, asset, amount) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `;
+    await query(insertQuery, [address, srcChain, srcHash, dstChain, dstHash, asset, amount]);
+    console.log(`Transaction ${srcChain}: ${srcHash} / ${dstChain}: ${dstHash} saved to DB`);
+  } catch (error) {
+    console.error('Failed to save transaction', error as Error);
+  }
 }
 
-export { getAllTransactions, getAllRemainders, saveTransction };
+const saveRemainder = async (
+  address: string, dstChain: string, dstHash: string, asset: string, totalAmount: string, sentAmount: string, remainder: string, conversionRate: string) => {
+  try {
+    const insertQuery = `
+    INSERT INTO remainder (address, chain, tx_hash, asset, total_amount, sent_amount, remainder, conversion_rate)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    `;
+    await query(insertQuery, [address, dstChain, dstHash, asset, totalAmount, sentAmount, remainder, conversionRate]);
+    console.log(`Remainder saved: ${dstHash}`);
+  } catch (error) {
+    console.error('Failed to save remainder', error as Error);
+  }
+}
+
+export { getAllTransactions, getAllRemainders, saveTransction, saveRemainder };

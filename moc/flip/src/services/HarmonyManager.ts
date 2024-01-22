@@ -5,7 +5,8 @@ import { HarmonyConfig } from "../config/type";
 import { convertOneToToken, getNumberAmount } from "../utils/price";
 import { tokenConfigs } from "../config";
 import { indexer } from '../server';
-import { saveTransction } from '../db/db';
+import { saveRemainder, saveTransction } from '../db/db';
+import { limitToken } from '../utils/priceLimit';
 
 class HarmonyManager {
   private config: HarmonyConfig;
@@ -33,17 +34,32 @@ class HarmonyManager {
       return;
     }
 
-    const conversionAmount = convertOneToToken(amount, tokenConfig.decimal);
-    console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ${tokenConfig.symbol} / Amount: ${conversionAmount}`);
+    const totalAmount = convertOneToToken(amount, tokenConfig.decimal);
+    const [cappedAmount, remainder, conversionRate] = limitToken(totalAmount, tokenConfig.decimal);
+    console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ${tokenConfig.symbol} / Amount: ${totalAmount} / Capped: ${cappedAmount.toString()}`);
+
     try {
       const data = {
         srcHash: srcHash,
         dstAddress: dstAddress,
         walletAddress: walletAddress,
         tokenAddress: tokenAddress,
-        amount: conversionAmount.toString(),
-        apiKey: this.config.apiKey
+        amount: cappedAmount.toString(),
+        apiKey: this.config.apiKey,
+        remainderInfo: {
+          totalAmount: totalAmount.toString(),
+          remainder: remainder.toString(),
+          conversionRate: conversionRate,
+        }
       };
+      // const data = {
+      //   srcHash: srcHash,
+      //   dstAddress: dstAddress,
+      //   walletAddress: walletAddress,
+      //   tokenAddress: tokenAddress,
+      //   amount: conversionAmount.toString(),
+      //   apiKey: this.config.apiKey,
+      // };
       const response = await axios.post(indexerInfo.url, data);
       // TODO: fix logging
       console.log('Completed:', response.data.txHash);
@@ -57,13 +73,15 @@ class HarmonyManager {
     }
   }
 
+  // TODO: need to await??
   async handleRequest(req: express.Request, res: express.Response) {
     try {
-      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
+      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey, remainderInfo } = req.body;
       if (!this.verifyApiKey(walletAddress, apiKey)) {
         res.status(401).send('Invalid API key');
         return;
       }
+
       const wallet = this.walletMap.get(walletAddress.toLowerCase());
       if (!wallet) {
         res.status(500).send(`Wallet ${walletAddress} not setup`);
@@ -73,7 +91,7 @@ class HarmonyManager {
       const minGasPrice = ethers.utils.parseUnits('100', 'gwei'); // 100 GWEI
       const txRequest = {
         to: dstAddress,
-        value: BigNumber.from(amount),
+        value: BigNumber.from(amount), // TODO: send only the capped amount 
         gasPrice: minGasPrice
       };
 
@@ -89,11 +107,18 @@ class HarmonyManager {
         txHash: txResponse.hash
       });
 
-      // TODO: need to await?
       const srcChain = this.dstMap.get(walletAddress)!;
       await saveTransction(
         dstAddress, srcChain, srcHash, this.config.chain, txResponse.hash, 'ONE', getNumberAmount(amount, 18)
       );
+
+      const { totalAmount, remainder, conversionRate } = remainderInfo;
+      if (BigNumber.from(remainder).gt(BigNumber.from(0))) {
+        await saveRemainder(
+          dstAddress, this.config.chain, txResponse.hash, 'ONE',
+          ethers.utils.formatUnits(totalAmount, 18), ethers.utils.formatUnits(amount, 18), ethers.utils.formatUnits(remainder, 18), conversionRate
+        );
+      }
     } catch (error) {
       console.error('Error handling request:', error);
       res.status(500).send('Internal server error');
