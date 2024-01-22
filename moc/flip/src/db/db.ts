@@ -18,7 +18,7 @@ const getChainTransactions = async (chain: string) => {
 }
 
 const getAllRemainders = async () => {
-  const result = await query('SELECT * FROM remainder ORDER BY id DESC');
+  const result = await query('SELECT * FROM remainders ORDER BY id DESC');
   return result.rows;
 };
 
