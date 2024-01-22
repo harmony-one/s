@@ -27,6 +27,7 @@ class HarmonyIndexer {
     })
   }
 
+  // TODO: multiple token address
   getTokenAddress(walletAddress: string): string {
     if (walletAddress === '0x9597aEeB8cff7549307930209f837d37740f266D') {
       return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';

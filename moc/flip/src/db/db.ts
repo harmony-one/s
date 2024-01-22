@@ -40,7 +40,7 @@ const saveRemainder = async (
   address: string, dstChain: string, dstHash: string, asset: string, totalAmount: string, sentAmount: string, remainder: string, conversionRate: string) => {
   try {
     const insertQuery = `
-    INSERT INTO remainder (address, chain, tx_hash, asset, total_amount, sent_amount, remainder, conversion_rate)
+    INSERT INTO remainders (address, chain, tx_hash, asset, total_amount, sent_amount, remainder, conversion_rate)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
     await query(insertQuery, [address, dstChain, dstHash, asset, totalAmount, sentAmount, remainder, conversionRate]);
