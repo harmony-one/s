@@ -50,6 +50,7 @@ class HarmonyIndexer {
                 try {
                   console.log(`Handling Tx: ${tx.hash}`);
                   await transactionManager.sendRequest(
+                    tx.hash,
                     tx.from,
                     tx.to!,
                     this.getTokenAddress(tx.to!),

@@ -45,6 +45,7 @@ class GeneralIndexer {
                 console.log(`Handling Tx: ${tx.hash}`);
                 try {
                   await transactionManager.sendRequest(
+                    tx.hash,
                     tx.from,
                     this.config.key.pubKey,
                     tx.to!,

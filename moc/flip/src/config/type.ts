@@ -1,3 +1,7 @@
+const HARMONY = 'Harmony';
+const BASE = 'Base';
+const BSC = 'BSC';
+
 // TODO: ensure the required values are loaded
 interface ChainConfig {
   chain: string;
@@ -20,7 +24,7 @@ interface CrossChainConfig extends ChainConfig {
 }
 
 interface KeyPair {
-  dstChain?: string, // destination chain (i.e. Base, BSC, etc)
+  dstChain: string, // destination chain (i.e. Base, BSC, etc)
   pubKey: string,
   privKey: string
 }
@@ -37,4 +41,7 @@ interface IndexerInfo {
   apiKey: string;
 }
 
-export { ChainConfig, HarmonyConfig, CrossChainConfig, KeyPair, TokenConfig, IndexerInfo };
+export {
+  ChainConfig, HarmonyConfig, CrossChainConfig, KeyPair, TokenConfig, IndexerInfo,
+  HARMONY, BASE, BSC
+};

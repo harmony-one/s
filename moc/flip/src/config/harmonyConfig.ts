@@ -1,14 +1,14 @@
 import 'dotenv/config';
-import { ChainConfig, HarmonyConfig, IndexerInfo, KeyPair } from './type';
+import { BASE, BSC, ChainConfig, HARMONY, HarmonyConfig, IndexerInfo, KeyPair } from './type';
 
 const keys: KeyPair[] = [
   {
-    dstChain: 'Base',
+    dstChain: BASE,
     pubKey: process.env.BASE_ADDRESS || '',
     privKey: process.env.BASE_PRIVATE_KEY || '',
   },
   {
-    dstChain: 'BSC',
+    dstChain: BSC,
     pubKey: process.env.BSC_ADDRESS || '',
     privKey: process.env.BSC_PRIVATE_KEY || '',
   }
@@ -30,7 +30,7 @@ indexerMap.set(process.env.BSC_ADDRESS!, {
 });
 
 const harmonyConfig: HarmonyConfig = {
-  chain: 'Harmony',
+  chain: HARMONY,
   rpcUrl: process.env.HARMONY_RPC || 'https://api.s0.t.hmny.io',
   keys: keys,
   funders: process.env.HARMONY_FUNDER ? process.env.HARMONY_FUNDER?.split(',') : [],

@@ -1,9 +1,10 @@
 import 'dotenv/config';
-import { CrossChainConfig, KeyPair, TokenConfig } from '../type';
+import { BASE, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
 
 const key: KeyPair = {
   pubKey: process.env.BASE_ADDRESS || '',
-  privKey: process.env.BASE_PRIVATE_KEY || ''
+  privKey: process.env.BASE_PRIVATE_KEY || '',
+  dstChain: HARMONY
 }
 
 const tokens: TokenConfig[] = [
@@ -30,7 +31,7 @@ const tokens: TokenConfig[] = [
 // });
 
 const baseConfig: CrossChainConfig = {
-  chain: 'Base',
+  chain: BASE,
   rpcUrl: process.env.BASE_RPC || 'https://mainnet.base.org',
   key: key,
   funders: process.env.BASE_FUNDER ? process.env.BASE_FUNDER?.split(',') : [],

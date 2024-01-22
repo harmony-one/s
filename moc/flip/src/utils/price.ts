@@ -2,6 +2,7 @@ import axios from 'axios';
 import { config } from '../prev_config';
 import { ethers, BigNumber } from 'ethers';
 import { ExtendedTransactionResponse } from '../indexers/GeneralIndexer';
+import { HARMONY } from '../config/type';
 
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
@@ -81,20 +82,10 @@ function convertTokenToOne(amount: BigNumber, decimal: number): BigNumber {
   return amount.mul(ethers.utils.parseUnits('1', ONE_DECIMAL)).div(conversionRate);
 }
 
-function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
-  let value: string;
-
-  if (chain === 'Harmony') {
-    value = ethers.utils.formatUnits(tx.value, ONE_DECIMAL);
-  } else {
-    value = ethers.utils.formatUnits(tx.amount as BigNumber, USDT_DECIMAL);
-  }
-
-  const numValue = parseFloat(value);
-  return parseFloat(numValue.toFixed(6));
-
-  // // TODO: check overflow
-  // return parseFloat(value);
+function getNumberAmount(amount: string, decimal: number): number {
+  const formattedAmount = ethers.utils.formatUnits(amount, decimal);
+  return parseFloat(formattedAmount);
+  // return  parseFloat(numberAmount.toFixed(6));
 }
 
-export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getAmount };
+export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getNumberAmount };

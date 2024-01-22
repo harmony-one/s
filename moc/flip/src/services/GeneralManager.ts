@@ -2,10 +2,11 @@ import express from 'express';
 import { BigNumber, ethers } from "ethers";
 import axios from "axios";
 import { tokenConfigs } from "../config";
-import { CrossChainConfig } from "../config/type";
-import { convertTokenToOne } from "../utils/price";
+import { CrossChainConfig, HARMONY } from "../config/type";
+import { convertTokenToOne, getNumberAmount } from "../utils/price";
 import { indexer } from '../server';
 import GeneralIndexer from '../indexers/GeneralIndexer';
+import { saveTransction } from '../db/db';
 
 class GeneralManager {
   private config: CrossChainConfig;
@@ -16,7 +17,7 @@ class GeneralManager {
     this.wallet = new ethers.Wallet(config.key.privKey, indexer.getProvider()); // TODO: manager relies on indexer
   }
 
-  async sendRequest(dstAddress: string, walletAddress: string, tokenAddress: string, amount: BigNumber) {
+  async sendRequest(srcHash: string, dstAddress: string, walletAddress: string, tokenAddress: string, amount: BigNumber) {
     const indexerInfo = this.config.indexerInfo;
     const tokenConfig = tokenConfigs.get(tokenAddress);
     if (!tokenConfig) {
@@ -28,6 +29,7 @@ class GeneralManager {
 
     try {
       const response = await axios.post(indexerInfo.url, {
+        srcHash: srcHash,
         dstAddress: dstAddress,
         walletAddress: walletAddress,
         tokenAddress: tokenAddress,
@@ -48,14 +50,15 @@ class GeneralManager {
 
   async handleRequest(req: express.Request, res: express.Response) {
     try {
-      const { dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
+      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
       if (!this.verifyApiKey(apiKey)) {
         res.status(401).send('Invalid API key');
         return;
       }
 
       const tokenContract = (indexer as GeneralIndexer).getTokenContract(tokenAddress);
-      if (!tokenContract) {
+      const tokenConfig = tokenConfigs.get(tokenAddress);
+      if (!tokenContract || !tokenConfig) {
         res.status(500).send(`Token ${tokenAddress} not setup`);
         return;
       }
@@ -71,7 +74,9 @@ class GeneralManager {
         txHash: tx.hash
       });
 
-      // TODO: save transaction to DB
+      await saveTransction(
+        dstAddress, HARMONY, srcHash, this.config.chain, tx.hash, tokenConfig.symbol, getNumberAmount(amount, tokenConfig.decimal)
+      );
     } catch (error) {
       console.error('Error handling request:', error);
       res.status(500).send('Internal server error');

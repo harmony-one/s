@@ -28,12 +28,25 @@ import { CrossChainConfig, HarmonyConfig } from './config/type';
 import HarmonyManager from './services/HarmonyManager';
 import { fetchPrice } from './utils/price';
 import GeneralManager from './services/GeneralManager';
+import { getAllTransactions } from './db/db';
 
 app.use(cors());
 app.use(express.json());
 
 console.log(chainConfig);
-fetchPrice(); // TODO: do this right
+
+// fetch and configure price
+const fetchPriceWithInterval = async () => {
+  try {
+    const priceData = await fetchPrice();
+    console.log('Price data fetched: ', priceData);
+  } catch (error) {
+    console.error('Error fetching price data:', error);
+  }
+};
+
+fetchPriceWithInterval();
+setInterval(fetchPriceWithInterval, 60 * 60 * 1000); // 60 minutes
 
 export var transactionManager: GeneralManager | HarmonyManager;
 export var indexer: GeneralIndexer | HarmonyIndexer;
@@ -64,6 +77,11 @@ function startServer() {
     });
   }
 }
+
+app.get('/', async (req, res) => {
+  const txs = await getAllTransactions();
+  res.json(txs);
+})
 
 app.post('/', async (req, res) => {
   await transactionManager.handleRequest(req, res);

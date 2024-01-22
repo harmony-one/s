@@ -1,9 +1,10 @@
 import 'dotenv/config';
-import { CrossChainConfig, KeyPair, TokenConfig } from '../type';
+import { BSC, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
 
 const key: KeyPair = {
   pubKey: process.env.BSC_ADDRESS || '',
-  privKey: process.env.BSC_PRIVATE_KEY || ''
+  privKey: process.env.BSC_PRIVATE_KEY || '',
+  dstChain: HARMONY
 }
 
 const tokens: TokenConfig[] = [
@@ -23,7 +24,7 @@ const tokens: TokenConfig[] = [
 // });
 
 const bscConfig: CrossChainConfig = {
-  chain: 'BSC',
+  chain: BSC,
   rpcUrl: process.env.BSC_RPC || 'https://bsc-dataseed.binance.org',
   key: key,
   funders: process.env.BSC_FUNDER ? process.env.BSC_FUNDER?.split(',') : [],

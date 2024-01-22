@@ -2,22 +2,25 @@ import express from 'express';
 import axios from "axios";
 import { BigNumber, ethers } from "ethers";
 import { HarmonyConfig } from "../config/type";
-import { convertOneToToken } from "../utils/price";
+import { convertOneToToken, getNumberAmount } from "../utils/price";
 import { tokenConfigs } from "../config";
 import { indexer } from '../server';
+import { saveTransction } from '../db/db';
 
 class HarmonyManager {
   private config: HarmonyConfig;
-  private walletMap: Map<String, ethers.Wallet> = new Map();
+  private walletMap: Map<string, ethers.Wallet> = new Map();
+  private dstMap: Map<string, string> = new Map();
 
   constructor(config: HarmonyConfig) {
     this.config = config;
     config.keys.forEach(keyPair => {
       this.walletMap.set(keyPair.pubKey.toLowerCase(), new ethers.Wallet(keyPair.privKey, indexer.getProvider()));
+      this.dstMap.set(keyPair.pubKey, keyPair.dstChain);
     });
   }
 
-  async sendRequest(dstAddress: string, walletAddress: string, tokenAddress: string, amount: BigNumber) {
+  async sendRequest(srcHash: string, dstAddress: string, walletAddress: string, tokenAddress: string, amount: BigNumber) {
     const indexerInfo = this.config.indexerInfo.get(walletAddress);
     if (!indexerInfo) {
       console.error(`URL mapping for ${walletAddress} does not exist`);
@@ -34,6 +37,7 @@ class HarmonyManager {
     console.log(`Sender: ${dstAddress} / Wallet: ${walletAddress} / Token: ${tokenConfig.symbol} / Amount: ${conversionAmount}`);
     try {
       const data = {
+        srcHash: srcHash,
         dstAddress: dstAddress,
         walletAddress: walletAddress,
         tokenAddress: tokenAddress,
@@ -55,7 +59,7 @@ class HarmonyManager {
 
   async handleRequest(req: express.Request, res: express.Response) {
     try {
-      const { dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
+      const { srcHash, dstAddress, walletAddress, tokenAddress, amount, apiKey } = req.body;
       if (!this.verifyApiKey(walletAddress, apiKey)) {
         res.status(401).send('Invalid API key');
         return;
@@ -85,7 +89,11 @@ class HarmonyManager {
         txHash: txResponse.hash
       });
 
-      // TODO: save transaction to DB
+      // TODO: need to await?
+      const srcChain = this.dstMap.get(walletAddress)!;
+      await saveTransction(
+        dstAddress, srcChain, srcHash, this.config.chain, txResponse.hash, 'ONE', getNumberAmount(amount, 18)
+      );
     } catch (error) {
       console.error('Error handling request:', error);
       res.status(500).send('Internal server error');

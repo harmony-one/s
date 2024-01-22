@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import { ChainConfig, IndexerInfo, TokenConfig } from './type';
+import { BASE, BSC, ChainConfig, HARMONY, TokenConfig } from './type';
 import harmonyConfig from './harmonyConfig';
 import bscConfig from './bsc/bscConfig';
 import baseConfig from './base/baseConfig';
@@ -36,13 +36,13 @@ function loadTokenConfigs(): Map<String, TokenConfig> {
 const tokenConfigs: Map<String, TokenConfig> = loadTokenConfigs(); // map[contract address] = token config
 
 switch (chain) {
-  case 'harmony':
+  case HARMONY.toLowerCase():
     chainConfig = harmonyConfig;
     break;
-  case 'bsc':
+  case BSC.toLowerCase():
     chainConfig = bscConfig;
     break;
-  case 'base':
+  case BASE.toLowerCase():
     chainConfig = baseConfig;
     break;
   default:
