@@ -1,7 +1,6 @@
-import 'dotenv/config';
 import { ethers } from "ethers";
 import { TransactionResponse } from "../types/customTypes";
-import { HarmonyConfig, KeyPair } from "../config/type";
+import { CrossChainConfig, TokenConfig } from "../config/type";
 import { transactionManager } from "../server";
 
 const INTERVAL = 500;
@@ -14,28 +13,22 @@ export interface ExtendedTransactionResponse extends TransactionResponse {
   remainderValue?: number;
 }
 
-class HarmonyIndexer {
+class GeneralIndexer {
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null = null;
-  private config: HarmonyConfig;
-  private keyMap: Map<String, KeyPair> = new Map();
+  private config: CrossChainConfig;
+  private tokenMap: Map<String, TokenConfig> = new Map();
+  private contractMap: Map<String, ethers.Contract> = new Map();
 
-  constructor(config: HarmonyConfig) {
+  constructor(config: CrossChainConfig) {
     this.config = config;
     this.provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
-    config.keys.forEach(keyPair => {
-      this.keyMap.set(keyPair.pubKey.toLowerCase(), keyPair);
-    })
-  }
-
-  // TODO: multiple token address
-  getTokenAddress(walletAddress: string): string {
-    if (walletAddress.toLowerCase() === process.env.BASE_ADDRESS!.toLowerCase()) {
-      return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
-    } else if (walletAddress.toLowerCase() === process.env.BSC_ADDRESS!.toLowerCase()) {
-      return '0x55d398326f99059fF775485246999027B3197955';
+    if (config.tokens) {
+      config.tokens.forEach(token => {
+        this.tokenMap.set(token.contractAddress.toLowerCase(), token);
+        this.contractMap.set(token.contractAddress, new ethers.Contract(token.contractAddress, token.abi));
+      });
     }
-    return '';
   }
 
   start() {
@@ -55,9 +48,9 @@ class HarmonyIndexer {
                   await transactionManager.sendRequest(
                     tx.hash,
                     tx.from,
+                    this.config.key.pubKey,
                     tx.to!,
-                    this.getTokenAddress(tx.to!),
-                    tx.value
+                    tx.amount!
                   );
                 } catch (error) {
                   this.error(`Failed to process transaction: ${tx.hash}`, error as Error);
@@ -98,13 +91,44 @@ class HarmonyIndexer {
     try {
       const block = await this.provider.getBlockWithTransactions(blockNum);
       var filteredTxs: TransactionResponse[];
-      filteredTxs = block.transactions.filter(tx => {
-        if (tx.from && !this.isFundingAddr(tx.from) && tx.to) {
-          return this.keyMap.has(tx.to!.toLowerCase());
+      // harmony specific
+
+      filteredTxs = block.transactions.filter(tx =>
+        tx.to && this.tokenMap.has(tx.to.toLowerCase())
+        && tx.from && !this.isFundingAddr(tx.from)
+      );
+
+      // get all receipts in parallel
+      const receiptPromises = filteredTxs.map(tx =>
+        this.provider.getTransactionReceipt(tx.hash).catch(error => {
+          this.error(`Error parsing transaction ${tx.hash}`, error);
+          return null; // return null or a default value in case of error
+        })
+      );
+      const receipts = await Promise.all(receiptPromises);
+
+      receipts.forEach((receipt, index) => {
+        if (receipt) {
+          const contract = this.contractMap.get(receipt.to);
+          if (contract) {
+            receipt.logs.forEach(log => {
+              try {
+                const parsedLog = contract.interface.parseLog(log);
+                if (parsedLog.name === 'Transfer'
+                  && parsedLog.args.to.toLowerCase() === this.config.key.pubKey.toLowerCase()) {
+                  newTxs.push({
+                    ...filteredTxs[index],
+                    amount: parsedLog.args.value, // include the transferred amount
+                  });
+                }
+              } catch (parseError) {
+                this.error(`Error parsing log for transaction ${filteredTxs[index].hash}`, parseError as Error);
+              }
+            });
+          }
         }
-        return false;
       });
-      newTxs.push(...filteredTxs);
+
     } catch (error) {
       this.error('Error fetching transactions', error as Error);
     }
@@ -130,5 +154,10 @@ class HarmonyIndexer {
   getProvider(): ethers.providers.JsonRpcProvider {
     return this.provider;
   }
+
+  getTokenContract(tokenAddress: string): ethers.Contract | undefined {
+    return this.contractMap.get(tokenAddress);
+  }
 }
-export default HarmonyIndexer;
+
+export default GeneralIndexer;

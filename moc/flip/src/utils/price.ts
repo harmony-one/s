@@ -1,12 +1,9 @@
+import 'dotenv/config';
 import axios from 'axios';
-import { config } from '../config';
 import { ethers, BigNumber } from 'ethers';
-import { ExtendedTransactionResponse } from '../indexers/Indexer';
-import { HARMONY } from '../server';
 
 const SYMBOL = 'ONEUSDT';
 const INTERVAL = '1h';
-const USDC_DECIMAL = 6;
 const ONE_DECIMAL = 18;
 
 let priceData: PriceData | null = null;
@@ -28,7 +25,8 @@ async function fetchPrice(): Promise<PriceData> {
   }
 
   try {
-    const response = await axios.get(config.price.URL, { params: params })
+    const priceUrl = process.env.PRICE_URL;
+    const response = await axios.get(priceUrl!, { params: params })
     const data = response.data;
     if (data.length == 0) {
       throw new Error('No price data available');
@@ -63,38 +61,28 @@ function getLowPrice(): string | undefined {
   return priceData?.lowPrice;
 }
 
-function convertOneToToken(amount: BigNumber): BigNumber {
+function convertOneToToken(amount: BigNumber, decimal: number): BigNumber {
   const lowPrice = getLowPrice();
   if (!lowPrice) {
     throw new Error('Low price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(lowPrice, USDC_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(lowPrice, decimal);
   return amount.mul(conversionRate).div(ethers.utils.parseUnits('1', ONE_DECIMAL));
 }
 
-function convertTokenToOne(amount: BigNumber): BigNumber {
+function convertTokenToOne(amount: BigNumber, decimal: number): BigNumber {
   const highPrice = getHighPrice();
   if (!highPrice) {
     throw new Error('Price data not available');
   }
-  const conversionRate = ethers.utils.parseUnits(highPrice, USDC_DECIMAL);
+  const conversionRate = ethers.utils.parseUnits(highPrice, decimal);
   return amount.mul(ethers.utils.parseUnits('1', ONE_DECIMAL)).div(conversionRate);
 }
 
-function getAmount(tx: ExtendedTransactionResponse, chain: string): number {
-  let value: string;
-
-  if (chain === HARMONY) {
-    value = ethers.utils.formatUnits(tx.value, ONE_DECIMAL);
-  } else {
-    value = ethers.utils.formatUnits(tx.amount as BigNumber, USDC_DECIMAL);
-  }
-
-  const numValue = parseFloat(value);
-  return parseFloat(numValue.toFixed(6));
-
-  // // TODO: check overflow
-  // return parseFloat(value);
+function getNumberAmount(amount: string, decimal: number): number {
+  const formattedAmount = ethers.utils.formatUnits(amount, decimal);
+  return parseFloat(formattedAmount);
+  // return  parseFloat(numberAmount.toFixed(6));
 }
 
-export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getAmount };
+export { PriceData, fetchPrice, getPrice, getHighPrice, getLowPrice, convertOneToToken, convertTokenToOne, getNumberAmount };

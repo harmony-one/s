@@ -1,30 +1,15 @@
 import app from './app';
-import { config } from './config';
-import WalletManager from './services/WalletManager';
-import abi from './abis/base_usdc.json';
-import HarmonyIndexer from './indexers/HarmonyIndexer';
-import BaseIndexer from './indexers/BaseIndexer';
-import priceRoutes from './routes/priceRoutes';
-import remainderRoutes from './routes/remainderRoutes';
+import 'dotenv/config';
+import { chainConfig } from './config/index';
 import { fetchPrice } from './utils/price';
-import { getAllTransactions } from './db/db';
-import { getExplorer, shortenHash } from './utils/chain';
-import { formatDate } from './utils/utils';
-import { CAP } from './utils/dollar';
+import { CrossChainConfig, HarmonyConfig } from './config/type';
+import GeneralIndexer from './indexers/GeneralIndexer';
+import HarmonyIndexer from './indexers/HarmonyIndexer';
+import HarmonyManager from './services/HarmonyManager';
+import GeneralManager from './services/GeneralManager';
+import { getAllRemainders, getChainTransactions } from './db/db';
 
-const PORT = config.express.PORT;
-export const HARMONY = 'Harmony';
-export const BASE = 'Base';
-
-// initialize and export walletManager
-export const walletManager = new WalletManager(config.rpc.HARMONY_RPC, config.rpc.BASE_RPC, abi, config.contracts.BASE_USDC);
-
-// initialize and start the indexers
-const harmonyIndexer = new HarmonyIndexer(config.rpc.HARMONY_RPC);
-harmonyIndexer.start();
-
-const baseIndexer = new BaseIndexer(config.rpc.BASE_RPC);
-baseIndexer.start();
+const PORT = process.env.PORT || 3000;
 
 // fetch and configure price
 const fetchPriceWithInterval = async () => {
@@ -39,72 +24,45 @@ const fetchPriceWithInterval = async () => {
 fetchPriceWithInterval();
 setInterval(fetchPriceWithInterval, 60 * 60 * 1000); // 60 minutes
 
-// root
-app.get('/', async (req, res) => {
-  try {
-
-    const transactions = await getAllTransactions();
-    // TODO: amount: show dollar equivalent
-    const address = await walletManager.getAddress();
-    let htmlResponse = `<h1>Flip: ${address}</h1>`;
-
-    htmlResponse += `<h3>DO NOT attempt to send more than $${CAP} of any asset.</h3>`;
-    htmlResponse += '<h3>DO NOT attempt to send any other assets than native ONE (Harmony) or native USDC (Base), all other funds will be lost.</h3>';
-    htmlResponse += '<h2>Welcome to usdc.country – Flip Tokens with Ease!</h2>'
-    htmlResponse += '<h3>What is it?</h3>';
-    htmlResponse += '<p>usdc.country offers a revolutionary service that allows you to swap native tokens seamlessly. No smart contracts, no transaction signing – just send $ONE to receive $USDC. (more asset support coming soon)</p>';
-
-    htmlResponse += '<h3>How it works?</h3>';
-    htmlResponse += '<p>First, you send $ONE tokens to a wallet address on usdc.country. Next, our system automatically calculates the equivalent amount in $USDC based on the current exchange rate and sends it to your specified wallet. Finally, you can access your $USDC on the Base network using your original address in as little as 4 seconds, for less than $0.10! It\'s that easy – no smart contracts, no transaction signing, just quick and secure token swaps. (this process in reverse will also work, send USDC on Base and receive ONE on Harmony!)</p>';
-
-    htmlResponse += '<h3>Why is it useful?</h3>';
-    htmlResponse += '<p>Our service provides a secure, cost-effective, and rapid solution for native token swaps. By eliminating the complexities and risks of traditional methods, we make it easier for you to manage your assets across different networks.</p>';
-    htmlResponse += '<p>Start trading smarter with usdc.country – where speed, security, and simplicity come together.</p>';
-
-
-    htmlResponse += `<table border="1">
-    <tr>
-      <th>ID</th>
-      <th>Address</th>
-      <th>Source Chain</th>
-      <th>Source Tx Hash</th>
-      <th>Destination Chain</th>
-      <th>Destination Tx Hash</th>
-      <th>Asset</th>
-      <th>Amount</th>
-      <th>Date</th>
-    </tr>`;
-
-    for (const tx of transactions) {
-      htmlResponse += `<tr>
-        <td>${tx.id}</td>
-        <td>${shortenHash(tx.address)}</a></td>
-        <td>${tx.src_chain}</td>
-        <td><a href="${getExplorer(tx.src_chain, tx.src_hash)}" target="_blank">${shortenHash(tx.src_hash)}</a></td>
-        <td>${tx.dst_chain}</td>
-        <td><a href="${getExplorer(tx.dst_chain, tx.dst_hash)}" target="_blank">${shortenHash(tx.dst_hash)}</a></td>
-        <td>${tx.asset}</td>
-        <td>${parseFloat(tx.amount).toFixed(6)}</td>
-        <td>${formatDate(tx.date)}</td>
-      </tr>`;
-    }
-
-    htmlResponse += `</table>`;
-
-    res.send(htmlResponse);
-
-  } catch (error) {
-    console.error('Error fetching transactions:', error);
-    res.status(500).send('Error fetching transactions');
+export var transactionManager: GeneralManager | HarmonyManager;
+export var indexer: GeneralIndexer | HarmonyIndexer;
+function startServer() {
+  if (chainConfig.chain === 'Harmony') {
+    indexer = new HarmonyIndexer(chainConfig as HarmonyConfig);
+    indexer.start();
+    transactionManager = new HarmonyManager(chainConfig as HarmonyConfig);
+  } else if (chainConfig.chain === 'Base') {
+    indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
+    indexer.start();
+    transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
+  } else {
+    indexer = new GeneralIndexer(chainConfig as CrossChainConfig);
+    indexer.start();
+    transactionManager = new GeneralManager(chainConfig as CrossChainConfig);
   }
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+app.get('/health', async (_, res) => {
+  res.send('ok');
 });
 
-// price route
-app.use('/price', priceRoutes);
-
-// remainder route
-app.use('/remainder', remainderRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.post('/', async (req, res) => {
+  console.log(req.body);
+  await transactionManager.handleRequest(req, res);
 });
+
+app.get('/txs', async (_, res) => {
+  const txs = await getChainTransactions(chainConfig.chain);
+  res.json(txs);
+});
+
+app.get('/remainders', async (_, res) => {
+  const remainders = await getAllRemainders();
+  res.json(remainders);
+});
+
+startServer();
