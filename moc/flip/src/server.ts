@@ -18,7 +18,6 @@ import cors from 'cors';
 // import { CAP } from './utils/dollar';
 
 
-// TODO: make 'Harmony' into a constant
 // TODO: refactor ./utils/
 
 import { chainConfig } from './config/index';
