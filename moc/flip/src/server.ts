@@ -17,7 +17,6 @@ import cors from 'cors';
 // import { formatDate } from './utils/utils';
 // import { CAP } from './utils/dollar';
 
-
 // TODO: refactor ./utils/
 
 import { chainConfig } from './config/index';
@@ -27,7 +26,7 @@ import { CrossChainConfig, HarmonyConfig } from './config/type';
 import HarmonyManager from './services/HarmonyManager';
 import { fetchPrice } from './utils/price';
 import GeneralManager from './services/GeneralManager';
-import { getAllRemainders, getAllTransactions } from './db/db';
+import { getAllRemainders, getAllTransactions, getChainTransactions } from './db/db';
 
 app.use(cors());
 app.use(express.json());
@@ -77,17 +76,17 @@ function startServer() {
   }
 }
 
-app.get('/', async (req, res) => {
-  const txs = await getAllTransactions();
-  res.json(txs);
-})
-
 app.post('/', async (req, res) => {
   console.log(req.body);
   await transactionManager.handleRequest(req, res);
 });
 
-app.get('/remainder', async (_, res) => {
+app.get('/txs', async (req, res) => {
+  const txs = await getChainTransactions(chainConfig.chain);
+  res.json(txs);
+});
+
+app.get('/remainders', async (_, res) => {
   const remainders = await getAllRemainders();
   res.json(remainders);
 })

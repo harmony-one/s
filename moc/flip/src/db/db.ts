@@ -12,6 +12,11 @@ const getAllTransactions = async () => {
   return result.rows;
 };
 
+const getChainTransactions = async (chain: string) => {
+  const result = await query('SELECT * FROM transactions WHERE src_chain = $1 OR dst_chain = $1 ORDER BY id DESC', [chain]);
+  return result.rows;
+}
+
 const getAllRemainders = async () => {
   const result = await query('SELECT * FROM remainder ORDER BY id DESC');
   return result.rows;
@@ -45,4 +50,4 @@ const saveRemainder = async (
   }
 }
 
-export { getAllTransactions, getAllRemainders, saveTransction, saveRemainder };
+export { getAllTransactions, getChainTransactions, getAllRemainders, saveTransction, saveRemainder };
