@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { ethers } from "ethers";
 import { TransactionResponse } from "../types/customTypes";
 import { HarmonyConfig, KeyPair } from "../config/type";
@@ -29,9 +30,9 @@ class HarmonyIndexer {
 
   // TODO: multiple token address
   getTokenAddress(walletAddress: string): string {
-    if (walletAddress === '0x9597aEeB8cff7549307930209f837d37740f266D') {
+    if (walletAddress.toLowerCase() === process.env.BASE_ADDRESS!.toLowerCase()) {
       return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
-    } else if (walletAddress === '0x6C5842e7Db7aAecD53e32878d350b293E019ec3B') {
+    } else if (walletAddress.toLowerCase() === process.env.BSC_ADDRESS!.toLowerCase()) {
       return '0x55d398326f99059fF775485246999027B3197955';
     }
     return '';
