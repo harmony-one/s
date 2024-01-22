@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { BSC, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
+import usdt from './abis/usdt.json';
 
 const key: KeyPair = {
   pubKey: process.env.BSC_ADDRESS || '',
@@ -13,15 +14,9 @@ const tokens: TokenConfig[] = [
     symbol: 'USDT',
     decimal: 18,
     contractAddress: '0x55d398326f99059fF775485246999027B3197955',
-    abi: require('./abis/usdt.json')
+    abi: usdt
   }
 ];
-
-// const indexerMap: Map<string, IndexerInfo> = new Map();
-// indexerMap.set(process.env.BSC_ADDRESS!, {
-//   url: process.env.HARMONY_URL!,
-//   apiKey: process.env.HARMONY_API_KEY!
-// });
 
 const bscConfig: CrossChainConfig = {
   chain: BSC,

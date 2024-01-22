@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { BASE, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
+import usdc from './abis/usdc.json';
 
 const key: KeyPair = {
   pubKey: process.env.BASE_ADDRESS || '',
@@ -13,7 +14,7 @@ const tokens: TokenConfig[] = [
     symbol: 'USDC',
     decimal: 6,
     contractAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-    abi: require('./abis/usdc.json')
+    abi: usdc
   },
   // // rETH
   // {
@@ -23,12 +24,6 @@ const tokens: TokenConfig[] = [
   //   abi: require('./abis/reth.json')
   // }
 ]
-
-// const indexerMap: Map<string, IndexerInfo> = new Map();
-// indexerMap.set(process.env.BASE_ADDRESS!, {
-//   url: process.env.HARMONY_URL!,
-//   apiKey: process.env.HARMONY_API_KEY!
-// });
 
 const baseConfig: CrossChainConfig = {
   chain: BASE,
