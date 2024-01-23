@@ -1,4 +1,14 @@
-2023-01-19 Fri: 
+2023-01-23 Tue: [Pushed](https://github.com/harmony-one/s/commit/34cc3c3e6d80cf63071a23a134012b0b301e8d0e) minimal multi-owner contract, and [pushed](https://github.com/harmony-one/s/commit/db2a42f1478528752efcb5b9bb010a61c8f3a5a3) minimal single-owner contract. [Wrote](https://github.com/harmony-one/s/blob/main/s-msw/README.md) README.md.
+ 
+2023-01-22 Mon: [Created](https://github.com/Aishlia/PaperTradesBot/commit/f2c6b20d58c70c0fe387ffa752a82088277a743c) telegram paper trades bot. [Fixed](https://github.com/Aishlia/PaperTradesBot/commit/9b839cada02f2e7153648aeeb9216113f2693aeb) logic of bot. [Added](https://github.com/Aishlia/PaperTradesBot/commit/cce2fd7ba8d93178c9a03b7cdd33e722789b2873) live price fetch. 
+
+---
+
+2023-01-21 Sun: Inlined variabled and simplified Minimal Social Wallet. 
+
+2023-01-20 Sat: Researched Polymarket and searched for similar projects. 
+
+2023-01-19 Fri: Monitored Onescriptions ONES launch and gathered basic launch stats.
 
 2023-01-18 Thu: Found new lead for senior eng position. Prototyped new pool based flip with Theo. Setup and tested podcast. 
 
