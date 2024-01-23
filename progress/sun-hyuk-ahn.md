@@ -1,3 +1,28 @@
+2023-01-23 Tue:
+
+2023-01-22 Mon: Updated set up so that a single indexer is deployed for each chain (previously, 2 indexers for each service). No need for overlapping indexers.
+
+---
+2023-01-21 Sun: Refactor code 
+
+2023-01-20 Sat: Set up configuration for for fly.io.
+
+2023-01-19 Fri: Generalize flip to deploy to chains using ChainConfig class.
+
+2023-01-18 Thu: Deployed usdt.country (Binance USDT / Harmony ONE pair).
+
+2023-01-17 Wed: Generalized indexer and transaction manager class to work with any chains.
+
+2023-01-16 Tue: Create and deploy backup indexer for Onescriptions.
+
+2023-01-15 Mon: Holiday
+
+---
+
+2023-01-12 Fri: Deploy frontend for flip.
+
+2023-01-11 Thu: Updated logic to process transaction synchronously.
+
 2023-01-10 Wed: Updated streaming process of transactions. Implemted rate limit of $1 with remainder DB and logic to later process manual refunds.
 
 2023-01-09 Tue: Updated wallet managing logic. Configured Postgres to store transaction data. Deployed the service on moc.usdc.country.
