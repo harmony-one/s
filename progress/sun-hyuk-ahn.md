@@ -3,7 +3,7 @@
 2023-01-22 Mon: Updated set up so that a single indexer is deployed for each chain (previously, 2 indexers for each service). No need for overlapping indexers.
 
 ---
-2023-01-21 Sun: Refactor code 
+2023-01-21 Sun: Refactor flip backend and frontend code for easier deployment. 
 
 2023-01-20 Sat: Set up configuration for for fly.io.
 
