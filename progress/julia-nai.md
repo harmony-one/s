@@ -4,7 +4,7 @@
 
 ---
 
-2023-01-21 Sun: Inlined variabled and simplified Minimal Social Wallet. 
+2023-01-21 Sun: Inlined variables and simplified Minimal Social Wallet. 
 
 2023-01-20 Sat: Researched Polymarket and searched for similar projects. 
 
