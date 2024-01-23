@@ -19,10 +19,6 @@ const StyledTh = styled.th`
   border: 1px solid black;
   padding: 8px;
   width: 150;
-
-  // &:nth-child(3) {
-  //   width: 300px;
-  // }
 `;
 
 const StyledTd = styled.td`
@@ -32,12 +28,10 @@ const StyledTd = styled.td`
 `;
 
 const StyledLink = styled.a`
-  // color: ${props => props.chain === srcChain ? srcColor : dstColor};
   color: #00AEE9;
   text-decoration: none;
 
   &:visited {
-    // color: ${props => props.chain === srcChain ? srcColor : dstColor};
     color: #00AEE9;
   }
 
@@ -46,22 +40,25 @@ const StyledLink = styled.a`
   }
 `;
 
-const txsUrl = 'https://moc-bsc-usdt.fly.dev/txs';
+var txsUrl, flipAddr, capAmount, srcChain, srcAsset, srcExplorer, dstChain, dstAsset, dstExplorer, dotCountry;
+function loadConfiguration() {
+  flipAddr = process.env.REACT_APP_FLIP_ADDRESS;
+  dotCountry = process.env.REACT_APP_DOT_COUNTRY;
+  capAmount = process.env.REACT_APP_DOLLAR_CAP;
+  txsUrl = process.env.REACT_APP_TXS_URL;
 
-const flipAddr = '0x23719c80171E1c533E58cE757084f6b225721D95';
-const capAmount = 10;
+  // load Harmony config
+  srcChain = 'Harmony';
+  srcAsset = 'ONE';
+  srcExplorer = 'https://explorer.harmony.one';
 
-const srcChain = 'Harmony';
-const srcAsset = 'ONE';
-const srcExplorer = 'https://explorer.harmony.one';
-const srcColor = '#00AEE9';
+  // load chain config
+  dstChain = process.env.REACT_APP_CHAIN;
+  dstAsset = process.env.REACT_APP_ASSET;
+  dstExplorer = process.env.REACT_APP_EXPLORER;
+}
 
-const dstChain = 'BSC';
-const dstAsset = 'USDT';
-const dstExplorer = 'https://bscscan.com';
-const dstColor = '#F3BA2F';
-
-const dotCountry = 'usdt'
+loadConfiguration();
 
 const fetchTxs = async () => {
   const response = await fetch(txsUrl);
@@ -125,14 +122,12 @@ function App() {
               <StyledTd>{formatHash(tx.address)}</StyledTd>
               <StyledTd>{tx.src_chain}</StyledTd>
               <StyledTd>
-                {/* <StyledLink chain={tx.src_chain} href={getExplorer(tx.src_chain, tx.src_hash)} target="_blank" rel="noopener noreferrer"> */}
                 <StyledLink href={getExplorer(tx.src_chain, tx.src_hash)} target="_blank" rel="noopener noreferrer">
                   {formatHash(tx.src_hash)}
                 </StyledLink>
               </StyledTd>
               <StyledTd>{tx.dst_chain}</StyledTd>
               <StyledTd>
-                {/* <StyledLink chain={tx.dst_chain} href={getExplorer(tx.dst_chain, tx.dst_hash)} target="_blank" rel="noopener noreferrer"> */}
                 <StyledLink href={getExplorer(tx.dst_chain, tx.dst_hash)} target="_blank" rel="noopener noreferrer">
                   {formatHash(tx.dst_hash)}
                 </StyledLink>
