@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { BSC, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
 import usdt from './abis/usdt.json';
 

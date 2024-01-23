@@ -1,5 +1,4 @@
-import 'dotenv/config';
-import { BASE, BSC, ChainConfig, HARMONY, HarmonyConfig, IndexerInfo, KeyPair } from './type';
+import { BASE, BSC, HARMONY, HarmonyConfig, IndexerInfo, KeyPair } from './type';
 
 const keys: KeyPair[] = [
   {

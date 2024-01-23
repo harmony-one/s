@@ -95,7 +95,7 @@ class GeneralIndexer {
 
       filteredTxs = block.transactions.filter(tx =>
         tx.to && this.tokenMap.has(tx.to.toLowerCase())
-        && tx.from && !this.isFundingAddr(tx.from)
+        && tx.from && !this.isFundingAddr(tx.from) && tx.from.toLowerCase() !== this.config.key.pubKey.toLowerCase() // ignore self transactions to prevent loop
       );
 
       // get all receipts in parallel

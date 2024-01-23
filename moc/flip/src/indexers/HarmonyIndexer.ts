@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { ethers } from "ethers";
 import { TransactionResponse } from "../types/customTypes";
 import { HarmonyConfig, KeyPair } from "../config/type";
@@ -100,7 +99,8 @@ class HarmonyIndexer {
       var filteredTxs: TransactionResponse[];
       filteredTxs = block.transactions.filter(tx => {
         if (tx.from && !this.isFundingAddr(tx.from) && tx.to) {
-          return this.keyMap.has(tx.to!.toLowerCase());
+          return this.keyMap.has(tx.to!.toLowerCase())
+            && !this.keyMap.has(tx.from.toLowerCase()); // ignore self transactions to prevent loop
         }
         return false;
       });
