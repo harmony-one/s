@@ -1,4 +1,4 @@
-2023-01-23 Tue:
+2023-01-23 Tue: Implemented lottery filtering logic for valid Twitter URL.
 
 2023-01-22 Mon: Updated set up so that a single indexer is deployed for each chain (previously, 2 indexers for each service). No need for overlapping indexers.
 
