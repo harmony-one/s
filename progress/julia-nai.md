@@ -1,3 +1,7 @@
+2023-01-26 Fri: Interview candidated. "share" button on 1Bot image generation to inscribe prompt and put on last 2 letters of txn .county.
+
+2023-01-25 Thu: Planned new lottery system for social referrals
+
 2023-01-24 Wed: Footprint SQL queries to gather lottery stats. 8 hours in, approximately 512 total inscriptions and 22 unique addresses.
 
 2023-01-23 Tue: [Pushed](https://github.com/harmony-one/s/commit/34cc3c3e6d80cf63071a23a134012b0b301e8d0e) minimal multi-owner contract, and [pushed](https://github.com/harmony-one/s/commit/db2a42f1478528752efcb5b9bb010a61c8f3a5a3) minimal single-owner contract. [Wrote](https://github.com/harmony-one/s/blob/main/s-msw/README.md) README.md.
