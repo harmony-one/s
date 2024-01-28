@@ -1,3 +1,5 @@
+2024-01-27 Sat: Tested apps adopting Harmony such as Knights and Peasants , DEUS App, Curve.fi, Crypto Royale, and FishFight, and others. Drafted summaries for the tested products in preparation for announcement to x.country telegram.
+
 2024-01-26 Fri: Researched and tested Harmony related apps, (eg. CougarSwap, XP.NETWORK, DefiKingdoms, AnotherWorld, ) and researched about various concepts on yielding (farms, pools, uniswap, pancakeswap, sushiswap, WONE, Jewel LP - especially the tokens for providing liquidity pools).
 
 2024-01-25 Thu: Researched 90+ Harmony community projects in depth, noting down their github activity, cheking their Twitter feeds, open source status, and researching other relevant projects developed by the organization. Updated to the [same notion page](https://www.notion.so/harmonyone/Master-Sheet-88c9a7016be04cb4a711cd97a53ec703) as yesterday.
