@@ -1,4 +1,6 @@
-2023-01-26 Fri: Interview candidated. "share" button on 1Bot image generation to inscribe prompt and put on last 2 letters of txn .county.
+2023-01-27 Sat: Continued using Diamond on Deso and testing various social finance products. 
+
+2023-01-26 Fri: Interview candidated. "share" button on 1Bot image generation to inscribe prompt and put on last 2 letters of txn .county. Tested DeSo Diamond. 
 
 2023-01-25 Thu: Planned new lottery system for social referrals
 
