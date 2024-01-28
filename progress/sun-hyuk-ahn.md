@@ -1,3 +1,7 @@
+2023-01-27 Sat: Continued working on the lottery.
+
+2023-01-26 Fri: Dotcountry inscription to work with Telegram inscriptions. Started preparing for next week's lottery.
+
 2023-01-25 Thu: Started dotcountry inscription to allow single domain owners to have user access. Assigned tasks to Yuriy and Artem related to dotcountry inscription.
 
 2023-01-24 Wed: q.country configuration and setup. Implemented lottery logic along with Yuriy. Flip configuration for user deployment.
