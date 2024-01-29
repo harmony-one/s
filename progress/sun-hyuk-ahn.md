@@ -1,4 +1,4 @@
-2023-01-28 Sun: Coordinated with community members to assit in setting up Flip. Updated Flip code to simplify deployment process.
+2023-01-28 Sun: Coordinated with community members to assit in setting up Flip. Updated Flip code to simplify deployment process for members.
 
 2023-01-27 Sat: Continued working on the lottery.
 
