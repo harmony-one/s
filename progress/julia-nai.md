@@ -1,3 +1,5 @@
+2023-01-28 Sun: Tested Phantom mobile.
+
 2023-01-27 Sat: Continued using Diamond on Deso and testing various social finance products. 
 
 2023-01-26 Fri: Interview candidated. "share" button on 1Bot image generation to inscribe prompt and put on last 2 letters of txn .county. Tested DeSo Diamond. 
