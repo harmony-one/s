@@ -1,3 +1,9 @@
+*2023-01-31 Wed: Impliment chained lottery. Test 1Bot inscription end-to-end. 
+
+*2023-01-30 Tue: Review code changes to 1Bot for image inscription. Review method for image storage (either store images or use Telegram API to fetch images on page load). If open-source social sollection project is found, see if feasible to impliment prior to ETHDenver. Work on the framework for the chained lottery. 
+
+*2023-01-29 Mon: Trying Phantom quests. Look for open source projects that use a social collection aspect that doesn't require NFC. Review code changes to 1Bot that remove all but 1 ONE from user wallet to cover gas fees for inscription of images. 
+
 2023-01-28 Sun: Tested Phantom mobile.
 
 2023-01-27 Sat: Continued using Diamond on Deso and testing various social finance products. 
