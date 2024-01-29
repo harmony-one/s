@@ -1,8 +1,41 @@
 import { Pool } from 'pg';
+import { readFile } from 'fs/promises';
 
 const pool = new Pool({
   connectionString: process.env.DB_CONNECTION_STRING
 });
+
+const checkTableExists = async (tableName: string): Promise<boolean> => {
+  const queryText = `SELECT EXISTS (
+    SELECT FROM information_schema.tables 
+    WHERE  table_schema = 'public'
+    AND    table_name   = $1
+  );`;
+  const res = await pool.query(queryText, [tableName]);
+  return res.rows[0].exists;
+};
+
+const runSchemaFile = async (filePath: string) => {
+  try {
+    const sql = await readFile(filePath, { encoding: 'utf-8' });
+    await pool.query(sql);
+    console.log(`Successfully ran schema file: ${filePath}`);
+  } catch (error) {
+    console.error(`Error running schema file: ${filePath}`, error);
+  }
+};
+
+const initDb = async () => {
+  const tables = ['remainders', 'transactions'];
+  for (const table of tables) {
+    const exists = await checkTableExists(table);
+    if (!exists) {
+      await runSchemaFile(`./src/db/schemas/${table}.sql`);
+    } else {
+      console.log(`Table ${table} already exists`);
+    }
+  }
+};
 
 const query = (text: string, params?: any[]) => pool.query(text, params);
 
@@ -49,4 +82,4 @@ const saveRemainder = async (
   }
 }
 
-export { getAllTransactions, getChainTransactions, getAllRemainders, saveTransction, saveRemainder };
+export { initDb, getAllTransactions, getChainTransactions, getAllRemainders, saveTransction, saveRemainder };

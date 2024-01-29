@@ -6,25 +6,15 @@ const BSC = 'BSC';
 interface ChainConfig {
   chain: string;
   rpcUrl: string;
-  apiKey: string;
   funders: string[];
   native: boolean; // set to true if accepting native asset
-}
-
-interface HarmonyConfig extends ChainConfig {
-  keys: KeyPair[];
-  indexerInfo: Map<string, IndexerInfo>;
-  dstChains: { [address: string]: string };
-}
-
-interface CrossChainConfig extends ChainConfig {
   key: KeyPair;
+}
+interface CrossChainConfig extends ChainConfig {
   tokens?: TokenConfig[];
-  indexerInfo: IndexerInfo;
 }
 
 interface KeyPair {
-  dstChain: string, // destination chain (i.e. Base, BSC, etc)
   pubKey: string,
   privKey: string
 }
@@ -36,12 +26,7 @@ interface TokenConfig {
   abi: any;
 }
 
-interface IndexerInfo {
-  url: string;
-  apiKey: string;
-}
-
 export {
-  ChainConfig, HarmonyConfig, CrossChainConfig, KeyPair, TokenConfig, IndexerInfo,
+  ChainConfig, CrossChainConfig, KeyPair, TokenConfig,
   HARMONY, BASE, BSC
 };

@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { TransactionResponse } from "../types/customTypes";
 import { CrossChainConfig, TokenConfig } from "../config/type";
-import { transactionManager } from "../server";
+import { generalManager } from "../server";
 
 const INTERVAL = 500;
 const MAX_RETRIES = 3;
@@ -44,11 +44,9 @@ class GeneralIndexer {
               for (const tx of newTxs) {
                 try {
                   console.log(`Handling Tx: ${tx.hash}`);
-                  // TODO: get rid of the await
-                  await transactionManager.sendRequest(
+                  generalManager.sendRequest(
                     tx.hash,
                     tx.from,
-                    this.config.key.pubKey,
                     tx.to!,
                     tx.amount!
                   );

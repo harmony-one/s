@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
-import { BASE, BSC, ChainConfig, HARMONY, TokenConfig } from './type';
+import { BASE, BSC, CrossChainConfig, TokenConfig } from './type';
 import harmonyConfig from './harmonyConfig';
 import bscConfig from './bsc/bscConfig';
 import baseConfig from './base/baseConfig';
@@ -16,7 +16,7 @@ const argv = yargs(hideBin(process.argv))
 
 
 // TODO: ensure all required env variables are set
-let chainConfig: ChainConfig;
+let chainConfig: CrossChainConfig;
 const chain = argv.chain ? argv.chain.toLowerCase() : '';
 
 // TODO: tokenConfigs only for harmony
@@ -36,9 +36,6 @@ function loadTokenConfigs(): Map<String, TokenConfig> {
 const tokenConfigs: Map<String, TokenConfig> = loadTokenConfigs(); // map[contract address] = token config
 
 switch (chain) {
-  case HARMONY.toLowerCase():
-    chainConfig = harmonyConfig;
-    break;
   case BSC.toLowerCase():
     chainConfig = bscConfig;
     break;
@@ -49,4 +46,4 @@ switch (chain) {
     throw new Error('Invalid or no blockchain specified. Use --chain to specify the blockchain.');
 }
 
-export { chainConfig, tokenConfigs };
+export { chainConfig, harmonyConfig, tokenConfigs };
