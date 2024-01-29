@@ -1,3 +1,23 @@
+2024-01-27 Sat: Tested apps adopting Harmony such as Knights and Peasants , DEUS App, Curve.fi, Crypto Royale, and FishFight, and others. Drafted summaries for the tested products in preparation for announcement to x.country telegram.
+
+2024-01-26 Fri: Researched and tested Harmony related apps, (eg. CougarSwap, XP.NETWORK, DefiKingdoms, AnotherWorld, ) and researched about various concepts on yielding (farms, pools, uniswap, pancakeswap, sushiswap, WONE, Jewel LP - especially the tokens for providing liquidity pools).
+
+2024-01-25 Thu: Researched 90+ Harmony community projects in depth, noting down their github activity, cheking their Twitter feeds, open source status, and researching other relevant projects developed by the organization. Updated to the [same notion page](https://www.notion.so/harmonyone/Master-Sheet-88c9a7016be04cb4a711cd97a53ec703) as yesterday.
+
+2024-01-24 Wed: Researched approximately 100+ projects/apps integrating Harmony network. Looked at their app, open source status, EVM compatibility, and researched relevant (forked projects). Updated [here](https://www.notion.so/harmonyone/Master-Sheet-88c9a7016be04cb4a711cd97a53ec703)
+
+2024-01-23 Tue: Assisted Julia with the Telegram embedded wallet (searched relevant chain names on CoinGecko and added them as transaction options). Looked into/worked on debugging the setup for our forked iOS Telegram. Reverse searched for "1666600000" on GitHub and researched ecosystem projects using our mainnet (added to [Notion](https://www.notion.so/harmonyone/Master-Sheet-88c9a7016be04cb4a711cd97a53ec703).)
+
+2024-01-22 Mon: Researched Unisat, Argent and Thor chain. Tested telegram embedded wallets/chat bots such as Unibot, Boxbet and Banabot. Researched on flips (Harmony's Q1 goal) for cross-chain.
+
+---
+
+2024-01-21 Sun: Researched, forked and tested open source iOS Apps (telegram, metamask). 
+
+2024-01-20 Sat: Investigated multisig safe wallets for TIA, RUNE, etc (eg. THORsafe, keplr wallet). 
+
+2024-01-19 Fri: Continued research on PRC-20 inscription tokens (top minted eg. POLS, Sponge V2), Polkadot and Onescription.
+
 2024-01-18 Thu: Updated UI for multisig iOS - edited UI view controllers and added Harmony logo to onboarding/privacy protection screens, removed unwanted sections in settings screen, removed chainprefix settings and set their defaults to false, updated theme color. Created demo video for multisig iOS.
 
 2024-01-17 Wed: Updated UI for multisig iOS - updated chain logo, removed help center section and replaced it with various social media/privacy policy links and icons, updated app name to Harmony Multisig Wallet, updated configurations on info.plist, removed dApps tab and modified navigation router, removed collectibles and forum section. Tested minting inscriptions on various PRC-20 tokens.
