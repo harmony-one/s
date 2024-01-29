@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { TransactionResponse } from "../types/customTypes";
-import { HarmonyConfig, KeyPair } from "../config/type";
-import { transactionManager } from "../server";
+import { BASE, BSC, ChainConfig, KeyPair } from "../config/type";
+import { dstChain, harmonyManager } from "../server";
 
 const INTERVAL = 500;
 const MAX_RETRIES = 3;
@@ -16,23 +16,22 @@ export interface ExtendedTransactionResponse extends TransactionResponse {
 class HarmonyIndexer {
   protected provider: ethers.providers.JsonRpcProvider;
   protected lastBlockNum: number | null = null;
-  private config: HarmonyConfig;
-  private keyMap: Map<String, KeyPair> = new Map();
+  private config: ChainConfig;
+  private key: KeyPair;
 
-  constructor(config: HarmonyConfig) {
+  constructor(config: ChainConfig) {
     this.config = config;
     this.provider = new ethers.providers.JsonRpcProvider(config.rpcUrl);
-    config.keys.forEach(keyPair => {
-      this.keyMap.set(keyPair.pubKey.toLowerCase(), keyPair);
-    })
+    this.key = config.key;
   }
 
   // TODO: multiple token address
   getTokenAddress(walletAddress: string): string {
-    if (walletAddress.toLowerCase() === process.env.BASE_ADDRESS!.toLowerCase()) {
-      return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
-    } else if (walletAddress.toLowerCase() === process.env.BSC_ADDRESS!.toLowerCase()) {
-      return '0x55d398326f99059fF775485246999027B3197955';
+    // if (walletAddress.toLowerCase() === process.env.BASE_ADDRESS!.toLowerCase()) {
+    if (dstChain === BASE) {
+      return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'; // Base: USDC token address
+    } else if (dstChain === BSC) {
+      return '0x55d398326f99059fF775485246999027B3197955'; // BSC: USDT token address
     }
     return '';
   }
@@ -50,12 +49,15 @@ class HarmonyIndexer {
               for (const tx of newTxs) {
                 try {
                   console.log(`Handling Tx: ${tx.hash}`);
-                  // TODO: get rid of the await
-                  await transactionManager.sendRequest(
+                  const tokenAddress = this.getTokenAddress(tx.to!);
+                  if (tokenAddress === '') {
+                    throw new Error('Unknown token address');
+                  }
+
+                  harmonyManager.sendRequest(
                     tx.hash,
                     tx.from,
-                    tx.to!,
-                    this.getTokenAddress(tx.to!),
+                    tokenAddress,
                     tx.value
                   );
                 } catch (error) {
@@ -98,9 +100,10 @@ class HarmonyIndexer {
       const block = await this.provider.getBlockWithTransactions(blockNum);
       var filteredTxs: TransactionResponse[];
       filteredTxs = block.transactions.filter(tx => {
+        // TODO: into a single return
         if (tx.from && !this.isFundingAddr(tx.from) && tx.to) {
-          return this.keyMap.has(tx.to!.toLowerCase())
-            && !this.keyMap.has(tx.from.toLowerCase()); // ignore self transactions to prevent loop
+          return tx.to!.toLowerCase() === this.key.pubKey.toLowerCase()
+            && tx.from.toLowerCase() !== this.key.pubKey.toLowerCase(); // ignore self transactions to prevent loop
         }
         return false;
       });

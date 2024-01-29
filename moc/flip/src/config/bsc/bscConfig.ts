@@ -1,10 +1,9 @@
-import { BSC, CrossChainConfig, HARMONY, KeyPair, TokenConfig } from '../type';
+import { BSC, CrossChainConfig, KeyPair, TokenConfig } from '../type';
 import usdt from './abis/usdt.json';
 
 const key: KeyPair = {
-  pubKey: process.env.BSC_ADDRESS || '',
-  privKey: process.env.BSC_PRIVATE_KEY || '',
-  dstChain: HARMONY
+  pubKey: process.env.PUBLIC_KEY || '',
+  privKey: process.env.PRIVATE_KEY || '',
 }
 
 const tokens: TokenConfig[] = [
@@ -19,16 +18,11 @@ const tokens: TokenConfig[] = [
 
 const bscConfig: CrossChainConfig = {
   chain: BSC,
-  rpcUrl: process.env.BSC_RPC || 'https://bsc-dataseed.binance.org',
+  rpcUrl: process.env.CHAIN_RPC || 'https://bsc-dataseed.binance.org',
   key: key,
-  funders: process.env.BSC_FUNDER ? process.env.BSC_FUNDER?.split(',') : [],
+  funders: process.env.FUNDERS ? process.env.FUNDERS?.split(',') : [],
   native: false,
   tokens: tokens,
-  apiKey: process.env.BSC_API_KEY!,
-  indexerInfo: {
-    url: process.env.HARMONY_URL!,
-    apiKey: process.env.HARMONY_API_KEY!
-  }
 }
 
 export default bscConfig;
