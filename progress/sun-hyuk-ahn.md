@@ -1,3 +1,5 @@
+2023-01-28 Sun: Coordinated with community members to assit in setting up Flip. Updated Flip code to simplify deployment process.
+
 2023-01-27 Sat: Continued working on the lottery.
 
 2023-01-26 Fri: Dotcountry inscription to work with Telegram inscriptions. Started preparing for next week's lottery.
