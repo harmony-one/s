@@ -1,4 +1,4 @@
-2023-01-28 Sun: Coordinated with community members to assit in setting up Flip. Updated Flip code to simplify deployment process for members.
+2023-01-28 Sun: Coordinated with community members to assit in setting up Flip. [Updated](https://github.com/harmony-one/s/tree/one-server) Flip code to simplify deployment process (containerization setup & configuration for indexersand db in a single server).
 
 2023-01-27 Sat: Continued working on the lottery.
 
