@@ -1,3 +1,11 @@
+*2024-01-31 Wed: Implement 1.country subdomain logic.
+
+*2024-01-30 Tue: Update 1.country frontend client to host Notion and Substack embed on inscription.
+
+*2024-01-29 Mon: Launch 01/30 Lottery. Implement dotcountry redirect logic.
+
+---
+
 2023-01-28 Sun: Coordinated with community members to assit in setting up [Flip](https://github.com/harmony-one/flip). [Updated](https://github.com/harmony-one/s/tree/one-server) Flip code to simplify deployment process (containerization setup & configuration for indexers and db into a single server).
 
 2023-01-27 Sat: Continued working on the lottery.
