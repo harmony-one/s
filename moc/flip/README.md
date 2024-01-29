@@ -1,6 +1,6 @@
 # Flip
 
-Flip is a minimal on-chain service leveraging `.country` domains.
+Flip is a minimal on-chain service enabling quick, cheap cross-chain swaps leveraging `.country` domains.
 
 ## Getting Started
 
