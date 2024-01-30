@@ -1,5 +1,7 @@
 2024-01-29 Mon: Tested and documented ecosystem projects (EzCasino, Chibi Cats Cafe, Speed Star, Crypto Royale, DappRadar, Synapse, Aragon, Coherence ONE, Defi Tower, Defira, Defimons, Galaxii, QiDao, ACryptoS, Elk Finance, Coin98, Beefy Finance, and Harmony Punks.)
 
+---
+
 2024-01-28 Sun: Yesterday's continued.
 
 2024-01-27 Sat: Tested apps adopting Harmony such as Knights and Peasants , DEUS App, Curve.fi, Crypto Royale, and FishFight, and others. Drafted summaries for the tested products in preparation for announcement to x.country telegram.
