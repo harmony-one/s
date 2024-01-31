@@ -1,47 +1,126 @@
 import React, { useState } from 'react';
-import './App.css';
+
+function generateEmojiFromHexPair(hexPair) {
+  const codePoint = parseInt(hexPair, 16);
+  const baseOffset = 0x1F600; // Offset for the range of smiley emojis
+  const emojiCode = baseOffset + codePoint;
+  try {
+      return String.fromCodePoint(emojiCode);
+  } catch {
+      return '🆘'; // Fallback emoji
+  }
+}
+
+function generateDataRow(walletAddress) {
+  if (!walletAddress.startsWith("0x") || walletAddress.length !== 42) {
+      throw new Error("Invalid EVM wallet address");
+  }
+
+  const firstTwoLetters = walletAddress.substring(2, 4);
+  const emojiString = [
+      walletAddress.substring(4, 6),
+      walletAddress.substring(6, 8),
+      walletAddress.substring(8, 10)
+  ].map(generateEmojiFromHexPair).join('');
+  const lastFourDigits = parseInt(walletAddress.substring(38), 16).toString().padStart(4, '0').slice(-4);
+
+  return {
+      walletAddress,
+      firstTwoLetters,
+      emojiString,
+      lastFourDigits
+  };
+}
 
 function App() {
-  const [inputValue, setInputValue] = useState('');
-  const [displayValue, setDisplayValue] = useState('1234'); // Example display value
+  const [walletAddress, setWalletAddress] = useState('');
+  const [fourDigits, setFourDigits] = useState('');
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
-  const handleNumberClick = (number) => {
-    if (inputValue.length < 4) {
-      setInputValue(inputValue + number);
+  const handleAdd = () => {
+    try {
+      const newRow = generateDataRow(walletAddress);
+      setData([...data, newRow]);
+      setWalletAddress('');
+    } catch (error) {
+      alert(error.message);
     }
   };
 
-  const handleBackspace = () => {
-    setInputValue(inputValue.slice(0, -1));
+  const handleFilter = () => {
+    const results = data.filter(row => row.lastFourDigits === fourDigits);
+    setFilteredData(results);
   };
 
-  const numberButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
-    <button key={number} onClick={() => handleNumberClick(number)}>
-      {number}
-    </button>
-  ));
-
-  const zeroButton = (
-    <button key="0" className="zero-button" onClick={() => handleNumberClick(0)}>
-      0
-    </button>
-  );
-
-  const backspaceButton = (
-    <button key="backspace" className="backspace-button" onClick={handleBackspace}>
-      ⌫
-    </button>
-  );
-
   return (
-    <div className="App">
-      <div className="display">{displayValue}</div>
-      <input type="text" value={inputValue} readOnly />
-      <div className="number-pad">
-        {numberButtons}
-        {zeroButton}
-        {backspaceButton}
+    <div className="App" style={{ margin: '20px' }}>
+      <div>
+        <input 
+          type="text" 
+          value={walletAddress} 
+          onChange={e => setWalletAddress(e.target.value)} 
+          placeholder="Enter EVM Wallet Address"
+          style={{ marginRight: '10px' }}
+        />
+        <button onClick={handleAdd}>Add Address</button>
       </div>
+      
+      <div style={{ marginTop: '20px' }}>
+        <input 
+          type="text" 
+          value={fourDigits} 
+          onChange={e => setFourDigits(e.target.value)} 
+          placeholder="Enter Last 4 Digits"
+          style={{ marginRight: '10px' }}
+        />
+        <button onClick={handleFilter}>Filter Data</button>
+      </div>
+
+      {filteredData.length > 0 && (
+        <div style={{ marginTop: '20px' }}>
+          <h3>Filtered Results:</h3>
+          <table style={{ width: '100%', textAlign: 'left' }}>
+            <thead>
+              <tr>
+                <th>First 2 Letters</th>
+                <th>Emojis</th>
+                <th>Last 4 Digits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.firstTwoLetters}</td>
+                  <td>{row.emojiString}</td>
+                  <td>{row.lastFourDigits}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <table style={{ marginTop: '20px', width: '100%', textAlign: 'left' }}>
+        <thead>
+          <tr>
+            <th>Wallet Address</th>
+            <th>First 2 Letters</th>
+            <th>Emojis</th>
+            <th>Last 4 Digits</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, index) => (
+            <tr key={index}>
+              <td>{row.walletAddress}</td>
+              <td>{row.firstTwoLetters}</td>
+              <td>{row.emojiString}</td>
+              <td>{row.lastFourDigits}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
