@@ -33,9 +33,29 @@ function generateDataRow(walletAddress) {
 }
 
 function App() {
+  const initialAddresses = [
+    "0xa0f8aB28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8bB28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8cB28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8dB28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xb5B353B145F95d0ca364d92aEA24514f6352f5DF",
+    "0xb6B353B145F95d0ca364d92aEA24514f6352f5DF",
+    "0xb7B353B145F95d0ca364d92aEA24514f6352f5DF",
+    "0x5795a56B46553913d53d34F7aE494a99E882209A",
+    "0x5896a56B46553913d53d34F7aE494a99E882209A",
+    "0x5997a56B46553913d53d34F7aE494a99E882209A",
+    "0xa0f8bb28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8b928a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8ba28a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8ab31a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8ab30a9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8ab2Fa9dC7e7492f27FDe2680Ab988b0C925C",
+    "0xa0f8ab32a9dC7e7492f27FDe2680Ab988b0C925C"
+  ];
+
   const [walletAddress, setWalletAddress] = useState('');
   const [fourDigits, setFourDigits] = useState('');
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(initialAddresses.map(addr => generateDataRow(addr)));
   const [filteredData, setFilteredData] = useState([]);
 
   const handleAdd = () => {
