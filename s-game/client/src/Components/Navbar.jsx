@@ -10,6 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import Groups2Icon from '@mui/icons-material/Groups2';
+import LanguageIcon from '@mui/icons-material/Language';
 
 import logo from '../assets/Harmony-logo-WH.svg';
 
@@ -118,12 +119,28 @@ const Navbar = ({ pageTitle, open, setOpen }) => {
                     <ListItemText primary="Connect" />
                     </ListItemButton>
                 </ListItem>
+                <ListItem disablePadding onClick={() => {navigate("/connections");}}>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <LanguageIcon style={{ color: 'white' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Connections" />
+                    </ListItemButton>
+                </ListItem>
                 <ListItem disablePadding onClick={() => {navigate("/socialbond");}}>
                     <ListItemButton>
                     <ListItemIcon>
                         <Groups2Icon style={{ color: 'white' }} />
                     </ListItemIcon>
                     <ListItemText primary="Social Bond" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding onClick={() => {navigate("/ens");}}>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <LanguageIcon style={{ color: 'white' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="ENS" />
                     </ListItemButton>
                 </ListItem>
             </List>

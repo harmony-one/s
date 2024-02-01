@@ -27,7 +27,7 @@ const EstablishConnection = ({myOTP}) => {
         <Typography variant='h6'>3 emojis:</Typography>
         <Typography variant='text'>(You and your partner choose the same set of emojis.)</Typography>
         <EmojiInput emojis={emojis} setEmojis={setEmojis} />
-        <Button variant='contained' onClick={handleAddConnection}>Add Connection</Button>
+        <Button variant='contained' sx={{marginTop: 1}} onClick={handleAddConnection}>Add Connection</Button>
     </div>
   )
 }

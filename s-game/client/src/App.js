@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AddConnection, SocialBond } from './Screens';
+import { AddConnection, SocialBond, ENS, Connections } from './Screens';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 function App() {
@@ -23,6 +23,8 @@ function App() {
           <Routes>
             <Route path="/" element={<AddConnection />} />
             <Route path="/socialbond" element={<SocialBond />} />
+            <Route path="/ens" element={<ENS />} />
+            <Route path="/connections" element={<Connections />} />
           </Routes>
         </div>
       </BrowserRouter>
