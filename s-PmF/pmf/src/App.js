@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 function generateEmojiFromHexPair(hexPair) {
   const codePoint = parseInt(hexPair, 16);
-  const baseOffset = 0x1F600; // Offset for the range of smiley emojis
+  const baseOffset = 0x1F300; // Offset for the range of smiley emojis
   const emojiCode = baseOffset + codePoint;
   try {
       return String.fromCodePoint(emojiCode);
