@@ -2,11 +2,12 @@
 
 *Planned: Further work on Telegram bot with Julia. Research more about community projects, etc to prepare for promotion at Eth-Denver.
 
+\
 2024-01-30 Tue: Added and tested more projects (20~) to notion master list. Went over with Julia on how to build the OTP architecture for the QR code/game.
 
 *Planned: Check-in with Julia, add further features to Telegram bot (we have basic features but I believe we still need to work on implementing wallet and setting connections for transactions, have to check with her.)
 
-
+\
 2024-01-29 Mon: Tested and documented ecosystem projects found through dApp radars and twitter (EzCasino, Chibi Cats Cafe, Speed Star, Crypto Royale, DappRadar, Synapse, Aragon, Coherence ONE, Defi Tower, Defira, Defimons, Galaxii, QiDao, ACryptoS, Elk Finance, Coin98, Beefy Finance, and Harmony Punks.) Sent top 3 projects summary to x.country telegram.
 
 *Planned: Finish testing the remaining projects noted in Notion. Choose top 3 projects and announce to x.country. If finished, continue more product testing (only 150 projects were listed since Github limits search results to 5 pages. Will look for ways to display other search results, eg. check Twitter)
