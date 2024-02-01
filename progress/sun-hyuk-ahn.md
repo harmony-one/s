@@ -1,8 +1,8 @@
-*2024-01-31 Wed: Implement 1.country subdomain logic.
+2024-01-31 Wed: Implemented Telegram embeds for 02/01 lottery. Manually implemented cross shard transactions for Flip (had to find a workaround as all the libraries were outdated).
 
-*2024-01-30 Tue: Update 1.country frontend client to host Notion and Substack embed on inscription.
+2024-01-30 Tue: Updated 1.country frontend client to host Notion and Substack embed on inscription. Notion is working as expected but have to find a fix for Substack.
 
-*2024-01-29 Mon: Launch 01/30 Lottery. Implement dotcountry redirect logic.
+2024-01-29 Mon: Launched 01/30 Lottery. Implemented dotcountry redirect logic.
 
 ---
 

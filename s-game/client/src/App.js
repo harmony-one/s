@@ -1,8 +1,7 @@
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Home } from './Screens';
+import { AddConnection, SocialBond, ENS, Connections } from './Screens';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { MetaMaskProvider } from '@metamask/sdk-react';
 
 function App() {
 
@@ -21,8 +20,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <div className="App">
-        <Routes>
-            <Route path="/" element={<Home />} />
+          <Routes>
+            <Route path="/" element={<AddConnection />} />
+            <Route path="/socialbond" element={<SocialBond />} />
+            <Route path="/ens" element={<ENS />} />
+            <Route path="/connections" element={<Connections />} />
           </Routes>
         </div>
       </BrowserRouter>
