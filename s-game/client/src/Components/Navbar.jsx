@@ -8,9 +8,10 @@ import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import InfoIcon from '@mui/icons-material/Info';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import Groups2Icon from '@mui/icons-material/Groups2';
 
-import WalletConnectButton from './Wallet ConnectButton';
+import logo from '../assets/Harmony-logo-WH.svg';
 
 
 const Navbar = ({ pageTitle, open, setOpen }) => {
@@ -68,12 +69,15 @@ const Navbar = ({ pageTitle, open, setOpen }) => {
             >
                 <MenuIcon />
             </IconButton>
-            <Typography variant="h5" noWrap component="div">
+            {/* <Typography variant="h5" noWrap component="div">
                 {pageTitle}
-            </Typography>
-
+            </Typography> */}
+            <Box sx={{ mr: 2.5 }}>
+              <a href="/">
+                <img src={logo} alt="logo" width={113} height={48} />
+              </a>
+            </Box>
             </Toolbar>
-            <WalletConnectButton text="Connect wallet to begin" />
         </AppBar>
         <Drawer
             sx={{
@@ -95,6 +99,11 @@ const Navbar = ({ pageTitle, open, setOpen }) => {
             }}
         >
             <DrawerHeader>
+            <Box sx={{ mr: 2.5 }}>
+              <a href="/">
+                <img src={logo} alt="logo" width={113} height={48} />
+              </a>
+            </Box>
             <IconButton onClick={handleDrawerClose}>
                 {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
             </IconButton>
@@ -104,9 +113,17 @@ const Navbar = ({ pageTitle, open, setOpen }) => {
                 <ListItem disablePadding onClick={() => {navigate("/");}}>
                     <ListItemButton>
                     <ListItemIcon>
-                        <InfoIcon style={{ color: 'white' }} />
+                        <HandshakeIcon style={{ color: 'white' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Home" />
+                    <ListItemText primary="Connect" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding onClick={() => {navigate("/socialbond");}}>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <Groups2Icon style={{ color: 'white' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Social Bond" />
                     </ListItemButton>
                 </ListItem>
             </List>
