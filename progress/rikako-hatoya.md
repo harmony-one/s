@@ -1,4 +1,6 @@
-*2024-01-31 Wed: Further work on Telegram bot with Julia. Research more about community projects, etc to prepare for promotion at Eth-Denver.
+2024-01-31 Wed: Worked on the social geo game app. Created OTP connection page that fetches wallet address from Metamask and displays last 4 digits, connections, social bond (groups), and ENS registration page. Live working demo: [here](https://65bbe0909d7fba10443b4511--sgame-test.netlify.app/) (must be opened with desktop or any ethereum compatible wallet browser eg. Metamask mobile browser).
+
+*Planned: Further work on Telegram bot with Julia. Research more about community projects, etc to prepare for promotion at Eth-Denver.
 
 2024-01-30 Tue: Added and tested more projects (20~) to notion master list. Went over with Julia on how to build the OTP architecture for the QR code/game.
 
