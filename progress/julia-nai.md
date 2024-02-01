@@ -1,4 +1,4 @@
-*2023-01-31 Wed: Implement chained lottery. Test 1Bot inscription end-to-end.
+2023-01-31 Wed: [Created](https://github.com/harmony-one/s/commit/fc87750c2e77a58921d7306ff30390da12373b03) base of PmF. [Implemented](https://github.com/harmony-one/s/commit/91264c4bb5cf5053decc122172189068795a1aa7) wallet lookup based on last 4 digits and emoji encoding and 2 error codes. 
 
 *2023-01-30 Tue: Review code changes to 1Bot for image inscription. Review method for image storage (either store images or use Telegram API to fetch images on page load). If open-source social collection project is found, see if feasible to implement prior to ETHDenver. Work on the framework for the chained lottery.
 
