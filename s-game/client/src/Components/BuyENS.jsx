@@ -3,9 +3,13 @@ import { Typography, Button, TextField, Box } from '@mui/material';
 import TopGroups from './TopGroups';
 import { maxWidth } from '@mui/system';
   
+import { storeTransactionInIndexedDB } from '../Actions/TransactionSync';
+
 const BuyENS = () => {
     const handleAddConnection = () => {
-        
+      storeTransactionInIndexedDB(['hello', 'test'])
+      .then(() => console.log('Transaction stored successfully'))
+      .catch(error => console.error('Error storing transaction:', error));
     };
 
   return (
