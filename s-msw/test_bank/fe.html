@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Bank Interface</title>
+    <style>
+        body {
+            font-family: 'Lucida Console', monospace;
+            color: black;
+            background-color: white;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+        }
+        button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bank Contract Interface</h2>
+        <button onclick="connectWallet()">Connect to MetaMask</button>
+        <br>
+        <button onclick="deposit()">Deposit 1000 ONE</button>
+        <br>
+        <button onclick="withdraw()">Withdraw Funds</button>
+        <br>
+        <input type="text" id="secretMessage" placeholder="Secret Message for Withdrawal">
+        <br>
+        <p id="status"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
+    <script>
+        let web3;
+        let contract;
+        let userAccount;
+
+        const contractAddress = '0xe901d37dE3720514eb12EfEeab3550FB88436d20';
+        const abi = [
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "depositor",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes32",
+				"name": "secretMessage",
+				"type": "bytes32"
+			}
+		],
+		"name": "DepositMade",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "deposit",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes32",
+				"name": "secretMessage",
+				"type": "bytes32"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"inputs": [],
+		"name": "checkBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+
+        function setStatus(message) {
+            document.getElementById("status").innerText = message;
+        }
+
+        async function connectWallet() {
+            // Wait for window.ethereum to be injected by MetaMask
+            if (typeof window.ethereum === 'undefined') {
+                await new Promise((resolve) => {
+                    window.addEventListener('ethereum#initialized', resolve, {
+                        once: true,
+                    });
+
+                    // If MetaMask isn't installed, wait 3 seconds and then check again
+                    setTimeout(resolve, 3000);
+                });
+            }
+
+            // Now check again for window.ethereum
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+                    contract = new web3.eth.Contract(abi, contractAddress);
+                    const accounts = await web3.eth.getAccounts();
+                    userAccount = accounts[0];
+                    setStatus("Wallet connected: " + userAccount);
+                } catch (error) {
+                    setStatus("Could not get accounts");
+                }
+            } else {
+                setStatus("Please install MetaMask");
+            }
+        }
+
+        async function deposit() {
+            if (!contract) {
+                setStatus("Please connect to MetaMask first.");
+                return;
+            }
+
+            contract.methods.deposit().send({ from: userAccount, value: web3.utils.toWei('1000', 'ether') })
+            .on('receipt', function(receipt){
+                const secretMessage = receipt.events.DepositMade.returnValues.secretMessage;
+                document.getElementById("secretMessage").value = secretMessage;
+                setStatus("Deposit successful. Secret Message: " + secretMessage);
+            })
+            .on('error', function(error){
+                setStatus("Deposit failed: " + error.message);
+            });
+        }
+
+        async function withdraw() {
+            if (!contract) {
+                setStatus("Please connect to MetaMask first.");
+                return;
+            }
+
+            const secretMessage = document.getElementById("secretMessage").value;
+            if (!secretMessage) {
+                setStatus("Please enter the secret message.");
+                return;
+            }
+
+            contract.methods.withdraw(secretMessage).send({ from: userAccount })
+            .on('receipt', function(){
+                setStatus("Withdraw successful.");
+            })
+            .on('error', function(error){
+                setStatus("Withdraw failed: " + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
