@@ -10,6 +10,8 @@
 
 *2023-01-29 Mon: Trying Phantom quests. Look for open source projects that use a social collection aspect that doesn't require NFC. Review code changes to 1Bot that remove all but 1 ONE from user wallet to cover gas fees for inscription of images.
 
+---
+
 2023-01-28 Sun: Tested Phantom mobile.
 
 2023-01-27 Sat: Continued using Diamond on Deso and testing various social finance products. 
