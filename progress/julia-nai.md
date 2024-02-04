@@ -1,3 +1,5 @@
+2023-02-3 Sat: [4 hours] [Created](https://github.com/harmony-one/s/commit/7b770fcee25c79ff4ed6868fb86fa71e6cf64ab0) webpage to display location data from OpenStreetMap Nominatim API. [Created](https://github.com/harmony-one/s/commit/0c9ad101603b14b927f19a63fcf7c114b1a9495e) iOS app to display location data via Apple NSLocation data. Working on allowing specific location and coordinate dump. 
+
 2023-02-2 Fri: Researched potential location tracking methods and the limitations of airdrop and NFC on iPhone.
 
 2023-02-01 Thu: Created a test of in-mem data. No issues with querying from 100k rows of wallets stored in mem (no internet connection needed). Massive slow downs by 200k rows. 
