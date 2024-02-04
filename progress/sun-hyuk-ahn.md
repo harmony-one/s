@@ -1,3 +1,5 @@
+2023-02-04 Sun: 
+
 2023-02-03 Sat: Researched into ElastiCache Redis. Configured the initial settings for ElastiCache and implemented Typescript interaction with ElastiCache. (2 hours)
 
 2023-02-02 Fri: Implemented BTC CLI wallet. Discussed new initiative. Benchmarked Redis performance.
