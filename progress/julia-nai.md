@@ -1,4 +1,4 @@
-2023-02-3 Sat: [4 hours] [Created](https://github.com/harmony-one/s/commit/7b770fcee25c79ff4ed6868fb86fa71e6cf64ab0) webpage to display location data from OpenStreetMap Nominatim API. [Created](https://github.com/harmony-one/s/commit/0c9ad101603b14b927f19a63fcf7c114b1a9495e) iOS app to display location data via Apple NSLocation data. Working on allowing specific location and coordinate dump. 
+2023-02-3 Sat: [5 hours] [Created](https://github.com/harmony-one/s/commit/7b770fcee25c79ff4ed6868fb86fa71e6cf64ab0) webpage to display location data from OpenStreetMap Nominatim API. [Created](https://github.com/harmony-one/s/commit/0c9ad101603b14b927f19a63fcf7c114b1a9495e) iOS app to display location data via Apple NSLocation data. Working on allowing specific location and coordinate dump. [Reviewed](https://aws.amazon.com/blogs/mobile/add-a-map-to-your-webpage-with-amazon-location-service/) archetecture for amazon location services mapping. Began setup of demo with service.
 
 2023-02-2 Fri: Researched potential location tracking methods and the limitations of airdrop and NFC on iPhone.
 
