@@ -11,6 +11,7 @@
 		AC41CD2B2B6F369500026786 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC41CD2A2B6F369500026786 /* ContentView.swift */; };
 		AC41CD2D2B6F369600026786 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC41CD2C2B6F369600026786 /* Assets.xcassets */; };
 		AC41CD302B6F369600026786 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC41CD2F2B6F369600026786 /* Preview Assets.xcassets */; };
+		AC41CD372B6F373E00026786 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC41CD362B6F373E00026786 /* LocationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		AC41CD2A2B6F369500026786 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AC41CD2C2B6F369600026786 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC41CD2F2B6F369600026786 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AC41CD362B6F373E00026786 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				AC41CD282B6F369500026786 /* locationTestApp.swift */,
+				AC41CD362B6F373E00026786 /* LocationManager.swift */,
 				AC41CD2A2B6F369500026786 /* ContentView.swift */,
 				AC41CD2C2B6F369600026786 /* Assets.xcassets */,
 				AC41CD2E2B6F369600026786 /* Preview Content */,
@@ -139,6 +142,7 @@
 			files = (
 				AC41CD2B2B6F369500026786 /* ContentView.swift in Sources */,
 				AC41CD292B6F369500026786 /* locationTestApp.swift in Sources */,
+				AC41CD372B6F373E00026786 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +279,8 @@
 				DEVELOPMENT_TEAM = 2WYHY6MN7C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show you your address";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show you your address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -285,7 +291,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.locationTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jtest.locationTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -304,6 +310,8 @@
 				DEVELOPMENT_TEAM = 2WYHY6MN7C;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show you your address";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show you your address";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -314,7 +322,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.locationTest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jtest.locationTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

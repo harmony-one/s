@@ -8,17 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var locationManager = LocationManager()
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text("Your Current Address:")
+                .font(.headline)
+            Text(locationManager.address)
+                .padding()
         }
-        .padding()
     }
-}
-
-#Preview {
-    ContentView()
 }
