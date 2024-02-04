@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AddConnection, SocialBond, ENS, Connections } from './Screens';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import Auth from './Screens/Auth';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/socialbond" element={<SocialBond />} />
             <Route path="/ens" element={<ENS />} />
             <Route path="/connections" element={<Connections />} />
+            <Route path="/auth" element={<Auth />} />
           </Routes>
         </div>
       </BrowserRouter>
