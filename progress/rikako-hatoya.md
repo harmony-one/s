@@ -1,3 +1,7 @@
+---
+
+2024-02-04 Sun: Further work on social media oauth.
+
 2024-02-03 Sat: Worked on social media oauth.
 
 2024-02-02 Fri: Further work on 1wallet, burner wallets, candidate interview.
