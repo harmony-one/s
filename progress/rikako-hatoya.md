@@ -1,4 +1,4 @@
-2024-02-05 Mon:
+2024-02-05 Mon: Tested Warpcast, investigated casts, and documented interesting frames on [Notion](https://harmonyone.notion.site/Frames-on-Warpcast-746d04f697884e3c95ba76ff95436af8) with Theo.F and Alaina. Followed tutorial on how to create frames in Farcaster and looked into documentation of relevant libraries (eg. Frames.js). Created static site and deployed on Cloudflare Workers + created KV namespace. 
 
 ---
 
