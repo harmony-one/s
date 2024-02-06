@@ -2,9 +2,9 @@
 
 ---
 
-2024-02-04 Sun: Further work on social media oauth: Initially started work on implementing Firebase but only supports limited number of social log-ins. Looked into creating back-end for SSO-login with [OneAll](https://docs.oneall.com/services/implementation-guide/social-login/) instead, which supports 40 social media websites.
+2024-02-04 Sun: Further work on social media oauth: Initially started work on implementing Firebase but only supports limited number of social log-ins. Looked into creating back-end for SSO-login with [OneAll](https://docs.oneall.com/services/implementation-guide/social-login/) instead, which supports 40 social media websites: investigating workflow and implementing REST API.
 
-2024-02-03 Sat: Worked on social media oauth: created landing page and added React components to display social media icons ([here](https://github.com/harmony-one/s/tree/main/s-game))
+2024-02-03 Sat: Worked on implementing social media oauth for s.country. Created landing page and added React components to display social media icons ([here](https://github.com/harmony-one/s/tree/main/s-game)).
 
 2024-02-02 Fri: Further work on 1wallet, burner wallets, candidate interview.
 
