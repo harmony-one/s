@@ -1,4 +1,8 @@
-2023-02-04 Sun: 
+2023-02-05 Mon: Implemented counter demo utilizing pages, workers, and kv store from Cloudflare.
+
+---
+
+2023-02-04 Sun: Researched into Cloudflare Pages and Workers. Created a simple interaction between pages and workers.
 
 2023-02-03 Sat: Researched into ElastiCache Redis. Configured the initial settings for ElastiCache and implemented Typescript interaction with ElastiCache. (2 hours)
 
