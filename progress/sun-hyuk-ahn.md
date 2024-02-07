@@ -1,3 +1,5 @@
+2023-02-06 Tue: Implemented KV store data scheme. Implemented workers to interact with the given data. Handed off the rest of taks to Artem and Yuriy.
+
 2023-02-05 Mon: Implemented counter demo utilizing pages, workers, and kv store from Cloudflare.
 
 ---
