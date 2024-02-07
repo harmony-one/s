@@ -1,5 +1,7 @@
 2024-02-06 Tue: Researched trending casts on Warpcast and tested out frames. Looked into Neynar (Node.js framework for implementing Farcaster), created a back-end and implemented REST APIs to gain user information such as get user profile from user id ([here](https://github.com/rika97/neynar)).
-Created Harmony ONE Map app using React Native ([here](https://github.com/harmony-one/1/tree/main/map)). Created UI framework with react navigation and tabs, created assets (splashscreen logos, etc), and implemented Apple Maps.![image](https://github.com/harmony-one/s/assets/27670355/4d298a2b-d84f-4ea0-a7da-1f8583101057)
+Created Harmony ONE Map app using React Native ([here](https://github.com/harmony-one/1/tree/main/map)). Created UI framework with react navigation and tabs, created assets (splashscreen logos, etc), and implemented Apple Maps.
+\
+![image](https://github.com/harmony-one/s/assets/27670355/4d298a2b-d84f-4ea0-a7da-1f8583101057)
 
 
 2024-02-05 Mon: Tested Warpcast, investigated casts, and documented interesting frames on [Notion](https://harmonyone.notion.site/Frames-on-Warpcast-746d04f697884e3c95ba76ff95436af8) with Theo.F and Alaina. Followed tutorial on how to create frames in Farcaster and looked into documentation of relevant libraries (eg. Frames.js). Created static site and deployed on Cloudflare Workers + created KV namespace. 
