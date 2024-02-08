@@ -1,4 +1,4 @@
-2023-02-06 Tue: Change log for Remote Emitter:
+2023-02-07 Wed: Change log for Remote Emitter:
 - Introduced session-based unique names
 - Linked @mentions to user pages.
 - **Added # tagging functionality with /tag/\<tag\>**
@@ -12,7 +12,11 @@
 - **Introduced top 3 hashtags feature**
 - Linked main username on HomePage to /\<username\>
 
+2023-01-06 Tue: Planned high level objective for webapp (Remote Emitter). Added spam filter to prevent repeat messages. 
+
 2023-02-05 Mon: Created test webapp with nosql client-side db. User can post a message and set some username. The message is posted with the current location and timestamp. Clicking on a username loads a /<username> page with all posts from that username. 
+
+---
 
 2023-02-4 Sun: [2 hours] Began creation of testing webapp that compares various location service APIs to see which is most accurate under a variety of conditions. 
 
