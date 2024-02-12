@@ -1,4 +1,50 @@
-2023-02-07 Wed: Change log for Remote Emitter:
+2023-02-11 Sun: [6 hours] \
+Change log for Remote Emitter
+
+**Major Changes**
+- [Rewrote](https://github.com/Aishlia/remote-emitter/commit/2a42c762dd741290e4ed2d0b16048bbf891b7f84) connections logic to utilize Neo4j graph db. Users are now stored as nodes and their connects are vertices. 6th degree connection displays faster than Firestore implimentation's calculation of 3rd degree. 
+- Removed directionality of connections (temp removal). For now, all mentions are treated as bi-directional.
+
+
+**Minor Changes**
+- Updated frontend to properly display new information. When a user clicks on another user's profile, they see the chain of users that connects them (ie. @me - @friend - @friend2 - @friend3 - @target_user)
+- [Removed](https://github.com/Aishlia/remote-emitter/commit/63dd92734a7cc982451d402745b926e3be372b7d) formatPath function
+- [Readded](https://github.com/Aishlia/remote-emitter/commit/b516fa6906c7752721294ad6fc303fa6651d19b5) location data. Not sure when I accidentally removed it
+
+2023-02-10 Sat: [4 hours] \
+🧧🧨🔴 Happy New Year 🐲🐉🏮
+Change log for Remote Emitter
+
+**Major Changes**
+- Changed chain logic. Added semi-functioning directionality. @a mentioning @b should be counted as @a → @b. @b then mentioning @a back should be counted as @a ↔ @b
+
+**Minor Changes**
+- Minor CSS changes for mobile view
+
+2023-02-09 Fri: \
+Change log for Remote Emitter
+
+**Major Changes**
+- [Added](https://github.com/Aishlia/remote-emitter/commit/5da19d881c538c33c33701f6aa5fa6c36331d902) new Firestore interests collection to store followed hashtags. Users who use a hastag are now following that hastag.
+- [Added](https://github.com/Aishlia/remote-emitter/commit/1d9ac584f575e5f3a8937916d127c6c26ca437eb) global view and home view to HomePage. Global view shows all posts, home view shows only posts tagged with a hastag that the user is following.
+
+**Minor Changes**
+- Finally [ran](https://github.com/Aishlia/remote-emitter/commit/99dfbd879bea76cd0c9278337357030c0445579c) prettier
+- [Wrote](https://github.com/Aishlia/remote-emitter/commit/c4c2d18d887dd8f58def86df1d9ac03a4b8370c4) README overview of how Firestore collections are used
+
+2023-02-08 Thu: \
+Change log for Remote Emitter
+
+**Major Changes**
+- [Added](https://github.com/Aishlia/remote-emitter/commit/04caf6a9ab13729a50e52a5919c68ab31c9dfa1a) Heatmap POC
+- [Created](https://github.com/Aishlia/remote-emitter/commit/be61e64c70d7642454c359ef70e05b7fb00ae4a6) POC for connection chain calculation using new Firestore collection "connections"
+
+**Minor Changes**
+- [Added](https://github.com/Aishlia/remote-emitter/commit/810d17d8227eca7c7a301a2f9aaa18a9eb672acb) links to global heatmap to HomePage
+- [Removed](https://github.com/Aishlia/remote-emitter/commit/a52fbd1b3bbcc14ef09e9047d6080e598276b828) unused const assignment
+
+2023-02-07 Wed: \
+Change log for Remote Emitter
 - Introduced session-based unique names
 - Linked @mentions to user pages.
 - **Added # tagging functionality with /tag/\<tag\>**
