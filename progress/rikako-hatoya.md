@@ -1,3 +1,5 @@
+2024-02-11 Sun: Worked on further debugging settings bundle to react native bridge. 
+
 2024-02-10 Sat: ONE Map: [Worked](https://github.com/harmony-one/1/commits/systemSettings) on debugging the system settings map selection. NSUserDefaults is not correctly being fetched, bug probably caused from the bridging between iOS and React Native.
 
 2024-02-09 Fri: ONE Map: [Worked](https://github.com/harmony-one/1/commits/rika/) on implementing Firebase. Investigated how to access single Firehost database with multiple Firebase API keys to enable tracking. Added UI updates (microphone icon, app logo) and modified app store submission info. Implemented in-app browser (when location name is clicked, will open a browser linking to Julia's hashtag url). Uploaded deliverables to Testflight and tested app. [Worked](https://github.com/harmony-one/1/commits/systemSettings) on configuring system settings to enable map selection through iOS settings app (created custom settings preferences and modules to bridge NSUserDefaults to React Native).
