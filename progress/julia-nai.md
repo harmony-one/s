@@ -1,4 +1,4 @@
-2023-02-11 Sun: [6 hours] \
+2023-02-11 Sun: [7 hours] \
 Change log for Remote Emitter
 
 **Major Changes**
