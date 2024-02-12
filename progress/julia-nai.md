@@ -12,7 +12,7 @@ Change log for Remote Emitter
 - [Readded](https://github.com/Aishlia/remote-emitter/commit/b516fa6906c7752721294ad6fc303fa6651d19b5) location data. Not sure when I accidentally removed it
 
 2023-02-10 Sat: [4 hours] \
-🧧🧨🔴 Happy New Year 🐲🐉🏮
+🧧🧨🔴 Happy New Year 🐲🐉🏮 \
 Change log for Remote Emitter
 
 **Major Changes**
