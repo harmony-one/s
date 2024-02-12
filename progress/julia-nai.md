@@ -4,6 +4,7 @@ Change log for Remote Emitter
 **Major Changes**
 - [Rewrote](https://github.com/Aishlia/remote-emitter/commit/2a42c762dd741290e4ed2d0b16048bbf891b7f84) connections logic to utilize Neo4j graph db. Users are now stored as nodes and their connects are vertices. 6th degree connection displays faster than Firestore implimentation's calculation of 3rd degree. 
 - Removed directionality of connections (temp removal). For now, all mentions are treated as bi-directional.
+- [Redesigned](https://github.com/Aishlia/remote-emitter/commit/ee36638d4b313aa92e526b7f33094c8e7b295ff0) graph data structure. Connection type is now stored in vertices.
 
 
 **Minor Changes**
