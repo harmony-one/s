@@ -1,4 +1,10 @@
-2024-02-11 Sun: Worked on further debugging settings bundle to react native bridge. 
+2024-02-12 Mon: ONE Map: [Implemented](https://github.com/harmony-one/1/commit/7acbbb7ac9b3e03f35256d288647bb029bae24d2) Firebase to app through react-native-firebase package, debugged errors caused due Flipper and AppDelegate settings. Created a collection and structured documents in Firestore to store check-in counts. [Implemented](https://github.com/harmony-one/1/commit/cdf54474d7375815713e06186e9beaafe4899fd4) React components to read/write check-in counts at each location to and fro Firestore, updated check-in button UI. Created build, and deployed to testflight.
+
+Human Protocol: Went over with Sun on the details/next steps, looked into implementing MetaMask OAuth log-in.
+
+---
+
+2024-02-11 Sun: Worked on further debugging settings bundle (for system settings) to react native bridge. 
 
 2024-02-10 Sat: ONE Map: [Worked](https://github.com/harmony-one/1/commits/systemSettings) on debugging the system settings map selection. NSUserDefaults is not correctly being fetched, bug probably caused from the bridging between iOS and React Native.
 
