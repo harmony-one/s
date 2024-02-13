@@ -1,3 +1,15 @@
+2023-02-12 Mon:\
+Change log for Remote Emitter
+
+**Major Changes**
+- [Added](https://github.com/Aishlia/remote-emitter/commit/e076cbbef889f74a4c0d6ed278b870888e7f3bd2) support for posting images.
+- [Added](https://github.com/Aishlia/remote-emitter/commit/6503e1fee7b4fb9439c4c539e92b90d48817f703) connections between users that use the same hashtag. (ie. @BeautifulJewel82 ↔ @DeterminedXenops71 -#cats- @EnergeticHunter60 → @UniquePiano39 ← @AncientCat37)
+    - In this instance, DeterminedXenops and EnergeticHunter both used #cats in a post completing the chain between BeautifulJewel and AncientCat.
+    - Mentions are considered a better connection than using hashtags so are ranked higher
+    - Hashtags are treated as Hashtag nodes in graph so a path involving the same users and only mentions will be shorter.
+
+---
+
 2023-02-11 Sun: [7 hours] \
 Change log for Remote Emitter
 
