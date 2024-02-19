@@ -1,3 +1,30 @@
+
+2023-02-18 Sun: Worked on setting up shortcuts for quick testing.
+
+2023-02-17 Sat: Restructured the application to fit the restructured data format. Documented the new data structure.
+
+2023-02-16 Fri: Implemented multiple tasks required for the application. Form data structure related to various "actions" within the application.
+
+2023-02-15 Thu: Implemented hash power.
+
+2023-02-14 Wed: OOO
+
+2023-02-13 Tue: OOO
+
+2023-02-12 Mon: Finalized the h.country merge. Handed off tasks to Julia and Theo to coordinate with Artem and Yuriy. Also, OAuth related tasks to Rika.
+
+---
+
+2023-02-11 Sun: Worked on the h.country merge. 
+
+2023-02-10 Sat: Implemented neo4js in order to find connections between users.
+
+2023-02-09 Fri: Looked into graph database and sorting algorithms for connections. Decided move forward with and implement the graph method. 
+
+2023-02-08 Thu: Initial implementation of Firebase OAuth with 4 providers (Google, Github, Twitter, and Facebook).
+
+2023-02-07 Wed: Migrated to Firebase datastore in order to utilize offline data availability.
+
 2023-02-06 Tue: Implemented KV store data scheme. Implemented workers to interact with the given data. Handed off the rest of taks to Artem and Yuriy.
 
 2023-02-05 Mon: Implemented counter demo utilizing pages, workers, and kv store from Cloudflare.
