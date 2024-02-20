@@ -1,3 +1,7 @@
+2024-01-19 Mon: Further looked into merge conflict and also showing new user creation message in the user profile page.
+
+2024-01-18 Sun: Looked into the updated firestore logic with the payload replaced instead of the hashtag action and worked on merging over my previous implementation for showing links.
+
 2024-02-17 Sat: Finished implementing "links" feature to display as mentions (currently we only have "tagged" for hashtags), see more details here in comments: [https://github.com/harmony-one/h.country/pull/16]. Will work later tonight to resolve merge conflicts.
 
 2024-02-16 Fri (Half PTO): [Merged](https://github.com/harmony-one/h.country/pull/8) conflicts for the window.popup() screen in /auth (added component, configured routing, disabled oAuth for now until we figure out how to fecth usernames). Debugged deploy to cloudflare (CI is trigerred anytime there is ESLint issues or too many unused React imports/components.) Started work on configuring links feed for userPage (looked into existing firebase codebase, investigated structure for adding social media links, added some UI components) on seperate branch [here](https://github.com/harmony-one/h.country/tree/addlinks).
