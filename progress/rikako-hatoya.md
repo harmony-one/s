@@ -1,4 +1,20 @@
+2024-01-20 Tue: 
+- Fixed bug to show new user joined message [[#29](https://github.com/harmony-one/h.country/pull/29)].
+- **Previously window.popup() only showed when clicking on big hashtag/slash logo and unadded social media names were not shown. Changed to display unadded social media names and make them each clickable with a window.prompt().**
+Looked into the current structure of the window.popup() screen - the userpage was currently split into two components (UserPage and headerList). While UserPage was mostly the logic and headerList was mostly the UI components, the two were both mixed. Userpage covered hashtag sorting while the headerList contained popup logic + wallet rendering. Looked into ways to make these files clean to resolve confusion from functions and props being called in these two separate files. Previously where JSX elements were each mapped from UserPage and being passed onto headerList to show each hashtags and links, I changed the structure to pass on item props from UserPage to headerList so that UI is now mostly handled in headerList. Implemented a dictionary of predefined social media websites. Implemented the logic to show the link if the user has a registered username (g/rika97) or a clickable text of the social media name to display window.prompt() [[#30](https://github.com/harmony-one/h.country/pull/30), [#36](https://github.com/harmony-one/h.country/pull/36), [#38](https://github.com/harmony-one/h.country/pull/38)].
+- **Added oAuth components**
+Calling oAuth requires 5 steps -
+  1. Setting up environment variables (in local and cloudflare)
+  2.  Creating a REST API for POST function to grab authorization token from oAuth, GET function to fetch data using the grabbed token. Depoying this on a server.
+  3.  Creating a component to send the user to oAuth screen and grabbing an authorization token from POST function in API
+  4.  Creating a file to handle callback/redirect after the auth token is grabbed and call the GET function from API
+  5.  Handling routes for the callback method (adding redirect URLs and implementing correct routing for the callback component
+
+  Edited and merged these components from the work I did in previous repo (human-protocol). [oAuth](https://github.com/harmony-one/h.country/tree/oAuth) now works if the REST API server is run on localhost.
+ 
 2024-01-19 Mon: Further looked into merge conflict and also showing new user creation message in the user profile page.
+
+---
 
 2024-01-18 Sun: Looked into the updated firestore logic with the payload replaced instead of the hashtag action and worked on merging over my previous implementation for showing links.
 
