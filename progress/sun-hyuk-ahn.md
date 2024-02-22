@@ -1,3 +1,10 @@
+2023-02-21 Wed: Completed all "slash" commands listed [here](https://xn--qv9h.s.country/p/human-protocol-social-shard-1-hcountry).
+
+2023-02-20 Tue: Implemented multi tags to allow hash/?. Fixed bugs related to user manual links.
+
+2023-02-19 Mon: Holiday
+
+---
 
 2023-02-18 Sun: Worked on setting up shortcuts for quick testing.
 
