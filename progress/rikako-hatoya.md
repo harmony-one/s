@@ -1,4 +1,21 @@
-2024-01-20 Tue: 
+**2024-02-21 Wed:**
+
+ONE Map: Made minor change to UI, created and deployed build to testflight.
+
+h.country: 
+- Cleaned up and organized code, moving all constants to "components/links/index.ts"
+- Made minor changes to prepare code for merging with oAuth components (providerName, displayName) [[#46](https://github.com/harmony-one/h.country/pull/46)]
+- Made major changes to our parser for adding links to userpage [[#54](https://github.com/harmony-one/h.country/pull/54)]
+  - Added special case handling for substack link: while other urls were in the format (twitter.com/username), substack was in the format (username.substack.com)
+  - Implemented logic for handling when the big '/' is clicked on the userpage
+    - User can now add links without worrying about semantics (whether they type 'www.', 'http://', 'https://' or even nothing and it wouldn't matter.)
+    - If the user enters a link to social media already available for oAuth (eg. Twitter, Substack), it will display as "t/stse" automatically
+    - If the user enters a particular page of a website say "wiki.com/cats" it will show as "wiki/cats"
+    - If the user enters just the homepage of a website say "www.stse.com" it will show as "stse.com"
+    - If the user enters just a word it will link to a google search of that word
+    - Implemented random string generator so that these custom links will be saved into Firebase data collection without overlapping field names
+
+**2024-02-20 Tue:**
 - Fixed bug to show new user joined message [[#29](https://github.com/harmony-one/h.country/pull/29)].
 - **Previously window.popup() only showed when clicking on big hashtag/slash logo and unadded social media names were not shown. Changed to display unadded social media names and make them each clickable with a window.prompt().**
 Looked into the current structure of the window.popup() screen - the userpage was currently split into two components (UserPage and headerList). While UserPage was mostly the logic and headerList was mostly the UI components, the two were both mixed. Userpage covered hashtag sorting while the headerList contained popup logic + wallet rendering. Looked into ways to make these files clean to resolve confusion from functions and props being called in these two separate files. Previously where JSX elements were each mapped from UserPage and being passed onto headerList to show each hashtags and links, I changed the structure to pass on item props from UserPage to headerList so that UI is now mostly handled in headerList. Implemented a dictionary of predefined social media websites. Implemented the logic to show the link if the user has a registered username (g/rika97) or a clickable text of the social media name to display window.prompt() [[#30](https://github.com/harmony-one/h.country/pull/30), [#36](https://github.com/harmony-one/h.country/pull/36), [#38](https://github.com/harmony-one/h.country/pull/38)].
@@ -12,11 +29,11 @@ Calling oAuth requires 5 steps -
 
   Edited and merged these components from the work I did in previous repo (human-protocol). [oAuth](https://github.com/harmony-one/h.country/tree/oAuth) now works if the REST API server is run on localhost.
  
-2024-01-19 Mon: Further looked into merge conflict and also showing new user creation message in the user profile page.
+2024-02-19 Mon: Further looked into merge conflict and also showing new user creation message in the user profile page.
 
 ---
 
-2024-01-18 Sun: Looked into the updated firestore logic with the payload replaced instead of the hashtag action and worked on merging over my previous implementation for showing links.
+2024-02-18 Sun: Looked into the updated firestore logic with the payload replaced instead of the hashtag action and worked on merging over my previous implementation for showing links.
 
 2024-02-17 Sat: Finished implementing "links" feature to display as mentions (currently we only have "tagged" for hashtags), see more details here in comments: [https://github.com/harmony-one/h.country/pull/16]. Will work later tonight to resolve merge conflicts.
 
