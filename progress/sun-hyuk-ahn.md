@@ -1,3 +1,5 @@
+2023-02-22 Thu: Completed last minute bug fixes and feature implementation for Eth Denver.
+
 2023-02-21 Wed: Completed all "slash" commands listed [here](https://xn--qv9h.s.country/p/human-protocol-social-shard-1-hcountry).
 
 2023-02-20 Tue: Implemented multi tags to allow hash/?. Fixed bugs related to user manual links.
