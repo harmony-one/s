@@ -1,3 +1,14 @@
+2024-02-22 Thu: h.country: 
+- Fixed the following bugs when clicking on big '/' [[#66](https://github.com/harmony-one/h.country/pull/66)]:
+  - If the domain already matched predefined domains, it would sometimes not correctly replace those predefined texts but instead create new text links due to regex issues
+  - When "www." was not entered in URLs, it would sometime not be recognized properly due to regex issues
+  - If domain was correctly matched with one of the predefined domains, it would show the domain name as well (eg. "twitter.com/stse" -> "twitter/stse") due to using same single function "extractUsernameFromURL()" which was originally created for undefined custom links. Implemented separate function "extractUsernameForProvider()" to account for this case.
+- Fixed substack domain bug [[#67](https://github.com/harmony-one/h.country/pull/67)]
+- Enabled twitter to also be added with "x.com" input [[#68](https://github.com/harmony-one/h.country/pull/68)]
+- Looked into disabling duplicated URLs to be added
+- Merged oAuth frontend work: set up configurations, modify deploy domain name, integrate existing code [[#70](https://github.com/harmony-one/h.country/pull/70)]
+- Set up oAuth server [[#73](https://github.com/harmony-one/h.country/pull/73)], deploy to heroku and configured server settings[[#74](https://github.com/harmony-one/h.country/pull/74)]
+
 **2024-02-21 Wed:**
 
 ONE Map: Made minor change to UI, created and deployed build to testflight.
