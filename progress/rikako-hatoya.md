@@ -1,3 +1,20 @@
+2024-02-25 Sun:
+Worked on setting up Telegram oAuth (father bot) and integrating to Auth0.
+
+2024-02-24 Sat:
+Looked into oAuth for social media websites and their process (setting up developer accounts)
+
+2024-02-23 Fri: 
+
+h.country: 
+
+Resolved bugs pertaining to connecting backend oAuth server with frontend:
+- Fixed CORS access issues [[#82](https://github.com/harmony-one/h.country/pull/82)] [[#81](https://github.com/harmony-one/h.country/pull/81)]
+- Fixed redirect uri mismatch issues (for exchanging authorization tokens) 
+- Fixed Heroku configurations for running node.js
+
+Now, oAuth is fully integrated and can be used on g.country
+
 2024-02-22 Thu: h.country: 
 - Fixed the following bugs when clicking on big '/' [[#66](https://github.com/harmony-one/h.country/pull/66)]:
   - If the domain already matched predefined domains, it would sometimes not correctly replace those predefined texts but instead create new text links due to regex issues
