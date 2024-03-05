@@ -1,3 +1,40 @@
+ETH Denver Update:
+
+The rise of Bitcoin Layer 2 technologies presents an opportunity to harness idle Bitcoin assets for enhancing the security and liquidity of networks like Harmony. By integrating these innovations, Harmony aims to leverage Bitcoin's robustness and value, bridging traditional and modern blockchain capabilities. Babylon Staking Protocol allows for the mentioned properties.
+
+To integrate the Babylon Staking Protocol with Harmony the following specifications need to be developed: IBC (Inter Blockchain Communication) implementation, Babylon smart contract development, timestamping service integration, and finality gadget implementation. The following outlines a detailed approach for each of these components:
+
+1. IBC Implementation for Harmony
+Objective: Enable Harmony to communicate with the Babylon chain and other IBC-enabled blockchains for cross-chain interactions, enhancing interoperability within the Cosmos ecosystem.
+Approach: Adapt Harmony's existing infrastructure to support IBC modules, ensuring compatibility with the Cosmos SDK. This may involve developing custom relayer services or adapting existing ones to facilitate communication between Harmony's EVM architecture and the IBC protocol.
+Challenges: Ensuring compatibility with Harmony's EVM and PoS mechanisms, efficient message passing, and maintaining security during cross-chain communications.
+
+2. Babylon Smart Contract Development
+Objective: Develop EVM-compatible smart contracts on Harmony that can interact with the Babylon chain for staking, validation, and other protocol-specific functions.
+Approach: Design and deploy smart contracts that can:
+Handle staking from users, issuing corresponding tokens or receipts as proof of stake.
+Interact with IBC relayers to send and receive validation information and finality signatures.
+Ensure secure and efficient execution of protocol operations within the EVM environment.
+Challenges: Maintaining security in a cross-chain environment, optimizing for gas efficiency, and ensuring the contracts are upgradeable to adapt to future protocol changes.
+
+3. Timestamping Service Integration
+Objective: Integrate Harmony with the Babylon chain's Bitcoin timestamping service to enable synchronization with the Bitcoin network.
+Approach: Implement a mechanism within Harmony (possibly through smart contracts or protocol-level integration) that:
+Requests timestamping from the Babylon chain.
+Verifies and incorporates the timestamps into Harmony's blockchain to maintain accurate time references.
+Challenges: Ensuring the reliability and security of timestamp data, minimizing latency in timestamp retrieval and verification, and handling the potential for discrepancies between blockchain time and real-world time.
+
+4. Finality Gadget Implementation 
+Objective: Implement a finality gadget within Harmony's PoS mechanism that is compatible with the Babylon protocol, enabling validators to sign finality signatures.
+Approach: Develop a component within Harmony's consensus mechanism that:
+Allows validators to generate and sign finality signatures upon reaching consensus.
+Communicates these signatures to the Babylon chain via IBC, ensuring they are recorded and acknowledged.
+Challenges: Integrating the finality gadget with Harmony's existing consensus protocol without compromising security or performance, ensuring the finality signatures are recognized and processed efficiently by the Babylon chain.
+
+Further research into the development and integration needs to be done.
+
+-- 
+
 2023-02-22 Thu: Completed last minute bug fixes and feature implementation for Eth Denver.
 
 2023-02-21 Wed: Completed all "slash" commands listed [here](https://xn--qv9h.s.country/p/human-protocol-social-shard-1-hcountry).
