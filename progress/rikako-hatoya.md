@@ -1,3 +1,17 @@
+ETH Denver summary:
+
+At ETH Denver, I had the opportunity to engage directly with numerous companies previously identified through our market research, making for a particularly intriguing experience. My focus was primarily on entities integrating cryptocurrency with physical devices. This intersection of digital and tangible technologies highlighted a fascinating area of innovation within the crypto space, underscoring the versatility and wide-ranging applicability of blockchain technology beyond purely digital platforms.
+
+During the event, I attended an after-party sponsored by Lendr and had the chance to connect with its CEO, Nathaji. Lendr's business model is particularly innovative, lending devices for public Wi-Fi hotspots while compensating venues that host these devices with token rewards. This approach demonstrates a novel application of crypto rewards, extending beyond traditional online activities like farming or staking to include physical hardware that addresses a common need. The concept was a striking example of how cryptocurrency can offer value in diverse ways, not limited to direct crypto users.
+
+Numerous companies at the conference were focused on Ethereum storage solutions, one of which was EthStorage, based in San Mateo. Supported by the Ethereum Foundation, EthStorage is engaged in leveraging decentralized smart contracts for the rendering of Web3 resources. Their work includes proof of storage for large, dynamic datasets, proof of publication, and access to on-chain, layer 2 storage solutions. Learning about their innovative approaches to common blockchain challenges was enlightening, illustrating the potential of decentralized technologies to revolutionize data storage and management.
+
+In addition to EthStorage, I also connected with representatives from Uniswap and Protofire. Uniswap's recent launch of a mobile app was particularly noteworthy, as was Protofire's collaboration with us on the Gnosis Safe. These encounters provided valuable insights into the current trends and developments within the blockchain ecosystem, highlighting the ongoing growth and evolution of the sector.
+
+One project that stood out was Aavegotchi, a unique 'grow your own pet' game reminiscent of the famous Japanese Tamagotchi, but operating on the Aave network. This project exemplifies the creative ways in which blockchain technology can be utilized to recreate and innovate upon familiar concepts, offering new and engaging experiences to users.
+
+Reflecting on the variety of projects and initiatives presented at ETH Denver, it's clear that the Web3 space is rich with innovation, particularly in addressing storage issues on the Ethereum network. Many projects are seeking to optimize execution and reduce transaction fees by increasing block capacity. As I look forward to my upcoming work at Harmony, I am inspired to explore how we can draw from these innovative ideas. Specifically, I aim to consider how we might leverage our chain's benefits, such as lower transaction fees and faster transactions, potentially working in partnership with these companies to focus on storage solutions. This experience has provided valuable perspective and motivation for future endeavors in the blockchain domain.
+
 2024-02-25 Sun:
 Worked on setting up Telegram oAuth (father bot) and integrating to Auth0.
 
