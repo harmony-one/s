@@ -41,7 +41,7 @@ Note that these are brief layout of the specification after the initial research
 
 2023-02-20 Tue: Implemented multi tags to allow hash/?. Fixed bugs related to user manual links.
 
-2023-02-19 Mon: Holiday
+2023-02-19 Mon: Holiday.
 
 ---
 
@@ -53,9 +53,9 @@ Note that these are brief layout of the specification after the initial research
 
 2023-02-15 Thu: Implemented hash power.
 
-2023-02-14 Wed: OOO
+2023-02-14 Wed: Out of office.
 
-2023-02-13 Tue: OOO
+2023-02-13 Tue: Out of office.
 
 2023-02-12 Mon: Finalized the h.country merge. Handed off tasks to Julia and Theo to coordinate with Artem and Yuriy. Also, OAuth related tasks to Rika.
 
