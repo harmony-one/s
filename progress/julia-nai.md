@@ -1,10 +1,35 @@
-1. **AGI-Powered Financial Advisory for Cryptocurrency Traders**: Uniswap’s new extension strives to make trading easier. Uniswap V4 will introduce a new layer of custom tailoring to a portfolio management with the hooks. Developing an AGI-powered financial feature within the Voice AI app, specifically tailored for crypto traders could leverage Uniswap V4’s new functionality to bring a level of safety to personal fund management with spreads, limit orders, and dynamic fees. This service would provide real-time, conversational updates on market trends, portfolio advice, and strategy optimization, directly addressing the use case of updates for stock traders mentioned under "AGI (100x humans): Voice in 2024." We can look at automated portfolio rebalancing strategies that can be automatically performed on the user’s behalf to hit their targets. 
-2. **Edge’s Principle of Data Ownership**: Edge’s fundamental mission is to empower individuals to have full control over their digital lives. Many individuals either accept or do not know the extent to which their online presence is traced and sold. We want to give users the ability to get a share of that back. Would people be willing to hand over more information if they are fairly compensated for it? Should models trained on that data pay our “royalties” in perpetuity? It seems unreasonable to be able to make these payment calculations fairly, but blockchain gives us this opportunity. If we are able to tokenize not only the data that is used to train a model, but also the model itself, we can examine how best to compensate the most key components to getting these models to work. 
-3. **Decentralized Social Gaming and AI Challenges**: The in built badge game at ETHDenver did not have very high engagement. Most people did not even know they could setup their badge to be scanned. Looking at the leaderboard of scans, the highest amount was 88 scans. When I asked people if I could scan their badges, most were surprised to learn for the first time that the badges were even scannable. But, they seemed to really engage with the idea once they had set it up. This shows the potential market for a h.country style connection game. Continue the development of h.country and launching a series of challenges that utilize Harmony's chain to create decentralized social games. These could involve AI-driven puzzles, trivia, and other interactive games that encourage social bonding and engagement, tying into the concept of "Social (100% bonding)" through innovative, playful experiences.
-4. **Ease of User Access**: Many projects have graduated into the phase of making their product easier to use. They are working on developing features that abstract away a lot of the tedious (and often roadblocking) steps that users have to take to engage with their products. Taking the time to really consider how we design products should be a top priority. We can continue to fork primitives, but if no-one builds the abstraction layer, it will be a tough road to user acquisition. Gone are the days of interacting directly with smart contracts. We want to push our Shard 1, but out portal to move ONE from Shard 0 to Shard 1 is broken. The currently only viable method I have found is through the CLI tools. One first step I want to take is a simplistic wallet that has behind-the-scenes shard transfers. If you want to send ONE to someone on shard 1, your ONE is automatically sent to shard 1 first and vice versa. 
-5. **Developer Access to Shard 1 Data**: We discussed quite extensively the idea that any developer may have access to h.country data through Shard 1. They could build any client, any indexer, looking for the action specifications that we have already defined. This is very similar to the way the ordinals JSONs are defined. However, we can make it even easier for developers. In the same way that we have RPC endpoints that you can hit to easily fetch data about our chain, we want to make it even easier to fetch h.country data. Data availability and the ease at which that data can be accessed is a crucial step in ensuring developers will actually use the information that we are providing. 
-6. **Enhanced Social Engagement through Embedded Distributions**: To enhance social engagement, we should focus on developing open ranking systems and embedding distribution mechanisms directly into social networking, content sharing, and community building features. h.country has only scratched the surface of finding chains between people. Given enough sources and enough interactions, we can find arbitrary chains between anything and anyone. If someone wants to find a new hobby, we should be able to find them a hobby better than they can do so themselves. This approach aims to personalize and enrich user interactions by prioritizing high-rank and quality, incentivizing participation through rewards. By integrating these systems, we seek to foster a vibrant, interactive community environment that encourages active contribution and meaningful connections among users.
+2023-02-22 Thu: Changes:
+- [Changed](https://github.com/harmony-one/h.country/commit/995b4cde33ebfd8c8e9b31ea8b1524cb25eeaee8) window prompt text
+- Review and [merged](https://github.com/harmony-one/h.country/commit/8136bca4a2f0a816ffdbee79458cd4289cacb7ac) PR #72
+- Updated some frontend displays
 
+2023-02-19 Mon: Updated package lock to fix deploy. 
+
+---
+2023-02-18 Sun: Updated the actions specification rules. 
+
+2023-02-17 Sat: Created hprod repo to deploy to h.country (prod). h.country repo deploys to g.country (dev). 
+
+2023-02-16 Fri: Changes:
+- [Added](https://github.com/harmony-one/h.country/commit/74d6878a8abd53f6a7e782739af68521b6ef437c) handling for Instagram links. Automatically converts link from https://instagram.com/username/ to ig/username linked to profile
+- [Added](https://github.com/harmony-one/h.country/commit/593476255f122301375a1269bca3a3fbb09c06dd) new spec for actions firestore collection. All actions are now stored in the same firestore collection with a different specification.
+- [Moved](https://github.com/harmony-one/h.country/commit/a7e6a6aa536e09eaeb87f4e2c52cc498d612a339) hashtag fetch and feed to actions collection
+- [Added](https://github.com/harmony-one/h.country/commit/ea79a08cdbe7077c3374652a46862e6481773cc5) lat long to actions address
+- [Created](https://github.com/harmony-one/h.country/commit/cb4cce3c527663024eb46ad2d72dbfd15bf65865) DEVELOPER.md to define action specs
+
+2023-02-15 Thu: Migrated to new [h.country](https://github.com/harmony-one/h.country) repo with new frontend design. Changes:
+- [Added](https://github.com/harmony-one/h.country/commit/6771b92eaaabd830197f2d804419dde929e56617) query for top 3 hashtags and counts.
+- [Added](https://github.com/harmony-one/h.country/commit/43ff99e94c9f03b6db31db76cfc518907b796970) text box to add hashtags from you to user's profile
+- [Added](https://github.com/harmony-one/h.country/commit/e280901a2a139857e9e4be30b003e0e24b534f8c) show global and user actions
+- [Added](https://github.com/harmony-one/h.country/commit/6ccf68d3cdfb226409f4c19572b581d05520f040) duplicate message checker
+- [Added](https://github.com/harmony-one/h.country/commit/95e1244aa0de24f26b733f6c755242ba94a48b49) timestamps
+- [Added](https://github.com/harmony-one/h.country/commit/13b9ebf98c051033a60018cf991336c74419a0d3) homepage
+- [Added](https://github.com/harmony-one/h.country/commit/06ac8d7cb9720de77f45ea0bdbd7cf0c44a1f6b5) links for profiles on profile page
+- [Added](https://github.com/harmony-one/h.country/commit/f450ac6f353da8718de8c6a16983a46754d1b237) popup for url submission
+
+2023-02-14 Wed: Planned h.country changes.
+
+2023-02-13 Tue: Remote Emitter - [Added](https://github.com/Aishlia/remote-emitter/commit/07645d60e7951c8333c82530c06ba465a8e06c6b) top 3 hashtags on homepage in.
 
 2023-02-12 Mon:\
 Change log for Remote Emitter
