@@ -1,7 +1,93 @@
+2023-02-23 Fri: \
+**TODO** \
+**Major Changes**
+- [ ] 30 action pagination on load
+- [x] Smart filtering of links, catch all is google search
+- [x] Click on a /, get the input for that slash
+- [x] Location update on window activation, user editable
+- [x] Add all shortcut slashes except location mock
+
+**Minor Changes**
+- [ ] Text from white to grey color
+- [ ] Font size to match Alaina’s mock
+- [ ] “Enter URL:” => “/“
+- [x] All lower case
+
+**Remote** \
+**Major Changes**
+- [ ] Open location google maps link open location pin click 
+    - [ ] Click on a location, get taken to that filter page. Next to the location name, there is a pin symbol. Click on that to open the google maps link to that street
+- [x] Third column under # is reserved for top 3 location hashtags
+- [ ] WIP Location filter not working
+- [x] Listener for all and own page for immediate update
+- [x] New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
+- [x] Time should be live seconds
+
+**Minor Changes**
+- [x] Tapping on location at the top of the page should do confirmation without popup
+
 2023-02-22 Thu: Changes:
 - [Changed](https://github.com/harmony-one/h.country/commit/995b4cde33ebfd8c8e9b31ea8b1524cb25eeaee8) window prompt text
 - Review and [merged](https://github.com/harmony-one/h.country/commit/8136bca4a2f0a816ffdbee79458cd4289cacb7ac) PR #72
 - Updated some frontend displays
+- Made white versions of the number and slash svgs to fix color issues
+- Defined URL handling:
+```
+To clarify, we want some placeholder texts in the slash section. For example "Instagram". If you click on instagram, you get a popup to add your instagram username which changes the word "Instragram" -> "i/aishlia" and links to https://.../aishlia. 
+
+When you click on the /, you should be able to enter anything. 
+
+If it's a URL that matches one of our Regex filters, display it as i/aishlia. 
+
+Else If it's a URL that doesn't match one of our filters, but does have a slash, display it as domain/page. 
+For example, if the user enters wiki.com/cats, that links to https://wiki.com/cats and display as wiki/cats.
+
+Else If it's a URL that doesn't have a /, display the whole url. So if the user enters https://pintrest.com or just pintrest.com, it should be displayed as pintrest.com and link to https://pintrest.com. 
+
+Else, display whatever they enter and link to the google search page for it. So if the user enters "abcdefg", it should display as "abcdefg" and link to https://www.google.com/search?q=abcdefg
+```
+
+**TODO** \
+**Major Changes** 
+- [ ] 30 action pagination on load
+- [x] Smart filtering of links, catch all is google search
+- [x] Click on a /, get the input for that slash
+- [x] Location update on window activation, user editable
+- [x] Add all shortcut slashes except location mock
+
+**Minor Changes** 
+- [ ] Text from white to grey color
+- [ ] Font size to match Alaina’s mock
+- [ ] “Enter URL:” => “/“
+- [x] All lower case
+
+**Remote** \
+**Major Changes** 
+- [ ] Open location google maps link open location pin click 
+    - [ ] Click on a location, get taken to that filter page. Next to the location name, there is a pin symbol. Click on that to open the google maps link to that street
+- [ ] Third column under # is reserved for top 3 location hashtags
+- [ ] Location filter not working
+- [x] Listener for all and own page for immediate update
+- [x] New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
+- [x] Time should be live seconds
+
+**Minor Changes** 
+- [x] Tapping on location at the top of the page should do confirmation without popup
+
+2023-02-21 Wed:
+Changes
+Major Changes
+- @potvik  Location at the top of the page (ex. cambridgeave) should be your location when you view the page. Everytime you refresh, open a new tab, etc. this should trigger a new action of type "check_in" and update the location at the top of the page. 
+- @potvik Open location google maps link by clicking on a location pin icon
+     - Click on a location, get taken to that filter page. Next to the location name, add a location pin symbol. Click on that to open the google maps link to that street
+- @potvik Third column under # is reserved for top 3 location hashtags. Everytime you do an action, the location of that action's hashtag is incrimented by 1. (So, if I send 10 messages from cambridgeave, I should see #cambridgeave^10
+- @artemcode Listener for all and own page for immediate update. Use unsubscribe with firestore
+- @artemcode Time should be live seconds. On the feed, the time elapsed should be a live counter (1s -> 2s -> 3s etc.)
+- @artemcode Location filter not working. The location filter does not appear to be working on profiles. If you click on a hashtag and then on a location, it doesn't seem to filter the location properly. 
+- @artemcode New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
+
+Minor Changes
+- @potvik Tapping on location at the top of the page should do confirmation without popup. (ie. remove "You will locate 0/DC3a at birchstreet" popup. Just do the action without confirmation)
 
 2023-02-19 Mon: Updated package lock to fix deploy. 
 
