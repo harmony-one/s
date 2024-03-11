@@ -1,93 +1,20 @@
-2023-02-23 Fri: \
-**TODO** \
-**Major Changes**
-- [ ] 30 action pagination on load
-- [x] Smart filtering of links, catch all is google search
-- [x] Click on a /, get the input for that slash
-- [x] Location update on window activation, user editable
-- [x] Add all shortcut slashes except location mock
+Summary progress: 2/6 Tue - 2/28 Wed and 3/4 Mon - 3/10 Sun \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I prototyped a social media with Firestore as the NoSQL key-value storage of messages. I titled this project Remote Emitter and added relevant features as they were brought up. First, I started by adding barebones messages sent under a user changeable username. I developed a home page where users could enter whatever username they wanted to post under and make a post. I added a timestamp and location stamp to each post. Then I added user specific pages routed under /<username>. Clicking on a username would take you to a page with all posts done from that username. I added location-specific pages as well. I worked on optimizing the storage and index methods so that updates were under 100 ms across all devices. Remote Emitter was setup to automatically deploy on-push from Cloudflare to jn.country through CNAME routing. I changed usernames to be non-user-changable, and added hashtag support (clicking on a hashtag would take you to /<hashtag> were you could see all posts that use that hashtag). Utilizing Neo4j, I was able to calculate directional nth degree connections between users. A user clicking on another user’s profile could see if there was a chain of people, that they have mutually tagged, connecting them. I tested up to a 6th degree connection with sub 400ms latency and added in the framework for a strength ranking. Later, I added mutual user of the same hashtag as a potential connection method between two nodes. I added posts and mentions tabs to profile pages and global and home feeds to the home page. I added image support and top 3 hashtags counter to the home page and user pages.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;After transitioning development to h.country, I migrated a lot of the features of Remote Emitter that were relevant to the new design and direction. I started by adding in action support initially only handling tags. Messages were changes to actions in an actions Firestore collection with predefined specifications detailing how each action should be displayed and what data should go with each one. I added in timestamps and location data to the tag action and displayed it globally on home page (later removed) and on user pages. I added initial methods for link support and the first pass automatic handling of certain specific links. I started with in-line link adding but transitioned to clicking on the slash to enter any link. By specifying how certain links should be handled, I was able to match the mock’s intention of using abbreviations for certain commonly used sites. h.country was also setup to auto-deploy on-commit from Cloudflare.\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I was sick quite a lot of this week, but following recovery, I have been looking into models that were originally trained on unlabeled voice recording data. I have been reading about experiments that teams have done measuring model improvement given more unlabeled voice data and looking into businesses that utilize these models for profit.
 
-**Minor Changes**
-- [ ] Text from white to grey color
-- [ ] Font size to match Alaina’s mock
-- [ ] “Enter URL:” => “/“
-- [x] All lower case
+---
 
-**Remote** \
-**Major Changes**
-- [ ] Open location google maps link open location pin click 
-    - [ ] Click on a location, get taken to that filter page. Next to the location name, there is a pin symbol. Click on that to open the google maps link to that street
-- [x] Third column under # is reserved for top 3 location hashtags
-- [ ] WIP Location filter not working
-- [x] Listener for all and own page for immediate update
-- [x] New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
-- [x] Time should be live seconds
-
-**Minor Changes**
-- [x] Tapping on location at the top of the page should do confirmation without popup
+2023-02-23 Fri: 
 
 2023-02-22 Thu: Changes:
 - [Changed](https://github.com/harmony-one/h.country/commit/995b4cde33ebfd8c8e9b31ea8b1524cb25eeaee8) window prompt text
 - Review and [merged](https://github.com/harmony-one/h.country/commit/8136bca4a2f0a816ffdbee79458cd4289cacb7ac) PR #72
 - Updated some frontend displays
 - Made white versions of the number and slash svgs to fix color issues
-- Defined URL handling:
-```
-To clarify, we want some placeholder texts in the slash section. For example "Instagram". If you click on instagram, you get a popup to add your instagram username which changes the word "Instragram" -> "i/aishlia" and links to https://.../aishlia. 
-
-When you click on the /, you should be able to enter anything. 
-
-If it's a URL that matches one of our Regex filters, display it as i/aishlia. 
-
-Else If it's a URL that doesn't match one of our filters, but does have a slash, display it as domain/page. 
-For example, if the user enters wiki.com/cats, that links to https://wiki.com/cats and display as wiki/cats.
-
-Else If it's a URL that doesn't have a /, display the whole url. So if the user enters https://pintrest.com or just pintrest.com, it should be displayed as pintrest.com and link to https://pintrest.com. 
-
-Else, display whatever they enter and link to the google search page for it. So if the user enters "abcdefg", it should display as "abcdefg" and link to https://www.google.com/search?q=abcdefg
-```
-
-**TODO** \
-**Major Changes** 
-- [ ] 30 action pagination on load
-- [x] Smart filtering of links, catch all is google search
-- [x] Click on a /, get the input for that slash
-- [x] Location update on window activation, user editable
-- [x] Add all shortcut slashes except location mock
-
-**Minor Changes** 
-- [ ] Text from white to grey color
-- [ ] Font size to match Alaina’s mock
-- [ ] “Enter URL:” => “/“
-- [x] All lower case
-
-**Remote** \
-**Major Changes** 
-- [ ] Open location google maps link open location pin click 
-    - [ ] Click on a location, get taken to that filter page. Next to the location name, there is a pin symbol. Click on that to open the google maps link to that street
-- [ ] Third column under # is reserved for top 3 location hashtags
-- [ ] Location filter not working
-- [x] Listener for all and own page for immediate update
-- [x] New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
-- [x] Time should be live seconds
-
-**Minor Changes** 
-- [x] Tapping on location at the top of the page should do confirmation without popup
+- Defined URL handling
 
 2023-02-21 Wed:
-Changes
-Major Changes
-- @potvik  Location at the top of the page (ex. cambridgeave) should be your location when you view the page. Everytime you refresh, open a new tab, etc. this should trigger a new action of type "check_in" and update the location at the top of the page. 
-- @potvik Open location google maps link by clicking on a location pin icon
-     - Click on a location, get taken to that filter page. Next to the location name, add a location pin symbol. Click on that to open the google maps link to that street
-- @potvik Third column under # is reserved for top 3 location hashtags. Everytime you do an action, the location of that action's hashtag is incrimented by 1. (So, if I send 10 messages from cambridgeave, I should see #cambridgeave^10
-- @artemcode Listener for all and own page for immediate update. Use unsubscribe with firestore
-- @artemcode Time should be live seconds. On the feed, the time elapsed should be a live counter (1s -> 2s -> 3s etc.)
-- @artemcode Location filter not working. The location filter does not appear to be working on profiles. If you click on a hashtag and then on a location, it doesn't seem to filter the location properly. 
-- @artemcode New user messages includes name of referer. For example, if a new user joins from link h.country/0/abcd…, then the new user message should be changed from “0/4298 joins” to “0/abcd adds 0/4298”
-
-Minor Changes
-- @potvik Tapping on location at the top of the page should do confirmation without popup. (ie. remove "You will locate 0/DC3a at birchstreet" popup. Just do the action without confirmation)
 
 2023-02-19 Mon: Updated package lock to fix deploy. 
 
