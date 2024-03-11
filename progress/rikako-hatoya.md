@@ -1,3 +1,9 @@
+2024-03-10 Sun: Further continued, looked into on-chai royalty policy and did some research on different AI models and their specs (MMLU, etc).
+
+2024-03-09 Sat: Further continued market research (eg. modulus, eternis) lisetd on the edgeai notion site and looked around Twitter.
+
+2024-03-08 Fri: Continued market research on crypto companies doing data collection (gensyn.ai, semiotic labs, etc).
+
 ETH Denver summary and future goals:
 
 At ETH Denver, my engagement with companies at the forefront of integrating cryptocurrency with physical devices illuminated the vast potential and innovation within the blockchain domain, particularly in blending digital and tangible technologies. The event served as a platform to explore the extensive applicability of blockchain beyond digital realms, notably through my interaction with Lendr's CEO, Nathaji, and their unique business model. Lendr exemplifies the innovative use of crypto rewards by lending devices for public Wi-Fi hotspots and compensating hosting venues, showcasing the diverse ways cryptocurrency can add value across various sectors.
